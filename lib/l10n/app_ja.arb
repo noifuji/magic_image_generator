@@ -1,0 +1,7 @@
+{
+  "@@locale": "ja",
+  "appTitle": "マジック画像ジェネレータ",
+  "searchCardHint": "カードを探す",
+
+  "errorReload": "エラー。再ロードしてね。"
+}

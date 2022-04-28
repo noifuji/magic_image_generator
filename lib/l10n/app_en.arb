@@ -1,0 +1,7 @@
+{
+    "@@locale": "en",
+    "appTitle": "Magic Image Generator",
+    "searchCardHint": "Search cards",
+
+    "errorReload": "Error. Please reload this page."
+}
