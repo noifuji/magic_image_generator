@@ -34,7 +34,7 @@ jobs:
 
       - name: Deploy  # S3にデプロイ 
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: # S3のbucket-for-deploying-react-projectバケットにデプロイ
           aws s3 cp --recursive --region ap-northeast-1 build s3://magic-image-generator-staging
