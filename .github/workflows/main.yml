@@ -1,0 +1,41 @@
+name: CI
+on:
+  push:
+      branches:
+        - master
+
+jobs:
+  build:
+    name: Build for web # GitHubに表示されるジョブの名前
+    runs-on: ubuntu-latest # ジョブを実行するマシーンの種類
+
+    steps: #一連のタスク
+
+      # チェックアウト
+      - name: Checks-out my repository # step に名前をつけられる なくてもいい
+        uses: actions/checkout@v2
+
+      # Flutter のインストール
+      - name: Install Flutter
+        run: git clone https://github.com/flutter/flutter.git # ターミナルでこれが実行されるイメージ
+
+      # PATH を通す
+      - name: Add path
+        run: echo "$(pwd)/flutter/bin" >> $GITHUB_PATH # GITHUB_PATH にどんどんぶちこめばいいらしい
+
+      # パッケージのダウンロード
+      - name: Download Flutter packages
+        run: flutter pub get
+
+      # ipa ファイルの出力
+      - name: build
+        # GITHUB_RUN_NUMBER をビルドナンバーに指定することで被りがないようにしている。
+        run: flutter build web
+
+      - name: Deploy  # S3にデプロイ 
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |　# S3のbucket-for-deploying-react-projectバケットにデプロイ
+          aws s3 cp --recursive --region ap-northeast-1 build s3://magic-image-generator-staging
+      
