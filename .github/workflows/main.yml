@@ -36,7 +36,6 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS-REGION: ${{secrets.AWS_REGION}}
         run: # S3のbucket-for-deploying-react-projectバケットにデプロイ
-          aws s3 sync ./build/web s3://magic-image-generator-staging/
+          aws --region ap-northeast-1 s3 sync ./build/web s3://magic-image-generator-staging/
       
