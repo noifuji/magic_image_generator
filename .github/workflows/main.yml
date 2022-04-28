@@ -37,5 +37,5 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: # S3のbucket-for-deploying-react-projectバケットにデプロイ
-          aws s3 cp ./build/web --recursive --region ap-northeast-1 build s3://magic-image-generator-staging
+          aws s3 cp ./build/web s3://magic-image-generator-staging --recursive
       
