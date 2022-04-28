@@ -24,20 +24,26 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 /*
+ * ・両面札　scryfallからmultiverseを2種とってひもつけをつくる ->ok
+ * ・画像データ収集後、自鯖配布 -> ok
+ *
+ * ・アリーナっぽい検索画面
  * ・検索機能が不安定
  * ・テキスト検索でオペレーターをつかえない
  * ・「t:creature -t:encha -t:arti pow=4」おかしい
  * ・color指定
- * ・両面札　scryfallからmultiverseを2種とってひもつけをつくる ->ok
- * 　　第一面ヒット　そのまま出す
- * 　　第二面ヒット　第一面をかわりに出す
- * 　　両方ヒット　　第一面のみをだす
  * ・スマホ対応
- * ・画像データ収集後、自鯖配布 -> ok
  * ・ヒット件数表示
  *　・画像データ読み込み中になんか出す
+ * ・ロード遅すぎる。
+ * ・keyの謎
+ * ・キャンバスで複数行
+ * ・カード移動時のエフェクト
+ * ・コピー成功時にエフェクト
  *
  */
+
+final key = GlobalKey<CanvasViewScreenState>();
 
 void main() {
   runApp(MyApp());
@@ -135,11 +141,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Util.printTimeStamp("_MyHomePageState build");
+    Util.printTimeStamp("_MyHomePageState build start");
     return FutureBuilder<CardRepository>(
         future: _initialize,
         builder: (context, dataSnapshot) {
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
+            Util.printTimeStamp("_MyHomePageState build waiting");
             return  const Center();
           } else if (dataSnapshot.error != null) {
             if (kDebugMode) {
@@ -184,8 +191,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: SearchViewScreen()),
                     Expanded(
                         flex: constants.canvasViewRatio,
-                        child: CanvasViewScreen())
+                        child: CanvasViewScreen(key:key))
                   ]),
+                  floatingActionButton: FloatingActionButton(
+                    onPressed: () async {
+                       await key.currentState?.copyImageToClipBoard();
+                    },
+                    tooltip: 'Copy',
+                    child: const Icon(Icons.copy),
+                  ), // ,
                 ));
           }
         });

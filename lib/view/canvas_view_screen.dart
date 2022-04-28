@@ -20,10 +20,10 @@ class CanvasViewScreen extends StatefulWidget {
   CanvasViewScreen({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _CanvasViewScreenState();
+  State<StatefulWidget> createState() => CanvasViewScreenState();
 }
 
-class _CanvasViewScreenState extends State<CanvasViewScreen> {
+class CanvasViewScreenState extends State<CanvasViewScreen> {
   final GlobalKey _globalKey = GlobalKey();
   double _canvasViewZoomRatio = 1.0;
 
@@ -45,11 +45,10 @@ class _CanvasViewScreenState extends State<CanvasViewScreen> {
           for (var card in selectedCards) {
             var img = Image.network(card.imageUrl(Localizations.localeOf(context)));
 
-            draggableImages.add(createDragTarget(context, selectedCards, card, img));
+            draggableImages.add(_createDragTarget(context, selectedCards, card, img));
           }
 
-          return Scaffold(
-            body: Row(children: [
+          return Row(children: [
               SizedBox(
                   width: draggableImages.length *
                       constants.cardWidth *
@@ -77,18 +76,12 @@ class _CanvasViewScreenState extends State<CanvasViewScreen> {
                         constants.cardWidth *
                         _canvasViewZoomRatio,
               )
-            ]),
-            floatingActionButton: FloatingActionButton(
-              onPressed: _incrementCounter,
-              tooltip: 'Increment',
-              child: const Icon(Icons.add),
-            ), // This trailing comma makes auto-formatting nicer for build methods.
-          );
+            ]);
 
         });
   }
 
-  DragTarget createDragTarget(BuildContext context,List<CardInfo> selectedCards,CardInfo card, Image img) {
+  DragTarget _createDragTarget(BuildContext context,List<CardInfo> selectedCards,CardInfo card, Image img) {
     return DragTarget<int>(
       builder: (
           BuildContext context,
@@ -112,7 +105,7 @@ class _CanvasViewScreenState extends State<CanvasViewScreen> {
       },
       onAccept: (data) {
         print('''OnAccept:$data''');
-        Provider.of<CanvasViewModel>(context, listen: false).setSelectedCards(rearrange(selectedCards, data, selectedCards.indexWhere((element) => element.imageUrl == card.imageUrl)));
+        Provider.of<CanvasViewModel>(context, listen: false).setSelectedCards(_rearrange(selectedCards, data, selectedCards.indexWhere((element) => element.imageUrl == card.imageUrl)));
       },
       onWillAccept: (data) {
         print('''onWillAccept:$data''');
@@ -132,7 +125,7 @@ class _CanvasViewScreenState extends State<CanvasViewScreen> {
    * from = 3 to = 5
    * [0,1,2](first - from-1) + [4](from+1 - to-1) + [3]from + [5,6,7](to+1 - last)
    */
-  List<CardInfo> rearrange(List<CardInfo> items, int indexFrom, int indexTo) {
+  List<CardInfo> _rearrange(List<CardInfo> items, int indexFrom, int indexTo) {
     print('''indexFrom:$indexFrom, indexTo:$indexTo''');
 
     List<CardInfo> copy = [];
@@ -165,7 +158,7 @@ class _CanvasViewScreenState extends State<CanvasViewScreen> {
     return copy;
   }
 
-  Future<void> _incrementCounter() async {
+  Future<void> copyImageToClipBoard() async {
     Future(() async {
       RenderRepaintBoundary? boundary = _globalKey.currentContext
           ?.findRenderObject() as RenderRepaintBoundary?;
