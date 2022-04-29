@@ -31,26 +31,31 @@ import './assets/configure_nonweb.dart' if (dart.library.html) './assets/configu
  * ・両面札　scryfallからmultiverseを2種とってひもつけをつくる ->ok
  * ・画像データ収集後、自鯖配布 -> ok
  * ・#形式やめる -> ok
+ * ・copy -> ok
+ *　・index.html -> ok
+ * ・ロード遅すぎる。->ok
+ * ・左から並び替えられない -> ok
  *
- * ・アリーナっぽい検索画面
- * ・検索機能が不安定
- * ・テキスト検索でオペレーターをつかえない
  * ・「t:creature -t:encha -t:arti pow=4」おかしい
  * ・color指定
- * 　white blue black red green colorless multicolor
- * 　略称　w, u, b, r, g, c, m, multi
- * 　多色を指定できる rgは赤緑 grも化
- * 　多色指定は略称のみ指定可能
- * ・検索失敗メッセージ
+ * 　　white blue black red green colorless multicolor
+ * 　　略称　w, u, b, r, g, c, m, multi
+ * 　　多色を指定できる rgは赤緑 grも化
+ * 　　多色指定は略称のみ指定可能
+ * ・テキスト検索でオペレーターをつかえない
  * ・スマホ対応
+ * ・検索失敗メッセージ
  * ・ヒット件数表示
  *　・画像データ読み込み中になんか出す
- * ・ロード遅すぎる。
- * ・keyの謎
  * ・キャンバスで複数行
  * ・カード移動時のエフェクト
  * ・コピー成功時にエフェクト
- *
+ * ・CanvasScreen汚すぎ
+ * ・メニュー
+ * ・アリーナっぽい検索画面
+ * ・両面カードクルクル
+ * ・キャンバスから画像削除
+ * ・画像データ履歴保持
  */
 
 final key = GlobalKey<CanvasViewScreenState>();
@@ -209,7 +214,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: () async {
                       await key.currentState?.copyImageToClipBoard();
                     },
-                    tooltip: 'Copy',
+                    tooltip: AppLocalizations.of(context)!.copy,
                     child: const Icon(Icons.copy),
                   ), // ,
                 ));

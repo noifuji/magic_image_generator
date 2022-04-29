@@ -29,7 +29,9 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
           return Column(children: [
             Expanded(
                 flex: 0,
-                child: SearchBoxWidget(parentWidth: constraints.maxWidth)),
+                child: Container(
+                  margin:const EdgeInsets.only(top: 5.0,),
+                    child:SearchBoxWidget(parentWidth: constraints.maxWidth))),
             Expanded(
                 flex: 1,
                 child: Container(
@@ -44,7 +46,7 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
                       children: List.generate(searchResults.length, (index) {
                         return GestureDetector(
                             onTap: () {
-                              Provider.of<CanvasViewModel>(context, listen: false).addSelectedCards(searchResults[index]);
+                              Provider.of<CanvasViewModel>(context, listen: false).addSelectedCards(0, searchResults[index]);
                             },
                             child: Container(
                               margin: const EdgeInsets.only(

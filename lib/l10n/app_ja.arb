@@ -2,6 +2,7 @@
   "@@locale": "ja",
   "appTitle": "マジック画像ジェネレータ",
   "searchCardHint": "カードを探す",
+  "copy": "コピー",
 
   "errorReload": "エラー。再ロードしてね。"
 }

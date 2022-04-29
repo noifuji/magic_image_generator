@@ -2,6 +2,7 @@
     "@@locale": "en",
     "appTitle": "Magic Image Generator",
     "searchCardHint": "Search cards",
+    "copy": "Copy",
 
     "errorReload": "Error. Please reload this page."
 }
