@@ -106,4 +106,10 @@ void main() {
         AnalyzeQueryUseCase().call('pow<=2 -t:enchant set:neo'), Locale("en"));
     expect(result.length, 61);
   });
+
+  test('Multiple not type condition.', () async {
+    List<CardInfo> result = await _repo.get(
+        AnalyzeQueryUseCase().call('t:creature -t:enchant -t:artifact pow=4 set:neo'), Locale("en"));
+    expect(result.length, 10);
+  });
 }

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:isar/isar.dart';
 import 'package:magic_image_generator/view/canvas_view_screen.dart';
 import 'package:magic_image_generator/view/search_view_screen.dart';
@@ -23,15 +24,24 @@ import 'domain/card_repository.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import './assets/configure_nonweb.dart' if (dart.library.html) './assets/configure_web.dart';
+
+
 /*
  * ・両面札　scryfallからmultiverseを2種とってひもつけをつくる ->ok
  * ・画像データ収集後、自鯖配布 -> ok
+ * ・#形式やめる -> ok
  *
  * ・アリーナっぽい検索画面
  * ・検索機能が不安定
  * ・テキスト検索でオペレーターをつかえない
  * ・「t:creature -t:encha -t:arti pow=4」おかしい
  * ・color指定
+ * 　white blue black red green colorless multicolor
+ * 　略称　w, u, b, r, g, c, m, multi
+ * 　多色を指定できる rgは赤緑 grも化
+ * 　多色指定は略称のみ指定可能
+ * ・検索失敗メッセージ
  * ・スマホ対応
  * ・ヒット件数表示
  *　・画像データ読み込み中になんか出す
@@ -46,6 +56,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 final key = GlobalKey<CanvasViewScreenState>();
 
 void main() {
+  configureApp();
   runApp(MyApp());
 }
 
@@ -69,7 +80,14 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    setLocale(const Locale.fromSubtags(languageCode: 'ja'));
+
+    if (WidgetsBinding.instance != null) {
+      final List<Locale> systemLocales =
+          WidgetsBinding.instance!.window.locales;
+      _locale = systemLocales.first;
+    } else {
+      _locale = AppLocalizations.supportedLocales.first;
+    }
   }
 
   @override
@@ -84,13 +102,9 @@ class _MyAppState extends State<MyApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('ja', ''), //日本語
-        Locale('en', ''), //英語
-      ],
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
-        brightness: Brightness.light,
-      ),
+          brightness: Brightness.light, fontFamily: "NotoSansJP-Regular"),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
       ),
@@ -113,7 +127,6 @@ class _MyHomePageState extends State<MyHomePage> {
   late Future<CardRepository> _initialize;
   SearchViewModel? _searchViewModel;
   CanvasViewModel? _canvasViewModel;
-
 
   @override
   void initState() {
@@ -147,7 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
         builder: (context, dataSnapshot) {
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
             Util.printTimeStamp("_MyHomePageState build waiting");
-            return  const Center();
+            return const Center();
           } else if (dataSnapshot.error != null) {
             if (kDebugMode) {
               print(dataSnapshot.error);
@@ -155,12 +168,12 @@ class _MyHomePageState extends State<MyHomePage> {
             return Text(AppLocalizations.of(context)!.errorReload);
           } else {
             Util.printTimeStamp("_MyHomePageState Scaffold");
-            _searchViewModel = _searchViewModel?? SearchViewModel(dataSnapshot.data!);
-            _canvasViewModel = _canvasViewModel?? CanvasViewModel();
+            _searchViewModel =
+                _searchViewModel ?? SearchViewModel(dataSnapshot.data!);
+            _canvasViewModel = _canvasViewModel ?? CanvasViewModel();
             return MultiProvider(
                 providers: [
-                  ChangeNotifierProvider.value(
-                      value: _searchViewModel),
+                  ChangeNotifierProvider.value(value: _searchViewModel),
                   ChangeNotifierProvider.value(value: _canvasViewModel),
                 ],
                 child: Scaffold(
@@ -170,32 +183,31 @@ class _MyHomePageState extends State<MyHomePage> {
                       Switch(
                           value: _localeSwitch,
                           onChanged: (value) {
-                            if (value) {
-                              MyApp.of(context)?.setLocale(
-                                  const Locale.fromSubtags(languageCode: 'en'));
-                            } else {
-                              MyApp.of(context)?.setLocale(
-                                  const Locale.fromSubtags(languageCode: 'ja'));
-                            }
-
+                            MyApp.of(context)?.setLocale(AppLocalizations
+                                .supportedLocales
+                                .firstWhere((element) =>
+                                    element.languageCode !=
+                                    Localizations.localeOf(context)
+                                        .languageCode));
                             setState(() {
                               _localeSwitch = value;
                             });
                           })
                     ],
                   ),
-                  body:
-                      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Expanded(
-                        flex: constants.searchViewRatio,
-                        child: SearchViewScreen()),
-                    Expanded(
-                        flex: constants.canvasViewRatio,
-                        child: CanvasViewScreen(key:key))
-                  ]),
+                  body: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                            flex: constants.searchViewRatio,
+                            child: SearchViewScreen()),
+                        Expanded(
+                            flex: constants.canvasViewRatio,
+                            child: CanvasViewScreen(key: key))
+                      ]),
                   floatingActionButton: FloatingActionButton(
                     onPressed: () async {
-                       await key.currentState?.copyImageToClipBoard();
+                      await key.currentState?.copyImageToClipBoard();
                     },
                     tooltip: 'Copy',
                     child: const Icon(Icons.copy),
