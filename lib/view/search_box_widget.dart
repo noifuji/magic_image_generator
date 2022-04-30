@@ -6,16 +6,19 @@ import '../viewmodel/search_view_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchBoxWidget extends StatelessWidget {
-  late double parentWidth;
+  int responsiveColumns;
+  double responsiveColumnWidth;
+  double responsiveGutterWidth;
 
-  SearchBoxWidget({required this.parentWidth, });
+  SearchBoxWidget({
+    required this.responsiveColumns,
+    required this.responsiveColumnWidth,
+    required this.responsiveGutterWidth });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: parentWidth * 0.8,
-        //width: constraints.maxWidth * 0.8,
-        margin: const EdgeInsets.symmetric(horizontal: 20.0),
+        width: responsiveColumnWidth*responsiveColumns + responsiveGutterWidth*(responsiveColumns-1),
         decoration: BoxDecoration(
           color: Theme.of(context)
               .colorScheme
@@ -28,7 +31,7 @@ class SearchBoxWidget extends StatelessWidget {
             Icons.search,
           ),
           SizedBox(
-              width: parentWidth * 0.7,
+              width: responsiveColumnWidth*(responsiveColumns-1) + responsiveGutterWidth*(responsiveColumns-2),
               child: TextField(
                 decoration: InputDecoration(hintText: AppLocalizations.of(context)!.searchCardHint),
                 autofocus: true,

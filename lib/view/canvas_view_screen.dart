@@ -16,7 +16,15 @@ import '../assets/util.dart';
 import '../model/card_info.dart';
 
 class CanvasViewScreen extends StatefulWidget {
-  CanvasViewScreen({Key? key}) : super(key: key);
+  int responsiveColumns;
+  double responsiveColumnWidth;
+  double responsiveGutterWidth;
+  CanvasViewScreen({
+    Key? key,
+    required this.responsiveColumns,
+    required this.responsiveColumnWidth,
+    required this.responsiveGutterWidth
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => CanvasViewScreenState();
@@ -37,9 +45,10 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
         builder: (BuildContext context, BoxConstraints constraints) {
       _canvasViewZoomRatio = min(
           constraints.maxWidth /
-              ((selectedCardRowLengthMax + 1) * constants.cardWidth),
+              ((selectedCardRowLengthMax + 1) * constants.rawCardImageWidth),
           (constraints.maxHeight) /
-              ((selectedCardMatrix.length + 1) * constants.cardHeight));
+              ((selectedCardMatrix.length + 1) * constants.rawCardImageHeight));
+
       if (_canvasViewZoomRatio > 1.0) {
         _canvasViewZoomRatio = 1.0;
       }
@@ -67,9 +76,9 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
               //横方向の余白
               width:  constraints.maxWidth -
                   row.length *
-                      constants.cardWidth *
+                      constants.rawCardImageWidth *
                       _canvasViewZoomRatio,
-              height: constants.cardHeight * _canvasViewZoomRatio,
+              height: constants.rawCardImageHeight * _canvasViewZoomRatio,
             );
           },
           onAccept: (data) {
@@ -106,7 +115,7 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
               SizedBox(
-                  height: constants.cardHeight *
+                  height: constants.rawCardImageHeight *
                       _canvasViewZoomRatio *
                       selectedCardMatrix.length,
                   child: RepaintBoundary(
@@ -123,10 +132,10 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
                   return SizedBox(
                     //縦方向の余白
                     width: selectedCardRowLengthMax *
-                        constants.cardWidth *
+                        constants.rawCardImageWidth *
                         _canvasViewZoomRatio,
                     height: constraints.maxHeight -
-                        constants.cardHeight *
+                        constants.rawCardImageHeight *
                             _canvasViewZoomRatio *
                             selectedCardMatrix.length,
                   );
@@ -180,15 +189,15 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
         return Draggable<Map<String, int>>(
             data: {"row": row, "col": col},
             child: SizedBox(
-              width: constants.cardWidth * _canvasViewZoomRatio,
+              width: constants.rawCardImageWidth * _canvasViewZoomRatio,
               child: img,
             ),
             feedback: SizedBox(
-              width: constants.cardWidth * _canvasViewZoomRatio,
+              width: constants.rawCardImageWidth * _canvasViewZoomRatio,
               child: img,
             ),
             childWhenDragging: SizedBox(
-              width: constants.cardWidth * _canvasViewZoomRatio,
+              width: constants.rawCardImageWidth * _canvasViewZoomRatio,
               child: Image.memory(kTransparentImage),
             ));
       },

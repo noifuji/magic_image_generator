@@ -1,7 +1,8 @@
-const double cardWidth = 265.0;
-const double cardHeight = 370.0;
-const int searchViewRatio = 3;
-const int canvasViewRatio = 2;
+const double rawCardImageWidth = 265.0;
+const double rawCardImageHeight = 370.0;
+const double cardAspectRatio = rawCardImageWidth / rawCardImageHeight;
+const int searchViewRatio = 1;
+const int canvasViewRatio = 1;
 const String imageUrlS3 = "https://magic-image-generator-card-images.s3.ap-northeast-1.amazonaws.com/";
 const String cardMasterUrlS3 = "https://magic-image-generator-staging.s3.ap-northeast-1.amazonaws.com/cardmaster.csv";
 

@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:isar/isar.dart';
 import 'package:magic_image_generator/view/canvas_view_screen.dart';
 import 'package:magic_image_generator/view/search_view_screen.dart';
@@ -12,6 +14,8 @@ import 'package:magic_image_generator/viewmodel/canvas_view_model.dart';
 import 'package:magic_image_generator/viewmodel/search_view_model.dart';
 import 'package:provider/provider.dart';
 
+import './assets/configure_nonweb.dart'
+    if (dart.library.html) './assets/configure_web.dart';
 import './assets/constants.dart' as constants;
 import 'assets/util.dart';
 import 'data/card.dart';
@@ -21,12 +25,6 @@ import 'data/card_remote_data_source.dart';
 import 'data/card_repository_impl.dart';
 import 'domain/card_repository.dart';
 
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import './assets/configure_nonweb.dart' if (dart.library.html) './assets/configure_web.dart';
-
-
 /*
  * ・両面札　scryfallからmultiverseを2種とってひもつけをつくる ->ok
  * ・画像データ収集後、自鯖配布 -> ok
@@ -35,6 +33,7 @@ import './assets/configure_nonweb.dart' if (dart.library.html) './assets/configu
  *　・index.html -> ok
  * ・ロード遅すぎる。->ok
  * ・左から並び替えられない -> ok
+ * ・スマホ対応 -> ok
  *
  * ・「t:creature -t:encha -t:arti pow=4」おかしい
  * ・color指定
@@ -43,7 +42,6 @@ import './assets/configure_nonweb.dart' if (dart.library.html) './assets/configu
  * 　　多色を指定できる rgは赤緑 grも化
  * 　　多色指定は略称のみ指定可能
  * ・テキスト検索でオペレーターをつかえない
- * ・スマホ対応
  * ・検索失敗メッセージ
  * ・ヒット件数表示
  *　・画像データ読み込み中になんか出す
@@ -181,43 +179,117 @@ class _MyHomePageState extends State<MyHomePage> {
                   ChangeNotifierProvider.value(value: _searchViewModel),
                   ChangeNotifierProvider.value(value: _canvasViewModel),
                 ],
-                child: Scaffold(
-                  appBar: AppBar(
-                    title: Text(AppLocalizations.of(context)!.appTitle),
-                    actions: [
-                      Switch(
-                          value: _localeSwitch,
-                          onChanged: (value) {
-                            MyApp.of(context)?.setLocale(AppLocalizations
-                                .supportedLocales
-                                .firstWhere((element) =>
-                                    element.languageCode !=
-                                    Localizations.localeOf(context)
+                child: LayoutBuilder(builder:
+                    (BuildContext context, BoxConstraints constraints) {
+                  final _breakpoint = Breakpoint.fromConstraints(constraints);
+                  print('''_breakpoint.device:${_breakpoint.device}''');
+                  print('''_breakpoint.columns:${_breakpoint.columns}''');
+                  print('''_breakpoint.gutters:${_breakpoint.gutters}''');
+                  print('''_breakpoint.window:${_breakpoint.window}''');
+                  int _columns = _breakpoint.columns;
+                  double _gutterWidth = _breakpoint.gutters;
+                  double _marginWidth = _breakpoint.gutters;
+                  double _columnWidth = (constraints.maxWidth - _marginWidth*2 - _gutterWidth * (_columns-1))/_columns;
+
+                  print("columnswidth:" + _columnWidth.toString());
+
+                  if(_columns > 4) {
+                    return Scaffold(
+                      appBar: AppBar(
+                        title: Text(AppLocalizations.of(context)!.appTitle),
+                        actions: [
+                          Switch(
+                              value: _localeSwitch,
+                              onChanged: (value) {
+                                MyApp.of(context)?.setLocale(AppLocalizations
+                                    .supportedLocales
+                                    .firstWhere((element) =>
+                                element.languageCode !=
+                                    Localizations
+                                        .localeOf(context)
                                         .languageCode));
-                            setState(() {
-                              _localeSwitch = value;
-                            });
-                          })
-                    ],
-                  ),
-                  body: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                            flex: constants.searchViewRatio,
-                            child: SearchViewScreen()),
-                        Expanded(
-                            flex: constants.canvasViewRatio,
-                            child: CanvasViewScreen(key: key))
-                      ]),
-                  floatingActionButton: FloatingActionButton(
-                    onPressed: () async {
-                      await key.currentState?.copyImageToClipBoard();
-                    },
-                    tooltip: AppLocalizations.of(context)!.copy,
-                    child: const Icon(Icons.copy),
-                  ), // ,
-                ));
+                                setState(() {
+                                  _localeSwitch = value;
+                                });
+                              })
+                        ],
+                      ),
+                      body: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                                flex: constants.searchViewRatio,
+                                child: Container(
+                                    margin: EdgeInsets.only(
+                                        left: _marginWidth,
+                                        right: _gutterWidth),
+
+                                    child: SearchViewScreen(
+                                      responsiveColumns: _columns ~/ 2,
+                                      responsiveColumnWidth: _columnWidth,
+                                      responsiveGutterWidth: _gutterWidth,
+                                    ))),
+                            Expanded(
+                                flex: constants.canvasViewRatio,
+                                child: Container(
+                                    margin: EdgeInsets.only(
+                                        right: _marginWidth),
+
+                                    child: CanvasViewScreen(
+                                      key: key,
+                                      responsiveColumns: _columns ~/ 2,
+                                      responsiveColumnWidth: _columnWidth,
+                                      responsiveGutterWidth: _gutterWidth,
+                                    )))
+                          ]),
+                      floatingActionButton: FloatingActionButton(
+                        onPressed: () async {
+                          await key.currentState?.copyImageToClipBoard();
+                        },
+                        tooltip: AppLocalizations.of(context)!.copy,
+                        child: const Icon(Icons.copy),
+                      ), // ,
+                    );
+                  } else {
+                    return Scaffold(
+                      appBar: AppBar(
+                        title: Text(AppLocalizations.of(context)!.appTitle),
+                        actions: [
+                          Switch(
+                              value: _localeSwitch,
+                              onChanged: (value) {
+                                MyApp.of(context)?.setLocale(AppLocalizations
+                                    .supportedLocales
+                                    .firstWhere((element) =>
+                                element.languageCode !=
+                                    Localizations
+                                        .localeOf(context)
+                                        .languageCode));
+                                setState(() {
+                                  _localeSwitch = value;
+                                });
+                              })
+                        ],
+                      ),
+                      body: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                                flex: constants.searchViewRatio,
+                                child: Container(
+                                    margin: EdgeInsets.only(
+                                        left: _marginWidth,
+                                        right: _gutterWidth),
+
+                                    child: SearchViewScreen(
+                                      responsiveColumns: _columns,
+                                      responsiveColumnWidth: _columnWidth,
+                                      responsiveGutterWidth: _gutterWidth,
+                                    ))),
+                          ]),// ,
+                    );
+                  }
+                }));
           }
         });
   }
