@@ -15,51 +15,52 @@ extension GetCardCollection on Isar {
 const CardSchema = CollectionSchema(
   name: 'Card',
   schema:
-      '{"name":"Card","idName":"id","properties":[{"name":"artist","type":"String"},{"name":"backFaceMultiverseId","type":"String"},{"name":"cmc","type":"Long"},{"name":"colorIdentity","type":"String"},{"name":"flavor","type":"String"},{"name":"flavorJp","type":"String"},{"name":"imageUrl","type":"String"},{"name":"imageUrlJp","type":"String"},{"name":"isBackFace","type":"Bool"},{"name":"layout","type":"String"},{"name":"legalityAlchemy","type":"Bool"},{"name":"legalityBrawl","type":"Bool"},{"name":"legalityCommander","type":"Bool"},{"name":"legalityDuel","type":"Bool"},{"name":"legalityExplorer","type":"Bool"},{"name":"legalityFuture","type":"Bool"},{"name":"legalityGladiator","type":"Bool"},{"name":"legalityHistoric","type":"Bool"},{"name":"legalityHistoricbrawl","type":"Bool"},{"name":"legalityLegacy","type":"Bool"},{"name":"legalityModern","type":"Bool"},{"name":"legalityPioneer","type":"Bool"},{"name":"legalityStandard","type":"Bool"},{"name":"legalityVintage","type":"Bool"},{"name":"loyalty","type":"String"},{"name":"loyaltyValue","type":"Long"},{"name":"manaCost","type":"String"},{"name":"multiverseId","type":"String"},{"name":"multiverseIdJp","type":"String"},{"name":"name","type":"String"},{"name":"nameJp","type":"String"},{"name":"power","type":"String"},{"name":"powerValue","type":"Long"},{"name":"rarity","type":"String"},{"name":"rarityValue","type":"Long"},{"name":"set","type":"String"},{"name":"text","type":"String"},{"name":"textJp","type":"String"},{"name":"toughness","type":"String"},{"name":"toughnessValue","type":"Long"},{"name":"type","type":"String"},{"name":"typeJp","type":"String"}],"indexes":[],"links":[]}',
+      '{"name":"Card","idName":"id","properties":[{"name":"artist","type":"String"},{"name":"backFaceMultiverseId","type":"String"},{"name":"cmc","type":"Long"},{"name":"colorIdentity","type":"String"},{"name":"colors","type":"Long"},{"name":"flavor","type":"String"},{"name":"flavorJp","type":"String"},{"name":"imageUrl","type":"String"},{"name":"imageUrlJp","type":"String"},{"name":"isBackFace","type":"Bool"},{"name":"layout","type":"String"},{"name":"legalityAlchemy","type":"Bool"},{"name":"legalityBrawl","type":"Bool"},{"name":"legalityCommander","type":"Bool"},{"name":"legalityDuel","type":"Bool"},{"name":"legalityExplorer","type":"Bool"},{"name":"legalityFuture","type":"Bool"},{"name":"legalityGladiator","type":"Bool"},{"name":"legalityHistoric","type":"Bool"},{"name":"legalityHistoricbrawl","type":"Bool"},{"name":"legalityLegacy","type":"Bool"},{"name":"legalityModern","type":"Bool"},{"name":"legalityPioneer","type":"Bool"},{"name":"legalityStandard","type":"Bool"},{"name":"legalityVintage","type":"Bool"},{"name":"loyalty","type":"String"},{"name":"loyaltyValue","type":"Long"},{"name":"manaCost","type":"String"},{"name":"multiverseId","type":"String"},{"name":"multiverseIdJp","type":"String"},{"name":"name","type":"String"},{"name":"nameJp","type":"String"},{"name":"power","type":"String"},{"name":"powerValue","type":"Long"},{"name":"rarity","type":"String"},{"name":"rarityValue","type":"Long"},{"name":"set","type":"String"},{"name":"text","type":"String"},{"name":"textJp","type":"String"},{"name":"toughness","type":"String"},{"name":"toughnessValue","type":"Long"},{"name":"type","type":"String"},{"name":"typeJp","type":"String"}],"indexes":[],"links":[]}',
   idName: 'id',
   propertyIds: {
     'artist': 0,
     'backFaceMultiverseId': 1,
     'cmc': 2,
     'colorIdentity': 3,
-    'flavor': 4,
-    'flavorJp': 5,
-    'imageUrl': 6,
-    'imageUrlJp': 7,
-    'isBackFace': 8,
-    'layout': 9,
-    'legalityAlchemy': 10,
-    'legalityBrawl': 11,
-    'legalityCommander': 12,
-    'legalityDuel': 13,
-    'legalityExplorer': 14,
-    'legalityFuture': 15,
-    'legalityGladiator': 16,
-    'legalityHistoric': 17,
-    'legalityHistoricbrawl': 18,
-    'legalityLegacy': 19,
-    'legalityModern': 20,
-    'legalityPioneer': 21,
-    'legalityStandard': 22,
-    'legalityVintage': 23,
-    'loyalty': 24,
-    'loyaltyValue': 25,
-    'manaCost': 26,
-    'multiverseId': 27,
-    'multiverseIdJp': 28,
-    'name': 29,
-    'nameJp': 30,
-    'power': 31,
-    'powerValue': 32,
-    'rarity': 33,
-    'rarityValue': 34,
-    'set': 35,
-    'text': 36,
-    'textJp': 37,
-    'toughness': 38,
-    'toughnessValue': 39,
-    'type': 40,
-    'typeJp': 41
+    'colors': 4,
+    'flavor': 5,
+    'flavorJp': 6,
+    'imageUrl': 7,
+    'imageUrlJp': 8,
+    'isBackFace': 9,
+    'layout': 10,
+    'legalityAlchemy': 11,
+    'legalityBrawl': 12,
+    'legalityCommander': 13,
+    'legalityDuel': 14,
+    'legalityExplorer': 15,
+    'legalityFuture': 16,
+    'legalityGladiator': 17,
+    'legalityHistoric': 18,
+    'legalityHistoricbrawl': 19,
+    'legalityLegacy': 20,
+    'legalityModern': 21,
+    'legalityPioneer': 22,
+    'legalityStandard': 23,
+    'legalityVintage': 24,
+    'loyalty': 25,
+    'loyaltyValue': 26,
+    'manaCost': 27,
+    'multiverseId': 28,
+    'multiverseIdJp': 29,
+    'name': 30,
+    'nameJp': 31,
+    'power': 32,
+    'powerValue': 33,
+    'rarity': 34,
+    'rarityValue': 35,
+    'set': 36,
+    'text': 37,
+    'textJp': 38,
+    'toughness': 39,
+    'toughnessValue': 40,
+    'type': 41,
+    'typeJp': 42
   },
   listProperties: {},
   indexIds: {},
@@ -115,115 +116,117 @@ void _cardSerializeNative(IsarCollection<Card> collection, IsarRawObject rawObj,
     _colorIdentity = IsarBinaryWriter.utf8Encoder.convert(value3);
   }
   dynamicSize += (_colorIdentity?.length ?? 0) as int;
-  final value4 = object.flavor;
+  final value4 = object.colors;
+  final _colors = value4;
+  final value5 = object.flavor;
   IsarUint8List? _flavor;
-  if (value4 != null) {
-    _flavor = IsarBinaryWriter.utf8Encoder.convert(value4);
+  if (value5 != null) {
+    _flavor = IsarBinaryWriter.utf8Encoder.convert(value5);
   }
   dynamicSize += (_flavor?.length ?? 0) as int;
-  final value5 = object.flavorJp;
+  final value6 = object.flavorJp;
   IsarUint8List? _flavorJp;
-  if (value5 != null) {
-    _flavorJp = IsarBinaryWriter.utf8Encoder.convert(value5);
+  if (value6 != null) {
+    _flavorJp = IsarBinaryWriter.utf8Encoder.convert(value6);
   }
   dynamicSize += (_flavorJp?.length ?? 0) as int;
-  final value6 = object.imageUrl;
-  final _imageUrl = IsarBinaryWriter.utf8Encoder.convert(value6);
+  final value7 = object.imageUrl;
+  final _imageUrl = IsarBinaryWriter.utf8Encoder.convert(value7);
   dynamicSize += (_imageUrl.length) as int;
-  final value7 = object.imageUrlJp;
-  final _imageUrlJp = IsarBinaryWriter.utf8Encoder.convert(value7);
+  final value8 = object.imageUrlJp;
+  final _imageUrlJp = IsarBinaryWriter.utf8Encoder.convert(value8);
   dynamicSize += (_imageUrlJp.length) as int;
-  final value8 = object.isBackFace;
-  final _isBackFace = value8;
-  final value9 = object.layout;
-  final _layout = IsarBinaryWriter.utf8Encoder.convert(value9);
+  final value9 = object.isBackFace;
+  final _isBackFace = value9;
+  final value10 = object.layout;
+  final _layout = IsarBinaryWriter.utf8Encoder.convert(value10);
   dynamicSize += (_layout.length) as int;
-  final value10 = object.legalityAlchemy;
-  final _legalityAlchemy = value10;
-  final value11 = object.legalityBrawl;
-  final _legalityBrawl = value11;
-  final value12 = object.legalityCommander;
-  final _legalityCommander = value12;
-  final value13 = object.legalityDuel;
-  final _legalityDuel = value13;
-  final value14 = object.legalityExplorer;
-  final _legalityExplorer = value14;
-  final value15 = object.legalityFuture;
-  final _legalityFuture = value15;
-  final value16 = object.legalityGladiator;
-  final _legalityGladiator = value16;
-  final value17 = object.legalityHistoric;
-  final _legalityHistoric = value17;
-  final value18 = object.legalityHistoricbrawl;
-  final _legalityHistoricbrawl = value18;
-  final value19 = object.legalityLegacy;
-  final _legalityLegacy = value19;
-  final value20 = object.legalityModern;
-  final _legalityModern = value20;
-  final value21 = object.legalityPioneer;
-  final _legalityPioneer = value21;
-  final value22 = object.legalityStandard;
-  final _legalityStandard = value22;
-  final value23 = object.legalityVintage;
-  final _legalityVintage = value23;
-  final value24 = object.loyalty;
+  final value11 = object.legalityAlchemy;
+  final _legalityAlchemy = value11;
+  final value12 = object.legalityBrawl;
+  final _legalityBrawl = value12;
+  final value13 = object.legalityCommander;
+  final _legalityCommander = value13;
+  final value14 = object.legalityDuel;
+  final _legalityDuel = value14;
+  final value15 = object.legalityExplorer;
+  final _legalityExplorer = value15;
+  final value16 = object.legalityFuture;
+  final _legalityFuture = value16;
+  final value17 = object.legalityGladiator;
+  final _legalityGladiator = value17;
+  final value18 = object.legalityHistoric;
+  final _legalityHistoric = value18;
+  final value19 = object.legalityHistoricbrawl;
+  final _legalityHistoricbrawl = value19;
+  final value20 = object.legalityLegacy;
+  final _legalityLegacy = value20;
+  final value21 = object.legalityModern;
+  final _legalityModern = value21;
+  final value22 = object.legalityPioneer;
+  final _legalityPioneer = value22;
+  final value23 = object.legalityStandard;
+  final _legalityStandard = value23;
+  final value24 = object.legalityVintage;
+  final _legalityVintage = value24;
+  final value25 = object.loyalty;
   IsarUint8List? _loyalty;
-  if (value24 != null) {
-    _loyalty = IsarBinaryWriter.utf8Encoder.convert(value24);
+  if (value25 != null) {
+    _loyalty = IsarBinaryWriter.utf8Encoder.convert(value25);
   }
   dynamicSize += (_loyalty?.length ?? 0) as int;
-  final value25 = object.loyaltyValue;
-  final _loyaltyValue = value25;
-  final value26 = object.manaCost;
-  final _manaCost = IsarBinaryWriter.utf8Encoder.convert(value26);
+  final value26 = object.loyaltyValue;
+  final _loyaltyValue = value26;
+  final value27 = object.manaCost;
+  final _manaCost = IsarBinaryWriter.utf8Encoder.convert(value27);
   dynamicSize += (_manaCost.length) as int;
-  final value27 = object.multiverseId;
-  final _multiverseId = IsarBinaryWriter.utf8Encoder.convert(value27);
+  final value28 = object.multiverseId;
+  final _multiverseId = IsarBinaryWriter.utf8Encoder.convert(value28);
   dynamicSize += (_multiverseId.length) as int;
-  final value28 = object.multiverseIdJp;
-  final _multiverseIdJp = IsarBinaryWriter.utf8Encoder.convert(value28);
+  final value29 = object.multiverseIdJp;
+  final _multiverseIdJp = IsarBinaryWriter.utf8Encoder.convert(value29);
   dynamicSize += (_multiverseIdJp.length) as int;
-  final value29 = object.name;
-  final _name = IsarBinaryWriter.utf8Encoder.convert(value29);
+  final value30 = object.name;
+  final _name = IsarBinaryWriter.utf8Encoder.convert(value30);
   dynamicSize += (_name.length) as int;
-  final value30 = object.nameJp;
-  final _nameJp = IsarBinaryWriter.utf8Encoder.convert(value30);
+  final value31 = object.nameJp;
+  final _nameJp = IsarBinaryWriter.utf8Encoder.convert(value31);
   dynamicSize += (_nameJp.length) as int;
-  final value31 = object.power;
+  final value32 = object.power;
   IsarUint8List? _power;
-  if (value31 != null) {
-    _power = IsarBinaryWriter.utf8Encoder.convert(value31);
+  if (value32 != null) {
+    _power = IsarBinaryWriter.utf8Encoder.convert(value32);
   }
   dynamicSize += (_power?.length ?? 0) as int;
-  final value32 = object.powerValue;
-  final _powerValue = value32;
-  final value33 = object.rarity;
-  final _rarity = IsarBinaryWriter.utf8Encoder.convert(value33);
+  final value33 = object.powerValue;
+  final _powerValue = value33;
+  final value34 = object.rarity;
+  final _rarity = IsarBinaryWriter.utf8Encoder.convert(value34);
   dynamicSize += (_rarity.length) as int;
-  final value34 = object.rarityValue;
-  final _rarityValue = value34;
-  final value35 = object.set;
-  final _set = IsarBinaryWriter.utf8Encoder.convert(value35);
+  final value35 = object.rarityValue;
+  final _rarityValue = value35;
+  final value36 = object.set;
+  final _set = IsarBinaryWriter.utf8Encoder.convert(value36);
   dynamicSize += (_set.length) as int;
-  final value36 = object.text;
-  final _text = IsarBinaryWriter.utf8Encoder.convert(value36);
+  final value37 = object.text;
+  final _text = IsarBinaryWriter.utf8Encoder.convert(value37);
   dynamicSize += (_text.length) as int;
-  final value37 = object.textJp;
-  final _textJp = IsarBinaryWriter.utf8Encoder.convert(value37);
+  final value38 = object.textJp;
+  final _textJp = IsarBinaryWriter.utf8Encoder.convert(value38);
   dynamicSize += (_textJp.length) as int;
-  final value38 = object.toughness;
+  final value39 = object.toughness;
   IsarUint8List? _toughness;
-  if (value38 != null) {
-    _toughness = IsarBinaryWriter.utf8Encoder.convert(value38);
+  if (value39 != null) {
+    _toughness = IsarBinaryWriter.utf8Encoder.convert(value39);
   }
   dynamicSize += (_toughness?.length ?? 0) as int;
-  final value39 = object.toughnessValue;
-  final _toughnessValue = value39;
-  final value40 = object.type;
-  final _type = IsarBinaryWriter.utf8Encoder.convert(value40);
+  final value40 = object.toughnessValue;
+  final _toughnessValue = value40;
+  final value41 = object.type;
+  final _type = IsarBinaryWriter.utf8Encoder.convert(value41);
   dynamicSize += (_type.length) as int;
-  final value41 = object.typeJp;
-  final _typeJp = IsarBinaryWriter.utf8Encoder.convert(value41);
+  final value42 = object.typeJp;
+  final _typeJp = IsarBinaryWriter.utf8Encoder.convert(value42);
   dynamicSize += (_typeJp.length) as int;
   final size = staticSize + dynamicSize;
 
@@ -235,44 +238,45 @@ void _cardSerializeNative(IsarCollection<Card> collection, IsarRawObject rawObj,
   writer.writeBytes(offsets[1], _backFaceMultiverseId);
   writer.writeLong(offsets[2], _cmc);
   writer.writeBytes(offsets[3], _colorIdentity);
-  writer.writeBytes(offsets[4], _flavor);
-  writer.writeBytes(offsets[5], _flavorJp);
-  writer.writeBytes(offsets[6], _imageUrl);
-  writer.writeBytes(offsets[7], _imageUrlJp);
-  writer.writeBool(offsets[8], _isBackFace);
-  writer.writeBytes(offsets[9], _layout);
-  writer.writeBool(offsets[10], _legalityAlchemy);
-  writer.writeBool(offsets[11], _legalityBrawl);
-  writer.writeBool(offsets[12], _legalityCommander);
-  writer.writeBool(offsets[13], _legalityDuel);
-  writer.writeBool(offsets[14], _legalityExplorer);
-  writer.writeBool(offsets[15], _legalityFuture);
-  writer.writeBool(offsets[16], _legalityGladiator);
-  writer.writeBool(offsets[17], _legalityHistoric);
-  writer.writeBool(offsets[18], _legalityHistoricbrawl);
-  writer.writeBool(offsets[19], _legalityLegacy);
-  writer.writeBool(offsets[20], _legalityModern);
-  writer.writeBool(offsets[21], _legalityPioneer);
-  writer.writeBool(offsets[22], _legalityStandard);
-  writer.writeBool(offsets[23], _legalityVintage);
-  writer.writeBytes(offsets[24], _loyalty);
-  writer.writeLong(offsets[25], _loyaltyValue);
-  writer.writeBytes(offsets[26], _manaCost);
-  writer.writeBytes(offsets[27], _multiverseId);
-  writer.writeBytes(offsets[28], _multiverseIdJp);
-  writer.writeBytes(offsets[29], _name);
-  writer.writeBytes(offsets[30], _nameJp);
-  writer.writeBytes(offsets[31], _power);
-  writer.writeLong(offsets[32], _powerValue);
-  writer.writeBytes(offsets[33], _rarity);
-  writer.writeLong(offsets[34], _rarityValue);
-  writer.writeBytes(offsets[35], _set);
-  writer.writeBytes(offsets[36], _text);
-  writer.writeBytes(offsets[37], _textJp);
-  writer.writeBytes(offsets[38], _toughness);
-  writer.writeLong(offsets[39], _toughnessValue);
-  writer.writeBytes(offsets[40], _type);
-  writer.writeBytes(offsets[41], _typeJp);
+  writer.writeLong(offsets[4], _colors);
+  writer.writeBytes(offsets[5], _flavor);
+  writer.writeBytes(offsets[6], _flavorJp);
+  writer.writeBytes(offsets[7], _imageUrl);
+  writer.writeBytes(offsets[8], _imageUrlJp);
+  writer.writeBool(offsets[9], _isBackFace);
+  writer.writeBytes(offsets[10], _layout);
+  writer.writeBool(offsets[11], _legalityAlchemy);
+  writer.writeBool(offsets[12], _legalityBrawl);
+  writer.writeBool(offsets[13], _legalityCommander);
+  writer.writeBool(offsets[14], _legalityDuel);
+  writer.writeBool(offsets[15], _legalityExplorer);
+  writer.writeBool(offsets[16], _legalityFuture);
+  writer.writeBool(offsets[17], _legalityGladiator);
+  writer.writeBool(offsets[18], _legalityHistoric);
+  writer.writeBool(offsets[19], _legalityHistoricbrawl);
+  writer.writeBool(offsets[20], _legalityLegacy);
+  writer.writeBool(offsets[21], _legalityModern);
+  writer.writeBool(offsets[22], _legalityPioneer);
+  writer.writeBool(offsets[23], _legalityStandard);
+  writer.writeBool(offsets[24], _legalityVintage);
+  writer.writeBytes(offsets[25], _loyalty);
+  writer.writeLong(offsets[26], _loyaltyValue);
+  writer.writeBytes(offsets[27], _manaCost);
+  writer.writeBytes(offsets[28], _multiverseId);
+  writer.writeBytes(offsets[29], _multiverseIdJp);
+  writer.writeBytes(offsets[30], _name);
+  writer.writeBytes(offsets[31], _nameJp);
+  writer.writeBytes(offsets[32], _power);
+  writer.writeLong(offsets[33], _powerValue);
+  writer.writeBytes(offsets[34], _rarity);
+  writer.writeLong(offsets[35], _rarityValue);
+  writer.writeBytes(offsets[36], _set);
+  writer.writeBytes(offsets[37], _text);
+  writer.writeBytes(offsets[38], _textJp);
+  writer.writeBytes(offsets[39], _toughness);
+  writer.writeLong(offsets[40], _toughnessValue);
+  writer.writeBytes(offsets[41], _type);
+  writer.writeBytes(offsets[42], _typeJp);
 }
 
 Card _cardDeserializeNative(IsarCollection<Card> collection, int id,
@@ -282,45 +286,46 @@ Card _cardDeserializeNative(IsarCollection<Card> collection, int id,
   object.backFaceMultiverseId = reader.readStringOrNull(offsets[1]);
   object.cmc = reader.readLong(offsets[2]);
   object.colorIdentity = reader.readStringOrNull(offsets[3]);
-  object.flavor = reader.readStringOrNull(offsets[4]);
-  object.flavorJp = reader.readStringOrNull(offsets[5]);
+  object.colors = reader.readLong(offsets[4]);
+  object.flavor = reader.readStringOrNull(offsets[5]);
+  object.flavorJp = reader.readStringOrNull(offsets[6]);
   object.id = id;
-  object.imageUrl = reader.readString(offsets[6]);
-  object.imageUrlJp = reader.readString(offsets[7]);
-  object.isBackFace = reader.readBool(offsets[8]);
-  object.layout = reader.readString(offsets[9]);
-  object.legalityAlchemy = reader.readBool(offsets[10]);
-  object.legalityBrawl = reader.readBool(offsets[11]);
-  object.legalityCommander = reader.readBool(offsets[12]);
-  object.legalityDuel = reader.readBool(offsets[13]);
-  object.legalityExplorer = reader.readBool(offsets[14]);
-  object.legalityFuture = reader.readBool(offsets[15]);
-  object.legalityGladiator = reader.readBool(offsets[16]);
-  object.legalityHistoric = reader.readBool(offsets[17]);
-  object.legalityHistoricbrawl = reader.readBool(offsets[18]);
-  object.legalityLegacy = reader.readBool(offsets[19]);
-  object.legalityModern = reader.readBool(offsets[20]);
-  object.legalityPioneer = reader.readBool(offsets[21]);
-  object.legalityStandard = reader.readBool(offsets[22]);
-  object.legalityVintage = reader.readBool(offsets[23]);
-  object.loyalty = reader.readStringOrNull(offsets[24]);
-  object.loyaltyValue = reader.readLongOrNull(offsets[25]);
-  object.manaCost = reader.readString(offsets[26]);
-  object.multiverseId = reader.readString(offsets[27]);
-  object.multiverseIdJp = reader.readString(offsets[28]);
-  object.name = reader.readString(offsets[29]);
-  object.nameJp = reader.readString(offsets[30]);
-  object.power = reader.readStringOrNull(offsets[31]);
-  object.powerValue = reader.readLongOrNull(offsets[32]);
-  object.rarity = reader.readString(offsets[33]);
-  object.rarityValue = reader.readLong(offsets[34]);
-  object.set = reader.readString(offsets[35]);
-  object.text = reader.readString(offsets[36]);
-  object.textJp = reader.readString(offsets[37]);
-  object.toughness = reader.readStringOrNull(offsets[38]);
-  object.toughnessValue = reader.readLongOrNull(offsets[39]);
-  object.type = reader.readString(offsets[40]);
-  object.typeJp = reader.readString(offsets[41]);
+  object.imageUrl = reader.readString(offsets[7]);
+  object.imageUrlJp = reader.readString(offsets[8]);
+  object.isBackFace = reader.readBool(offsets[9]);
+  object.layout = reader.readString(offsets[10]);
+  object.legalityAlchemy = reader.readBool(offsets[11]);
+  object.legalityBrawl = reader.readBool(offsets[12]);
+  object.legalityCommander = reader.readBool(offsets[13]);
+  object.legalityDuel = reader.readBool(offsets[14]);
+  object.legalityExplorer = reader.readBool(offsets[15]);
+  object.legalityFuture = reader.readBool(offsets[16]);
+  object.legalityGladiator = reader.readBool(offsets[17]);
+  object.legalityHistoric = reader.readBool(offsets[18]);
+  object.legalityHistoricbrawl = reader.readBool(offsets[19]);
+  object.legalityLegacy = reader.readBool(offsets[20]);
+  object.legalityModern = reader.readBool(offsets[21]);
+  object.legalityPioneer = reader.readBool(offsets[22]);
+  object.legalityStandard = reader.readBool(offsets[23]);
+  object.legalityVintage = reader.readBool(offsets[24]);
+  object.loyalty = reader.readStringOrNull(offsets[25]);
+  object.loyaltyValue = reader.readLongOrNull(offsets[26]);
+  object.manaCost = reader.readString(offsets[27]);
+  object.multiverseId = reader.readString(offsets[28]);
+  object.multiverseIdJp = reader.readString(offsets[29]);
+  object.name = reader.readString(offsets[30]);
+  object.nameJp = reader.readString(offsets[31]);
+  object.power = reader.readStringOrNull(offsets[32]);
+  object.powerValue = reader.readLongOrNull(offsets[33]);
+  object.rarity = reader.readString(offsets[34]);
+  object.rarityValue = reader.readLong(offsets[35]);
+  object.set = reader.readString(offsets[36]);
+  object.text = reader.readString(offsets[37]);
+  object.textJp = reader.readString(offsets[38]);
+  object.toughness = reader.readStringOrNull(offsets[39]);
+  object.toughnessValue = reader.readLongOrNull(offsets[40]);
+  object.type = reader.readString(offsets[41]);
+  object.typeJp = reader.readString(offsets[42]);
   return object;
 }
 
@@ -338,19 +343,19 @@ P _cardDeserializePropNative<P>(
     case 3:
       return (reader.readStringOrNull(offset)) as P;
     case 4:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 5:
       return (reader.readStringOrNull(offset)) as P;
     case 6:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 7:
       return (reader.readString(offset)) as P;
     case 8:
-      return (reader.readBool(offset)) as P;
-    case 9:
       return (reader.readString(offset)) as P;
-    case 10:
+    case 9:
       return (reader.readBool(offset)) as P;
+    case 10:
+      return (reader.readString(offset)) as P;
     case 11:
       return (reader.readBool(offset)) as P;
     case 12:
@@ -378,11 +383,11 @@ P _cardDeserializePropNative<P>(
     case 23:
       return (reader.readBool(offset)) as P;
     case 24:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 25:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 26:
-      return (reader.readString(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 27:
       return (reader.readString(offset)) as P;
     case 28:
@@ -392,26 +397,28 @@ P _cardDeserializePropNative<P>(
     case 30:
       return (reader.readString(offset)) as P;
     case 31:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 32:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 33:
-      return (reader.readString(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 34:
-      return (reader.readLong(offset)) as P;
-    case 35:
       return (reader.readString(offset)) as P;
+    case 35:
+      return (reader.readLong(offset)) as P;
     case 36:
       return (reader.readString(offset)) as P;
     case 37:
       return (reader.readString(offset)) as P;
     case 38:
-      return (reader.readStringOrNull(offset)) as P;
-    case 39:
-      return (reader.readLongOrNull(offset)) as P;
-    case 40:
       return (reader.readString(offset)) as P;
+    case 39:
+      return (reader.readStringOrNull(offset)) as P;
+    case 40:
+      return (reader.readLongOrNull(offset)) as P;
     case 41:
+      return (reader.readString(offset)) as P;
+    case 42:
       return (reader.readString(offset)) as P;
     default:
       throw 'Illegal propertyIndex';
@@ -425,6 +432,7 @@ dynamic _cardSerializeWeb(IsarCollection<Card> collection, Card object) {
       jsObj, 'backFaceMultiverseId', object.backFaceMultiverseId);
   IsarNative.jsObjectSet(jsObj, 'cmc', object.cmc);
   IsarNative.jsObjectSet(jsObj, 'colorIdentity', object.colorIdentity);
+  IsarNative.jsObjectSet(jsObj, 'colors', object.colors);
   IsarNative.jsObjectSet(jsObj, 'flavor', object.flavor);
   IsarNative.jsObjectSet(jsObj, 'flavorJp', object.flavorJp);
   IsarNative.jsObjectSet(jsObj, 'id', object.id);
@@ -475,6 +483,8 @@ Card _cardDeserializeWeb(IsarCollection<Card> collection, dynamic jsObj) {
       IsarNative.jsObjectGet(jsObj, 'backFaceMultiverseId');
   object.cmc = IsarNative.jsObjectGet(jsObj, 'cmc') ?? double.negativeInfinity;
   object.colorIdentity = IsarNative.jsObjectGet(jsObj, 'colorIdentity');
+  object.colors =
+      IsarNative.jsObjectGet(jsObj, 'colors') ?? double.negativeInfinity;
   object.flavor = IsarNative.jsObjectGet(jsObj, 'flavor');
   object.flavorJp = IsarNative.jsObjectGet(jsObj, 'flavorJp');
   object.id = IsarNative.jsObjectGet(jsObj, 'id');
@@ -542,6 +552,9 @@ P _cardDeserializePropWeb<P>(Object jsObj, String propertyName) {
           as P;
     case 'colorIdentity':
       return (IsarNative.jsObjectGet(jsObj, 'colorIdentity')) as P;
+    case 'colors':
+      return (IsarNative.jsObjectGet(jsObj, 'colors') ??
+          double.negativeInfinity) as P;
     case 'flavor':
       return (IsarNative.jsObjectGet(jsObj, 'flavor')) as P;
     case 'flavorJp':
@@ -1060,6 +1073,53 @@ extension CardQueryFilter on QueryBuilder<Card, Card, QFilterCondition> {
       property: 'colorIdentity',
       value: pattern,
       caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterFilterCondition> colorsEqualTo(int value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'colors',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterFilterCondition> colorsGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'colors',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterFilterCondition> colorsLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'colors',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterFilterCondition> colorsBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'colors',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
     ));
   }
 
@@ -3475,6 +3535,14 @@ extension CardQueryWhereSortBy on QueryBuilder<Card, Card, QSortBy> {
     return addSortByInternal('colorIdentity', Sort.desc);
   }
 
+  QueryBuilder<Card, Card, QAfterSortBy> sortByColors() {
+    return addSortByInternal('colors', Sort.asc);
+  }
+
+  QueryBuilder<Card, Card, QAfterSortBy> sortByColorsDesc() {
+    return addSortByInternal('colors', Sort.desc);
+  }
+
   QueryBuilder<Card, Card, QAfterSortBy> sortByFlavor() {
     return addSortByInternal('flavor', Sort.asc);
   }
@@ -3821,6 +3889,14 @@ extension CardQueryWhereSortThenBy on QueryBuilder<Card, Card, QSortThenBy> {
     return addSortByInternal('colorIdentity', Sort.desc);
   }
 
+  QueryBuilder<Card, Card, QAfterSortBy> thenByColors() {
+    return addSortByInternal('colors', Sort.asc);
+  }
+
+  QueryBuilder<Card, Card, QAfterSortBy> thenByColorsDesc() {
+    return addSortByInternal('colors', Sort.desc);
+  }
+
   QueryBuilder<Card, Card, QAfterSortBy> thenByFlavor() {
     return addSortByInternal('flavor', Sort.asc);
   }
@@ -4155,6 +4231,10 @@ extension CardQueryWhereDistinct on QueryBuilder<Card, Card, QDistinct> {
     return addDistinctByInternal('colorIdentity', caseSensitive: caseSensitive);
   }
 
+  QueryBuilder<Card, Card, QDistinct> distinctByColors() {
+    return addDistinctByInternal('colors');
+  }
+
   QueryBuilder<Card, Card, QDistinct> distinctByFlavor(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('flavor', caseSensitive: caseSensitive);
@@ -4347,6 +4427,10 @@ extension CardQueryProperty on QueryBuilder<Card, Card, QQueryProperty> {
 
   QueryBuilder<Card, String?, QQueryOperations> colorIdentityProperty() {
     return addPropertyNameInternal('colorIdentity');
+  }
+
+  QueryBuilder<Card, int, QQueryOperations> colorsProperty() {
+    return addPropertyNameInternal('colors');
   }
 
   QueryBuilder<Card, String?, QQueryOperations> flavorProperty() {

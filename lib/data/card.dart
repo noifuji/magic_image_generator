@@ -53,6 +53,7 @@ class Card {
   String? backFaceMultiverseId;
   late bool isBackFace;
   Card? backFace;
+  late int colors;
 
   CardInfo convert() {
       return CardInfo(

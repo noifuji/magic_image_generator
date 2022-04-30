@@ -65,7 +65,8 @@ class CardRemoteDataSource {
         ..legalityStandard = (e[34] == "legal")
         ..legalityVintage = (e[35] == "legal")
         ..backFaceMultiverseId = e[37].toString()
-        ..isBackFace = (e[38] != "");
+        ..isBackFace = (e[38] != "")
+        ..colors = e[5].toString().length;
     }).toList();
 
     return Future<List<Card>>.value(cards);

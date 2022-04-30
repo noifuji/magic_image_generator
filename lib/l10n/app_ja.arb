@@ -4,5 +4,8 @@
   "searchCardHint": "カードを探す",
   "copy": "コピー",
 
+  "menuSearchCard": "カード検索",
+  "menuEditCardImage": "カード画像編集",
+
   "errorReload": "エラー。再ロードしてね。"
 }

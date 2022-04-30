@@ -15,45 +15,60 @@ class SearchCondition implements SearchQuerySymbol {
     "legal" : SearchKeywordType.legal,
     "set" : SearchKeywordType.set,
     "r" : SearchKeywordType.rarity,
+    "rarity" : SearchKeywordType.rarity,
     "c" : SearchKeywordType.color,
+    "color" : SearchKeywordType.color,
     "t" : SearchKeywordType.type,
+    "type" : SearchKeywordType.type,
     "cmc" : SearchKeywordType.cmc,
     "pow" : SearchKeywordType.power,
+    "power" : SearchKeywordType.power,
     "tou" : SearchKeywordType.toughness,
+    "toughness" : SearchKeywordType.toughness,
     "o" : SearchKeywordType.oracle,
+    "oracle" : SearchKeywordType.oracle,
     "name" : SearchKeywordType.name};
 
-  late SearchKeywordType keyword;
-  late RelationalOperatorType relationalOperatorType;
-  late dynamic value;
+  static final Map<String, String> colorMap = {
+    "w" : "w",
+    "u" : "u",
+    "b" : "b",
+    "r" : "r",
+    "g" : "g",
+    "white" : "w",
+    "blue" : "u",
+    "black" : "b",
+    "red" : "r",
+    "green" : "g",
+    "multicolor" : "m",
+    "multi" : "m",
+    "colorless" : "",
+  };
 
-  SearchCondition(List<String> raw) {
-    if(!isSearchConditionFormat(raw)) {
-      throw Exception();
-    }
+  static final Map<String, String> rarityMap = {
+    "c":"common" ,
+    "common":"common" ,
+    "u":"uncommon",
+    "uncommon":"uncommon",
+    "r":"rare" ,
+    "rare":"rare" ,
+    "m":"mythic",
+    "mythic":"mythic",
+  };
 
-    keyword = keywordMap[raw[0]]!;
+  SearchKeywordType keyword;
+  RelationalOperatorType relationalOperatorType;
+  dynamic value;
 
-    value = raw.last;
 
-    relationalOperatorType = relationalOperatorMap[raw.sublist(1,raw.length-1).join()]!;
-  }
+  SearchCondition({
+    required this.keyword,
+    required this.relationalOperatorType,
+    required this.value});
 
-  static bool isSearchConditionFormat(List<String> raw) {
-    if(raw.length < 3) {
-      return false;
-    }
-
-    if(!keywordMap.keys.toList().contains(raw[0])) {
-      return false;
-    }
-
-    if(!relationalOperatorMap.keys.toList().contains(raw.sublist(1,raw.length-1).join())) {
-      return false;
-    }
-
-    return true;
-
+  @override
+  String toString() {
+    return '''{keyword:${keyword.name}, relationalOperatorType:${relationalOperatorType.name}, value:$value}''';
   }
 
 }

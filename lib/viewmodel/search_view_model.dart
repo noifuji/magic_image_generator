@@ -21,6 +21,7 @@ class SearchViewModel extends ChangeNotifier {
     //クエリの分析
     var analyzer = AnalyzeQueryUseCase();
     var conditions = analyzer.call(query);
+
     //リポジトリから結果の取り出し
     _searchResults = await _repository.get(conditions, locale);
     //リザルトを更新

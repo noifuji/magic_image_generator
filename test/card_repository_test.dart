@@ -109,7 +109,80 @@ void main() {
 
   test('Multiple not type condition.', () async {
     List<CardInfo> result = await _repo.get(
-        AnalyzeQueryUseCase().call('t:creature -t:enchant -t:artifact pow=4 set:neo'), Locale("en"));
-    expect(result.length, 10);
+        AnalyzeQueryUseCase().call('t:creature -t:enchant -t:artifact pow=4 r:c set:neo'), Locale("en"));
+    for(var r in result) {
+      print(r.name);
+    }
+    expect(result.length, 1);
+  });
+
+
+  test('Color contains red. ', () async {
+    List<CardInfo> result = await _repo.get(
+        AnalyzeQueryUseCase().call('c:red set:neo'), Locale("en"));
+    expect(result.length, 61);
+
+
+    result = await _repo.get(
+        AnalyzeQueryUseCase().call('color:red set:neo'), Locale("en"));
+    expect(result.length, 61);
+  });
+
+  test('Search red using Color Code. ', () async {
+    List<CardInfo> result = await _repo.get(
+        AnalyzeQueryUseCase().call('c:r set:neo'), Locale("en"));
+    expect(result.length, 61);
+  });
+
+  test('Color equals red ', () async {
+    List<CardInfo> result = await _repo.get(
+        AnalyzeQueryUseCase().call('c=red set:neo'), Locale("en"));
+    expect(result.length, 44);
+  });
+
+  test('Color contains red and green using Color code. ', () async {
+    List<CardInfo> result = await _repo.get(
+        AnalyzeQueryUseCase().call('c:rg set:neo'), Locale("en"));
+    expect(result.length, 4);
+  });
+
+  test('Color contains red and green  using color code in reverse order.', () async {
+    List<CardInfo> result = await _repo.get(
+        AnalyzeQueryUseCase().call('c:gr set:neo'), Locale("en"));
+    expect(result.length, 4);
+  });
+
+  test('Color contains multicolor.', () async {
+    List<CardInfo> result = await _repo.get(
+        AnalyzeQueryUseCase().call('c:m set:neo'), Locale("en"));
+    expect(result.length, 38);
+
+    result = await _repo.get(
+        AnalyzeQueryUseCase().call('c:multi set:neo'), Locale("en"));
+    expect(result.length, 38);
+  });
+
+  test('Color contains colorless.', () async {
+    List<CardInfo> result = await _repo.get(
+        AnalyzeQueryUseCase().call('c:colorless set:neo'), Locale("en"));
+    expect(result.length, 29);
+  });
+
+  test('Search same words with operators.', () async {
+    List<CardInfo> result = await _repo.get(
+        AnalyzeQueryUseCase().call('o:and set:neo'), Locale("en"));
+    expect(result.length, 119);
+
+    result = await _repo.get(
+        AnalyzeQueryUseCase().call('o:or set:neo'), Locale("en"));
+    expect(result.length, 179);
+
+    result = await _repo.get(
+        AnalyzeQueryUseCase().call('o:- set:neo'), Locale("en"));
+    expect(result.length, 30);
+
+    result = await _repo.get(
+        AnalyzeQueryUseCase().call('o:" set:neo'), Locale("en"));
+    expect(result.length, 18);
   });
 }

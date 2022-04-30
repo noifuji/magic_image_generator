@@ -4,5 +4,8 @@
     "searchCardHint": "Search cards",
     "copy": "Copy",
 
+    "menuSearchCard": "Search",
+    "menuEditCardImage": "Edit Image",
+
     "errorReload": "Error. Please reload this page."
 }

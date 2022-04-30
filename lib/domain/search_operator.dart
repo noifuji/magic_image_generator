@@ -36,4 +36,9 @@ class SearchOperator implements SearchQuerySymbol{
 
     return searchOperatorMap.keys.toList().contains(raw[0]);
   }
+
+  @override
+  String toString() {
+    return '''{searchOperatorType:${searchOperatorType.name}}''';
+  }
 }

@@ -2,17 +2,24 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
+import 'package:magic_image_generator/domain/rarity_type.dart';
 import 'package:magic_image_generator/domain/relational_operator_type.dart';
 import 'package:magic_image_generator/domain/search_condition.dart';
 import 'package:magic_image_generator/domain/search_keyword_type.dart';
 import 'package:magic_image_generator/domain/search_operator.dart';
 import 'package:magic_image_generator/domain/search_operator_type.dart';
 
+import '../domain/color_type.dart';
 import '../domain/search_query_symbol.dart';
 import 'card.dart';
 
 import '../assets/constants.dart' as constants;
 
+/*
+逆ポーランド記法形式のConditionとOperatorを解読しつつ、Isarの形式に変換する。
+ConditionによってIsarでのクエリが異なる。
+各キーワード毎に変換メソッドを作成する。
+ */
 class CardLocalDataSource {
   static final conditionMap = {
     RelationalOperatorType.contains :ConditionType.contains,
@@ -49,7 +56,48 @@ class CardLocalDataSource {
     SearchKeywordType.legal : "legal",
   };
 
-  final intValueKeywords = [SearchKeywordType.rarity,SearchKeywordType.cmc,
+  static final colorTypeMap = {
+    ColorType.white:"w",
+    ColorType.blue:"u",
+    ColorType.black:"b",
+    ColorType.red:"r",
+    ColorType.green:"g",
+    ColorType.wu:"wu",
+    ColorType.ub:"ub",
+    ColorType.br:"br",
+    ColorType.rg:"rg",
+    ColorType.gw:"gw",
+    ColorType.wb:"wb",
+    ColorType.bg:"bg",
+    ColorType.gu:"gu",
+    ColorType.ur:"ur",
+    ColorType.wr:"wr",
+    ColorType.wub:"wub",
+    ColorType.ubr:"ubr",
+    ColorType.brg:"brg",
+    ColorType.rgw:"rgw",
+    ColorType.gwu:"gwu",
+    ColorType.wur:"wur",
+    ColorType.ubg:"ubg",
+    ColorType.brw:"brw",
+    ColorType.rgu:"rgu",
+    ColorType.wbg:"wbg",
+    ColorType.noWhite:"ubrg",
+    ColorType.noBlue:"wbrg",
+    ColorType.noBlack:"wurg",
+    ColorType.noRed:"wubg",
+    ColorType.noGreen:"wubr",
+    ColorType.fiveColors:"wubrg",
+  };
+
+  final rarityTypeMap = {
+    RarityType.common:0,
+  RarityType.uncommon:1,
+  RarityType.rare:2,
+  RarityType.mythic:3};
+
+
+  final intValueKeywords = [SearchKeywordType.cmc,
     SearchKeywordType.power,SearchKeywordType.toughness,
     SearchKeywordType.loyalty];
 
@@ -81,6 +129,10 @@ class CardLocalDataSource {
       throw Exception();
     }
 
+    for(var s in query) {
+      print(s);
+    }
+
     List<FilterOperation> stack = [];
 
     //queryを変換していく。
@@ -97,14 +149,15 @@ class CardLocalDataSource {
         }
 
         if(t.keyword == SearchKeywordType.rarity) {
-          t = rarityToValue(t);
+          stack.add(createRarityIsarFilter(t, propertyMap));
+        } else if(t.keyword == SearchKeywordType.color) {
+          stack.add(createColorIsarFilter(t, propertyMap));
         }
-
-        if(intValueKeywords.contains(t.keyword)) {
+        else if(intValueKeywords.contains(t.keyword)) {
           t.value = int.parse(t.value.toString());
-          stack.add(createIsarCondition<int>(t, propertyMap));
+          stack.add(createIsarFilter<int>(t, propertyMap));
         } else if(t.value is String) {
-          stack.add(createIsarCondition<String>(t, propertyMap));
+          stack.add(createIsarFilter<String>(t, propertyMap));
         }
 
 
@@ -191,7 +244,7 @@ class CardLocalDataSource {
     });
   }
 
-  FilterOperation createIsarCondition<T>(SearchCondition condition, Map propertyMap) {
+  FilterOperation createIsarFilter<T>(SearchCondition condition, Map propertyMap) {
     if(condition.relationalOperatorType == RelationalOperatorType.greaterThanOrEquals) {
       return FilterGroup.and(
           [FilterCondition<T>(type: ConditionType.gt,
@@ -212,20 +265,83 @@ class CardLocalDataSource {
             FilterGroup.not(FilterCondition<T>(type: ConditionType.isNull, property: propertyMap[condition.keyword]!)),]);
 
     }
-
   }
 
-  SearchCondition rarityToValue(SearchCondition c) {
-    if(constants.rarityLetterMap.keys.toList().contains(c.value.toLowerCase())) {
-      c.value = constants.rarityLetterMap[c.value.toLowerCase()]!;
+  FilterOperation createRarityIsarFilter(SearchCondition condition, Map propertyMap) {
+    condition.value = rarityTypeMap[condition.value];
+
+    if(condition.relationalOperatorType == RelationalOperatorType.contains) {
+      condition.relationalOperatorType = RelationalOperatorType.equals;
     }
 
-    if(!constants.rarityValueMap.keys.toList().contains(c.value.toLowerCase())) {
+    return createIsarFilter(condition, propertyMap);
+  }
+
+  /*
+  relation:  contains, =のみ使用可能
+  value: multi, colorlessは特殊
+
+  = colorless -> colorsが0
+  : colorless -> colorsが0
+  = m    -> colors 1より大きい
+  : m   -> colorsが1より大きい
+  : 単色　-> Xを含む
+  : 複数色 -> Xを含むかつYを含む
+  = 単色 ->Xを含むかつcolorsが1
+  = 複数色　-> Xを含むかつYを含むかつ色数がcolorsが一致
+   */
+  FilterOperation createColorIsarFilter(SearchCondition condition, Map propertyMap) {
+    if(![RelationalOperatorType.equals,RelationalOperatorType.contains].contains(condition.relationalOperatorType)) {
       throw Exception();
     }
 
-    c.value = constants.rarityValueMap[c.value.toLowerCase()]!;
+    if(condition.value == ColorType.colorless){//colorlessの場合
+      return FilterCondition<int>(
+              type: ConditionType.eq,
+              property: "colors",
+              value: 0, caseSensitive: false);
 
-    return c;
+    } else if(condition.value == ColorType.multiColor) {//multicolorの場合
+      return FilterCondition<int>(
+              type: ConditionType.gt,
+              property: "colors",
+              value: 1, caseSensitive: false);
+
+    } else if(condition.relationalOperatorType == RelationalOperatorType.contains) {//containの場合
+      List<FilterCondition<String>> filters = [];
+      String colorString = colorTypeMap[condition.value]!;
+      for(var i = 0; i < colorString.length; i++) {
+        filters.add(
+            FilterCondition<String>(
+                type: ConditionType.contains,
+                property: "colorIdentity",
+                value: colorString[i], caseSensitive: false));
+      }
+
+      return FilterGroup.and(filters);
+    } else if(condition.relationalOperatorType == RelationalOperatorType.equals) {//equalsの場合
+      List<FilterCondition<dynamic>> filters = [];
+      String colorString = colorTypeMap[condition.value]!;
+      for(var i = 0; i < colorString.length; i++) {
+        filters.add(
+            FilterCondition<String>(
+                type: ConditionType.contains,
+                property: "colorIdentity",
+                value: colorString[i], caseSensitive: false));
+      }
+
+      filters.add(
+          FilterCondition<int>(
+              type: ConditionType.eq,
+              property: "colors",
+              value: colorString.length, caseSensitive: false));
+
+      return FilterGroup.and(filters);
+    }
+
+    throw Exception();
+
   }
+
+
 }

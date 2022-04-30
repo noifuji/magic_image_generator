@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:magic_image_generator/domain/search_condition.dart';
+import 'package:magic_image_generator/domain/search_condition_mapper.dart';
 import 'package:magic_image_generator/domain/search_operator.dart';
 import 'package:magic_image_generator/domain/search_operator_type.dart';
 import 'package:magic_image_generator/domain/search_query_symbol.dart';
@@ -75,8 +77,6 @@ class AnalyzeQueryUseCase {
   }
 
   List<String> checkOperators(List<String> p) {
-    //validate
-    //validate
     int countOpenBracket = p.fold<int>(0, (previousValue, element) => previousValue = previousValue + (element == '('? 1 : 0));
     int countCloseBracket = p.fold<int>(0, (previousValue, element) => previousValue = previousValue + (element == ')'? 1 : 0));
     if(countOpenBracket != countCloseBracket) {
@@ -209,7 +209,8 @@ d. その他（演算子）の場合
  * 数値　数値 　　補完
  * 数値　(　　　　補完
  * 数値 )　　　　スルー
- * 数値　演算子　　スルー
+ * 数値　and or　　スルー
+ * 数値　-　　　　補完
  * ( (　　　　　　スルー
  * ( 数値　　　　　スルー
  * ( )　　　　　　エラー
@@ -237,7 +238,8 @@ d. その他（演算子）の場合
       if((first is SearchCondition && second is SearchCondition) ||
           (first is SearchCondition && second is SearchOperator && second.searchOperatorType == SearchOperatorType.openedBracket) ||
           (first is SearchOperator && first.searchOperatorType == SearchOperatorType.closedBracket && second is SearchCondition) ||
-          (first is SearchOperator && first.searchOperatorType == SearchOperatorType.closedBracket && second is SearchOperator && second.searchOperatorType == SearchOperatorType.openedBracket)) {
+          (first is SearchOperator && first.searchOperatorType == SearchOperatorType.closedBracket && second is SearchOperator && second.searchOperatorType == SearchOperatorType.openedBracket) ||
+          (first is SearchCondition && second is SearchOperator && second.searchOperatorType == SearchOperatorType.not)) {
         r.add(t);
         r.add(SearchOperator(["and"]));
       } else if((first is SearchOperator &&
@@ -261,10 +263,10 @@ d. その他（演算子）の場合
     return p.map((e) {
       if(SearchOperator.isSearchOperator(e)) {
         return SearchOperator(e);
-      } else if(SearchCondition.isSearchConditionFormat(e)) {
-        return SearchCondition(e);
+      } else if(SearchConditionMapper.isMappable(e)) {
+        return SearchConditionMapper.map(e);
       } else if(e.length == 1) {
-        return SearchCondition(["name", ":" , e[0]]);
+        return SearchConditionMapper.map(["name", ":" , e[0]]);
       }
 
       throw Exception();

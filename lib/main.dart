@@ -34,26 +34,28 @@ import 'domain/card_repository.dart';
  * ・ロード遅すぎる。->ok
  * ・左から並び替えられない -> ok
  * ・スマホ対応 -> ok
- *
- * ・「t:creature -t:encha -t:arti pow=4」おかしい
+ * ・「t:creature -t:encha -t:arti pow=4」おかしい ->ok
  * ・color指定
- * 　　white blue black red green colorless multicolor
+ * 　　white blue black red green colorless multicolor ->ok
  * 　　略称　w, u, b, r, g, c, m, multi
  * 　　多色を指定できる rgは赤緑 grも化
  * 　　多色指定は略称のみ指定可能
+ * ・キャンバスで複数行 -> ok
+ *
  * ・テキスト検索でオペレーターをつかえない
  * ・検索失敗メッセージ
  * ・ヒット件数表示
  *　・画像データ読み込み中になんか出す
- * ・キャンバスで複数行
  * ・カード移動時のエフェクト
  * ・コピー成功時にエフェクト
  * ・CanvasScreen汚すぎ
- * ・メニュー
  * ・アリーナっぽい検索画面
  * ・両面カードクルクル
  * ・キャンバスから画像削除
  * ・画像データ履歴保持
+ * ・スマホナビゲーション
+ * ・スマホのときは検索ボックス下へ(検索ボックス位置オプションをsearchScreeenにつける。)
+ * ・クエリ入力補助(プルダウンで選択できる　o:xxx オラクル　c:xxx 色指定など)
  */
 
 final key = GlobalKey<CanvasViewScreenState>();
@@ -126,10 +128,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  int _selectedIndex = 0;
   bool _localeSwitch = false;
   late Future<CardRepository> _initialize;
   SearchViewModel? _searchViewModel;
   CanvasViewModel? _canvasViewModel;
+
+  final List<Widget> _widgetOptions = <Widget>[];
 
   @override
   void initState() {
@@ -153,6 +158,12 @@ class _MyHomePageState extends State<MyHomePage> {
     await repo.init();
 
     return Future<CardRepository>.value(repo);
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
@@ -182,16 +193,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: LayoutBuilder(builder:
                     (BuildContext context, BoxConstraints constraints) {
                   final _breakpoint = Breakpoint.fromConstraints(constraints);
-                  print('''_breakpoint.device:${_breakpoint.device}''');
-                  print('''_breakpoint.columns:${_breakpoint.columns}''');
-                  print('''_breakpoint.gutters:${_breakpoint.gutters}''');
-                  print('''_breakpoint.window:${_breakpoint.window}''');
                   int _columns = _breakpoint.columns;
                   double _gutterWidth = _breakpoint.gutters;
                   double _marginWidth = _breakpoint.gutters;
                   double _columnWidth = (constraints.maxWidth - _marginWidth*2 - _gutterWidth * (_columns-1))/_columns;
-
-                  print("columnswidth:" + _columnWidth.toString());
 
                   if(_columns > 4) {
                     return Scaffold(
@@ -248,9 +253,21 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                         tooltip: AppLocalizations.of(context)!.copy,
                         child: const Icon(Icons.copy),
-                      ), // ,
-                    );
+                      ),);
                   } else {
+                    _widgetOptions.add(
+                        SearchViewScreen(
+                      responsiveColumns: _columns,
+                      responsiveColumnWidth: _columnWidth,
+                      responsiveGutterWidth: _gutterWidth,));
+
+                    _widgetOptions.add(
+                        CanvasViewScreen(
+                          key: key,
+                          responsiveColumns: _columns,
+                          responsiveColumnWidth: _columnWidth,
+                          responsiveGutterWidth: _gutterWidth,));
+
                     return Scaffold(
                       appBar: AppBar(
                         title: Text(AppLocalizations.of(context)!.appTitle),
@@ -281,12 +298,34 @@ class _MyHomePageState extends State<MyHomePage> {
                                         left: _marginWidth,
                                         right: _gutterWidth),
 
-                                    child: SearchViewScreen(
-                                      responsiveColumns: _columns,
-                                      responsiveColumnWidth: _columnWidth,
-                                      responsiveGutterWidth: _gutterWidth,
-                                    ))),
-                          ]),// ,
+                                    child: _widgetOptions[_selectedIndex])),
+                          ]),
+
+                        floatingActionButton: Container(
+                            margin: EdgeInsets.only(bottom: 0.0),
+                        child:
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                            children:[
+                          if(_selectedIndex==1)FloatingActionButton(
+                          onPressed: () async {
+                            await key.currentState?.copyImageToClipBoard();
+                          },
+                          tooltip: AppLocalizations.of(context)!.copy,
+                          child: const Icon(Icons.copy),
+                        )])),
+
+
+                        bottomNavigationBar: BottomNavigationBar(
+                          items: <BottomNavigationBarItem>[
+                            BottomNavigationBarItem(
+                                icon: Icon(Icons.search), label: AppLocalizations.of(context)!.menuSearchCard),
+                            BottomNavigationBarItem(
+                                icon: Icon(Icons.style), label: AppLocalizations.of(context)!.menuEditCardImage),
+                          ],
+                          currentIndex: _selectedIndex,
+                          onTap: _onItemTapped,
+                        )
                     );
                   }
                 }));
