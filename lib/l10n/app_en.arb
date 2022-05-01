@@ -7,5 +7,7 @@
     "menuSearchCard": "Search",
     "menuEditCardImage": "Edit Image",
 
+    "msgCopyDone": "An image was copied!",
+
     "errorReload": "Error. Please reload this page."
 }

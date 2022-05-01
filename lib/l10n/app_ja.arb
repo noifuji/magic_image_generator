@@ -7,5 +7,7 @@
   "menuSearchCard": "カード検索",
   "menuEditCardImage": "カード画像編集",
 
+  "msgCopyDone": "画像がコピーされたよ!",
+
   "errorReload": "エラー。再ロードしてね。"
 }

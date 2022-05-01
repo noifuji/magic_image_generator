@@ -11,7 +11,7 @@ class SearchBoxWidget extends StatelessWidget {
   double responsiveColumnWidth;
   double responsiveGutterWidth;
 
-  final TextEditingController _editingController = TextEditingController();
+  final myController = TextEditingController();
 
   SearchBoxWidget(
       {required this.responsiveColumns,
@@ -22,8 +22,6 @@ class SearchBoxWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var focusNode = FocusNode();
-    FocusScope.of(context).requestFocus(focusNode);
     return Container(
         width: responsiveColumnWidth * responsiveColumns +
             responsiveGutterWidth * (responsiveColumns - 1),
@@ -33,41 +31,28 @@ class SearchBoxWidget extends StatelessWidget {
         ),
         child: Row(children: [
           SizedBox(
-              width: responsiveColumnWidth * 0.5,
-              child: const Icon(
-                Icons.search,
-              )),
-          SizedBox(
               width: responsiveColumnWidth * (responsiveColumns - 1) +
                   responsiveGutterWidth * (responsiveColumns - 2),
-              child: RawKeyboardListener(
-                  onKey: (event) async {
-                    print(event);
-                    if (event is RawKeyUpEvent) {
-                      if (event.logicalKey == LogicalKeyboardKey.enter) {
-                        await submit(context);
-                      } else if (event.data is RawKeyEventDataWeb) {
-                        final data = event.data as RawKeyEventDataWeb;
-                        if (data.keyLabel == 'Enter') await submit(context);
-                      } else if (event.data is RawKeyEventDataAndroid) {
-                        final data = event.data as RawKeyEventDataAndroid;
-                        if (data.keyCode == 13) await submit(context);
-                      }
-                    }
-                  },
-                  focusNode: focusNode,
-                  child: TextField(
-                    controller: _editingController,
+              child: TextField(
+                controller: myController,
                     decoration: InputDecoration(
                         hintText: AppLocalizations.of(context)!.searchCardHint),
-                    autofocus: false,
-                  )))
+                    autofocus: true,
+                    onSubmitted: (value) async {
+                      await Provider.of<SearchViewModel>(context, listen: false)
+                          .search(value, Localizations.localeOf(context));
+                    },
+                  )),
+          SizedBox(
+              width: responsiveColumnWidth * 0.5,
+              child: IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () async {
+                  await Provider.of<SearchViewModel>(context, listen: false)
+                    .search(myController.text, Localizations.localeOf(context));
+                  },
+              )),
         ]));
   }
 
-  submit(BuildContext context) async {
-    final input = _editingController.text;
-    await Provider.of<SearchViewModel>(context, listen: false)
-        .search(input, Localizations.localeOf(context));
-  }
 }

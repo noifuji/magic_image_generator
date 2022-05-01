@@ -11,6 +11,7 @@ import 'package:transparent_image/transparent_image.dart';
 import 'dart:ui' as ui;
 import 'dart:js' as js;
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../assets/constants.dart' as constants;
 import '../assets/util.dart';
 import '../model/card_info.dart';
@@ -318,21 +319,26 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
 
   Future<void> copyImageToClipBoard() async {
     Future(() async {
-      RenderRepaintBoundary? boundary = _globalKey.currentContext
-          ?.findRenderObject() as RenderRepaintBoundary?;
-      if (boundary == null) {
-        return;
-      }
-      ui.Image image =
-          await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      if (byteData != null) {
-        Uint8List pngBytes = byteData.buffer.asUint8List();
-        js.context.callMethod('copyImageToClipboard', [pngBytes]);
-      } else {
-        print("failed");
-      }
+        RenderRepaintBoundary? boundary = _globalKey.currentContext
+            ?.findRenderObject() as RenderRepaintBoundary?;
+        if (boundary == null) {
+          return;
+        }
+        ui.Image image =
+        await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);
+        ByteData? byteData =
+        await image.toByteData(format: ui.ImageByteFormat.png);
+        if (byteData != null) {
+          Uint8List pngBytes = byteData.buffer.asUint8List();
+          js.context.callMethod('copyImageToClipboard', [pngBytes]);
+
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(AppLocalizations.of(context)!.msgCopyDone),
+          ));
+
+        } else {
+          print("failed");
+        }
     });
   }
 }
