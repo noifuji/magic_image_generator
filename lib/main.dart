@@ -58,6 +58,7 @@ import 'domain/card_repository.dart';
  * ・クエリ入力補助(プルダウンで選択できる　o:xxx オラクル　c:xxx 色指定など)
  * ・キャンバスで右端移動できない
  * ・大量に画像いれると余白がマイナスになる。
+ * ・並び替え機能
  */
 
 final key = GlobalKey<CanvasViewScreenState>();
