@@ -19,12 +19,13 @@ class CanvasViewScreen extends StatefulWidget {
   int responsiveColumns;
   double responsiveColumnWidth;
   double responsiveGutterWidth;
-  CanvasViewScreen({
-    Key? key,
-    required this.responsiveColumns,
-    required this.responsiveColumnWidth,
-    required this.responsiveGutterWidth
-  }) : super(key: key);
+
+  CanvasViewScreen(
+      {Key? key,
+      required this.responsiveColumns,
+      required this.responsiveColumnWidth,
+      required this.responsiveGutterWidth})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => CanvasViewScreenState();
@@ -45,13 +46,15 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
         builder: (BuildContext context, BoxConstraints constraints) {
       _canvasViewZoomRatio = min(
           constraints.maxWidth /
-              ((selectedCardRowLengthMax + 1) * constants.rawCardImageWidth),
+              ((selectedCardRowLengthMax) * constants.rawCardImageWidth+5),
           (constraints.maxHeight) /
               ((selectedCardMatrix.length + 1) * constants.rawCardImageHeight));
 
       if (_canvasViewZoomRatio > 1.0) {
         _canvasViewZoomRatio = 1.0;
       }
+
+
 
       List<Widget> draggableImageMatrix = [];
 
@@ -74,8 +77,8 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
           ) {
             return SizedBox(
               //横方向の余白
-              width:  constraints.maxWidth -
-                  row.length *
+              width: (selectedCardRowLengthMax -
+                  row.length) *
                       constants.rawCardImageWidth *
                       _canvasViewZoomRatio,
               height: constants.rawCardImageHeight * _canvasViewZoomRatio,
@@ -104,11 +107,16 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
         return Row(children: cardWidgets);
       }).toList();
 
+      print(constraints.maxWidth -
+          selectedCardRowLengthMax *
+              constants.rawCardImageWidth *
+              _canvasViewZoomRatio);
+
       return Row(children: [
         SizedBox(
-            /*width: selectedCardRowLengthMax *
-                constants.cardWidth *
-                _canvasViewZoomRatio,*/
+            width: selectedCardRowLengthMax *
+                constants.rawCardImageWidth *
+                _canvasViewZoomRatio,
             child: SingleChildScrollView(
                 child: Column(
                     mainAxisSize: MainAxisSize.max,
@@ -121,7 +129,7 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
                   child: RepaintBoundary(
                       key: _globalKey,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: draggableImageMatrix))),
               DragTarget<Map<String, int>>(
                 builder: (
@@ -164,10 +172,10 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
             ]))),
         SizedBox(
           //横方向の余白
-          width: 0/*constraints.maxWidth -
+          width: constraints.maxWidth -
               selectedCardRowLengthMax *
-                  constants.cardWidth *
-                  _canvasViewZoomRatio,*/
+                  constants.rawCardImageWidth *
+                  _canvasViewZoomRatio,
         )
       ]);
     });

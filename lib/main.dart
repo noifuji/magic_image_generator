@@ -56,6 +56,8 @@ import 'domain/card_repository.dart';
  * ・スマホナビゲーション
  * ・スマホのときは検索ボックス下へ(検索ボックス位置オプションをsearchScreeenにつける。)
  * ・クエリ入力補助(プルダウンで選択できる　o:xxx オラクル　c:xxx 色指定など)
+ * ・キャンバスで右端移動できない
+ * ・大量に画像いれると余白がマイナスになる。
  */
 
 final key = GlobalKey<CanvasViewScreenState>();
