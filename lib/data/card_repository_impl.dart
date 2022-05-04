@@ -7,6 +7,7 @@ import 'package:magic_image_generator/model/card_info.dart';
 
 import '../assets/util.dart';
 import '../domain/card_repository.dart';
+import '../model/card_info_header.dart';
 import 'card.dart';
 import 'card_remote_data_source.dart';
 
@@ -30,14 +31,14 @@ class CardRepositoryImpl implements CardRepository {
   }
 
   @override
-  Future<List<CardInfo>> get(List<SearchQuerySymbol> query, Locale locale) async {
+  Future<List<CardInfoHeader>> get(List<SearchQuerySymbol> query, Locale locale) async {
     List<Card> cards = await _localDataSource.get(query, locale);
-    return Future<List<CardInfo>>.value(cards.map((e) {
-      CardInfo ci = e.convert();
-      if(ci.isTransform) {
-        ci.backFace = e.backFace!.convert();
+    return Future<List<CardInfoHeader>>.value(cards.map((e) {
+      CardInfoHeader cih = CardInfoHeader(e.convert());
+      if(cih.isTransform) {
+        cih.cardFaces.add(e.backFace!.convert());
       }
-      return ci;
+      return cih;
     }).toList());
   }
 

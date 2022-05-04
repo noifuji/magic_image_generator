@@ -5,14 +5,15 @@ import 'package:magic_image_generator/domain/card_repository.dart';
 
 import '../domain/analyze_query_usecase.dart';
 import '../model/card_info.dart';
+import '../model/card_info_header.dart';
 
 class SearchViewModel extends ChangeNotifier {
   final CardRepository _repository;
 
 
-  List<CardInfo> _searchResults = [];
+  List<CardInfoHeader> _searchResults = [];
 
-  List<CardInfo> get searchResults => _searchResults;
+  List<CardInfoHeader> get searchResults => _searchResults;
 
 
   SearchViewModel(this._repository);

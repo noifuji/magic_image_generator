@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:isar/isar.dart';
 
 import '../model/card_info.dart';
+
 part 'card.g.dart';
 
 @Collection()
@@ -56,12 +57,13 @@ class Card {
   late int colors;
 
   CardInfo convert() {
-      return CardInfo(
-          multiverseId: multiverseId,
-          name: name,
-          imageUrl: imageUrl,
-          imageUrlJp: imageUrlJp,
-          isTransform: layout == "transform",
-      );
+    CardInfo ci = CardInfo(
+        multiverseId: multiverseId,
+        name: name,
+        imageUrl: imageUrl,
+        imageUrlJp: imageUrlJp,
+        layout: layout);
+
+    return ci;
   }
 }

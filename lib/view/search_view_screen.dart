@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../assets/constants.dart' as constants;
 import '../assets/util.dart';
 import '../model/card_info.dart';
+import '../model/card_info_header.dart';
 import '../viewmodel/canvas_view_model.dart';
 import '../viewmodel/search_view_model.dart';
 
@@ -31,7 +32,7 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
   @override
   Widget build(BuildContext context) {
     Util.printTimeStamp("SearchViewScreen build");
-    List<CardInfo> searchResults = Provider.of<SearchViewModel>(context).searchResults;
+    List<CardInfoHeader> searchResults = Provider.of<SearchViewModel>(context).searchResults;
 
     return Column(children: [
             Expanded(
@@ -56,7 +57,7 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
                       children: List.generate(searchResults.length, (index) {
                         return GestureDetector(
                             onTap: () {
-                              Provider.of<CanvasViewModel>(context, listen: false).addSelectedCards(0, searchResults[index]);
+                              Provider.of<CanvasViewModel>(context, listen: false).addSelectedCards(0, searchResults[index].copyWith());
                             },
                             child: Container(
                               margin: const EdgeInsets.only(
@@ -64,7 +65,7 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
                                   bottom: 3.0,
                                   left: 3.0,
                                   right: 3.0),
-                              child: Image.network(searchResults[index].imageUrl(Localizations.localeOf(context)),
+                              child: Image.network(searchResults[index].cardFaces[0].imageUrl(Localizations.localeOf(context)),
                                   fit: BoxFit.contain, width: constants.rawCardImageWidth),
                             ));
                       }),

@@ -43,7 +43,10 @@ import 'domain/card_repository.dart';
  * ・キャンバスで複数行 -> ok
  * ・スマホナビゲーション -> ok
  * ・コピー成功時にエフェクト->ok
+ * ・両面カードクルクル -> ok
+ * ・キャンバスから画像削除 -> ok
  *
+ * ・スマホでコピーできない->ok
  * ・テキスト検索でオペレーターをつかえない
  * ・検索失敗メッセージ
  * ・ヒット件数表示
@@ -51,8 +54,6 @@ import 'domain/card_repository.dart';
  * ・カード移動時のエフェクト
  * ・CanvasScreen汚すぎ
  * ・アリーナっぽい検索画面
- * ・両面カードクルクル
- * ・キャンバスから画像削除
  * ・画像データ履歴保持
  * ・スマホのときは検索ボックス下へ(検索ボックス位置オプションをsearchScreeenにつける。)
  * ・クエリ入力補助(プルダウンで選択できる　o:xxx オラクル　c:xxx 色指定など)
@@ -199,137 +200,152 @@ class _MyHomePageState extends State<MyHomePage> {
                   int _columns = _breakpoint.columns;
                   double _gutterWidth = _breakpoint.gutters;
                   double _marginWidth = _breakpoint.gutters;
-                  double _columnWidth = (constraints.maxWidth - _marginWidth*2 - _gutterWidth * (_columns-1))/_columns;
+                  double _columnWidth = (constraints.maxWidth -
+                          _marginWidth * 2 -
+                          _gutterWidth * (_columns - 1)) /
+                      _columns;
 
-                  if(_columns > 4) {
+                  if (_columns > 4) {
                     return Scaffold(
-                      appBar: AppBar(
-                        title: Text(AppLocalizations.of(context)!.appTitle),
-                        actions: [
-                          Switch(
-                              value: _localeSwitch,
-                              onChanged: (value) {
-                                MyApp.of(context)?.setLocale(AppLocalizations
-                                    .supportedLocales
-                                    .firstWhere((element) =>
-                                element.languageCode !=
-                                    Localizations
-                                        .localeOf(context)
-                                        .languageCode));
-                                setState(() {
-                                  _localeSwitch = value;
-                                });
-                              })
-                        ],
-                      ),
-                      body: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                                flex: constants.searchViewRatio,
-                                child: Container(
-                                    margin: EdgeInsets.only(
-                                        left: _marginWidth,
-                                        right: _gutterWidth),
+                        appBar: AppBar(
+                          title: Text(AppLocalizations.of(context)!.appTitle),
+                          actions: [
+                            Switch(
+                                value: _localeSwitch,
+                                onChanged: (value) {
+                                  MyApp.of(context)?.setLocale(AppLocalizations
+                                      .supportedLocales
+                                      .firstWhere((element) =>
+                                          element.languageCode !=
+                                          Localizations.localeOf(context)
+                                              .languageCode));
+                                  setState(() {
+                                    _localeSwitch = value;
+                                  });
+                                })
+                          ],
+                        ),
+                        body: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                  flex: constants.searchViewRatio,
+                                  child: Container(
+                                      margin: EdgeInsets.only(
+                                          left: _marginWidth,
+                                          right: _gutterWidth),
+                                      child: SearchViewScreen(
+                                        responsiveColumns: _columns ~/ 2,
+                                        responsiveColumnWidth: _columnWidth,
+                                        responsiveGutterWidth: _gutterWidth,
+                                      ))),
+                              Expanded(
+                                  flex: constants.canvasViewRatio,
+                                  child: Container(
+                                      margin:
+                                          EdgeInsets.only(right: _marginWidth),
+                                      child: CanvasViewScreen(
+                                        key: key,
+                                        responsiveColumns: _columns ~/ 2,
+                                        responsiveColumnWidth: _columnWidth,
+                                        responsiveGutterWidth: _gutterWidth,
+                                      )))
+                            ]),
+                        floatingActionButton: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                          FloatingActionButton(
+                            onPressed: () async {
+                              await key.currentState?.copyImageToClipBoard();
+                            },
+                            tooltip: AppLocalizations.of(context)!.copy,
+                            child: const Icon(Icons.copy),
+                          ),
 
-                                    child: SearchViewScreen(
-                                      responsiveColumns: _columns ~/ 2,
-                                      responsiveColumnWidth: _columnWidth,
-                                      responsiveGutterWidth: _gutterWidth,
-                                    ))),
-                            Expanded(
-                                flex: constants.canvasViewRatio,
-                                child: Container(
-                                    margin: EdgeInsets.only(
-                                        right: _marginWidth),
+                              const SizedBox(height: 16),
 
-                                    child: CanvasViewScreen(
-                                      key: key,
-                                      responsiveColumns: _columns ~/ 2,
-                                      responsiveColumnWidth: _columnWidth,
-                                      responsiveGutterWidth: _gutterWidth,
-                                    )))
-                          ]),
-                      floatingActionButton: FloatingActionButton(
-                        onPressed: () async {
-                          await key.currentState?.copyImageToClipBoard();
-                        },
-                        tooltip: AppLocalizations.of(context)!.copy,
-                        child: const Icon(Icons.copy),
-                      ),);
+                          FloatingActionButton(
+                            onPressed: () async {
+                              await key.currentState?.downloadImage();
+                            },
+                            tooltip: AppLocalizations.of(context)!.download,
+                            child: const Icon(Icons.download),
+                          ),
+                        ]));
                   } else {
-                    _widgetOptions.add(
-                        SearchViewScreen(
+                    _widgetOptions.add(SearchViewScreen(
                       responsiveColumns: _columns,
                       responsiveColumnWidth: _columnWidth,
-                      responsiveGutterWidth: _gutterWidth,));
+                      responsiveGutterWidth: _gutterWidth,
+                    ));
 
-                    _widgetOptions.add(
-                        CanvasViewScreen(
-                          key: key,
-                          responsiveColumns: _columns,
-                          responsiveColumnWidth: _columnWidth,
-                          responsiveGutterWidth: _gutterWidth,));
+                    _widgetOptions.add(CanvasViewScreen(
+                      key: key,
+                      responsiveColumns: _columns,
+                      responsiveColumnWidth: _columnWidth,
+                      responsiveGutterWidth: _gutterWidth,
+                    ));
 
                     return Scaffold(
-                      appBar: AppBar(
-                        title: Text(AppLocalizations.of(context)!.appTitle),
-                        actions: [
-                          Switch(
-                              value: _localeSwitch,
-                              onChanged: (value) {
-                                MyApp.of(context)?.setLocale(AppLocalizations
-                                    .supportedLocales
-                                    .firstWhere((element) =>
-                                element.languageCode !=
-                                    Localizations
-                                        .localeOf(context)
-                                        .languageCode));
-                                setState(() {
-                                  _localeSwitch = value;
-                                });
-                              })
-                        ],
-                      ),
-                      body: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                                flex: constants.searchViewRatio,
-                                child: Container(
-                                    margin: EdgeInsets.only(
-                                        left: _marginWidth,
-                                        right: _gutterWidth),
-
-                                    child: _widgetOptions[_selectedIndex])),
-                          ]),
-
+                        appBar: AppBar(
+                          title: Text(AppLocalizations.of(context)!.appTitle),
+                          actions: [
+                            Switch(
+                                value: _localeSwitch,
+                                onChanged: (value) {
+                                  MyApp.of(context)?.setLocale(AppLocalizations
+                                      .supportedLocales
+                                      .firstWhere((element) =>
+                                          element.languageCode !=
+                                          Localizations.localeOf(context)
+                                              .languageCode));
+                                  setState(() {
+                                    _localeSwitch = value;
+                                  });
+                                })
+                          ],
+                        ),
+                        body: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                  flex: constants.searchViewRatio,
+                                  child: Container(
+                                      margin: EdgeInsets.only(
+                                          left: _marginWidth,
+                                          right: _gutterWidth),
+                                      child: _widgetOptions[_selectedIndex])),
+                            ]),
                         floatingActionButton: Container(
                             margin: EdgeInsets.only(bottom: 0.0),
-                        child:
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                            children:[
-                          if(_selectedIndex==1)FloatingActionButton(
-                          onPressed: () async {
-                            await key.currentState?.copyImageToClipBoard();
-                          },
-                          tooltip: AppLocalizations.of(context)!.copy,
-                          child: const Icon(Icons.copy),
-                        )])),
-
-
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  if (_selectedIndex == 1)
+                                    FloatingActionButton(
+                                      onPressed: () async {
+                                        await key.currentState
+                                            ?.copyImageToClipBoard();
+                                      },
+                                      tooltip:
+                                          AppLocalizations.of(context)!.copy,
+                                      child: const Icon(Icons.copy),
+                                    )
+                                ])),
                         bottomNavigationBar: BottomNavigationBar(
                           items: <BottomNavigationBarItem>[
                             BottomNavigationBarItem(
-                                icon: Icon(Icons.search), label: AppLocalizations.of(context)!.menuSearchCard),
+                                icon: Icon(Icons.search),
+                                label: AppLocalizations.of(context)!
+                                    .menuSearchCard),
                             BottomNavigationBarItem(
-                                icon: Icon(Icons.style), label: AppLocalizations.of(context)!.menuEditCardImage),
+                                icon: Icon(Icons.style),
+                                label: AppLocalizations.of(context)!
+                                    .menuEditCardImage),
                           ],
                           currentIndex: _selectedIndex,
                           onTap: _onItemTapped,
-                        )
-                    );
+                        ));
                   }
                 }));
           }

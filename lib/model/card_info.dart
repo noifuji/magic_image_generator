@@ -1,12 +1,14 @@
 import 'dart:ui';
 
+import 'package:uuid/uuid.dart';
+
 class CardInfo{
   late String multiverseId;
   late String name;
   late String _imageUrl;
   late String _imageUrlJp;
-  late bool isTransform;
-  CardInfo? backFace;
+  late String layout;
+  bool isFront = true;
 
 
   String imageUrl(Locale locale) {
@@ -24,9 +26,21 @@ class CardInfo{
     required this.name,
     required String imageUrl,
     required String imageUrlJp,
-    required this.isTransform
+    required this.layout,
   }) {
     _imageUrl = imageUrl;
     _imageUrlJp = imageUrlJp;
+  }
+
+  CardInfo copyWith() {
+    CardInfo card =CardInfo(
+      multiverseId: multiverseId,
+      name: name,
+      imageUrl: _imageUrl,
+      imageUrlJp: _imageUrlJp,
+      layout: layout
+    );
+
+    return card;
   }
 }
