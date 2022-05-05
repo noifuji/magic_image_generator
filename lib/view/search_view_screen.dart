@@ -2,11 +2,11 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:magic_image_generator/view/search_box_widget.dart';
+import 'package:magic_image_generator/view/search_card.dart';
 import 'package:provider/provider.dart';
 
 import '../assets/constants.dart' as constants;
 import '../assets/util.dart';
-import '../model/card_info.dart';
 import '../model/card_info_header.dart';
 import '../viewmodel/canvas_view_model.dart';
 import '../viewmodel/search_view_model.dart';
@@ -51,6 +51,7 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
                       top: 10.0,
                     ),
                     child: GridView.count(
+                      controller: ScrollController(),
                       crossAxisCount: widget.responsiveColumns~/2,
                       crossAxisSpacing: widget.responsiveGutterWidth,
                       childAspectRatio: constants.cardAspectRatio,
@@ -65,8 +66,9 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
                                   bottom: 3.0,
                                   left: 3.0,
                                   right: 3.0),
-                              child: Image.network(searchResults[index].cardFaces[0].imageUrl(Localizations.localeOf(context)),
-                                  fit: BoxFit.contain, width: constants.rawCardImageWidth),
+                              child: SearchCard(card:searchResults[index], scale: 1.0)
+                              //Image.network(searchResults[index].cardFaces[0].imageUrlLocale(context),
+                              //    fit: BoxFit.contain, width: constants.rawCardImageWidth),
                             ));
                       }),
                     )))

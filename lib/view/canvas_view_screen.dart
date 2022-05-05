@@ -10,17 +10,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:magic_image_generator/view/flippable_card.dart';
+import 'package:magic_image_generator/view/canvas_card.dart';
 import 'package:magic_image_generator/viewmodel/canvas_view_model.dart';
 import 'package:provider/provider.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:uuid/uuid.dart';
 
 import '../assets/constants.dart' as constants;
-import '../assets/util.dart';
-import '../model/card_info.dart';
 import '../model/card_info_header.dart';
-import 'canvas_card_widget.dart';
 
 class CanvasViewScreen extends StatefulWidget {
   final int responsiveColumns;
@@ -44,7 +40,6 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     List<List<CardInfoHeader>> selectedCardMatrix =
         Provider.of<CanvasViewModel>(context).selectedCards;
     int selectedCardRowLengthMax = selectedCardMatrix.fold<int>(
@@ -76,51 +71,22 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
                 List<dynamic> accepted,
                 List<dynamic> rejected,
               ) {
-                if(!card.isTransform) {
-                  return CanvasCardWidget(
-                      key:ValueKey(card.displayId),
-                      header: card,
-                      front: card.firstFace,
-                      canvasViewZoomRatio: _canvasViewZoomRatio);
-                }
-
-                if(card.isFront) {
-                  /*return FlippableCard(
-                    key:ValueKey(card.displayId),
-                    firstFace: Image.network(card.firstFace.imageUrl(Localizations.localeOf(context))),
-                    scale: _canvasViewZoomRatio,
-                    secondFace: Image.network(card.secondFace!.imageUrl(Localizations.localeOf(context))),
-                    isFirstFaceFront: card.isFront,);*/
-                    return CanvasCardWidget(
-                      key:ValueKey(card.displayId),
-                      header: card,
-                      front: card.firstFace,
-                      back: card.secondFace,
-                      onFlip: () => card.isFront = !card.isFront,
-                      canvasViewZoomRatio: _canvasViewZoomRatio);
-                } else {
-                  return CanvasCardWidget(
-                      key:ValueKey(card.displayId),
-                      header: card,
-                      front: card.secondFace!,
-                      back: card.firstFace,
-                      onFlip: () => card.isFront = !card.isFront,
-                      canvasViewZoomRatio: _canvasViewZoomRatio);
-                }
-
+                return CanvasCard(
+                  key: ValueKey(card.displayId),
+                  card: card,
+                  scale: _canvasViewZoomRatio,
+                );
               },
               onAccept: (data) =>
-                  Provider.of<CanvasViewModel>(context, listen: false).moveCard(
-                    data,
-                    {"row": rowIndex, "col": colIndex}),
+                  Provider.of<CanvasViewModel>(context, listen: false)
+                      .moveCard(data, {"row": rowIndex, "col": colIndex}),
               onWillAccept: (data) =>
                   data is Map<String, int> &&
                   data.keys.contains("row") &&
                   data.keys.contains("col"));
         }).toList();
 
-        cardWidgets.add(
-            DragTarget<Map<String, int>>(
+        cardWidgets.add(DragTarget<Map<String, int>>(
           builder: (
             BuildContext context,
             List<dynamic> accepted,
@@ -134,9 +100,11 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
               height: constants.rawCardImageHeight * _canvasViewZoomRatio,
             );
           },
-          onAccept: (from) => Provider.of<CanvasViewModel>(context, listen: false)
-                .moveCard(from, {"row":rowIndex, "col":row.length}),
-          onWillAccept: (data) => data != null && data["row"] != null && data["col"] != null,
+          onAccept: (from) =>
+              Provider.of<CanvasViewModel>(context, listen: false)
+                  .moveCard(from, {"row": rowIndex, "col": row.length}),
+          onWillAccept: (data) =>
+              data != null && data["row"] != null && data["col"] != null,
         ));
 
         return Row(children: cardWidgets);
@@ -178,11 +146,14 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
                                 selectedCardMatrix.length,
                       );
                     },
-                    onAccept: (from) => Provider.of<CanvasViewModel>(context, listen: false)
-                          .moveCard(from, {"row":selectedCardMatrix.length, "col":0}),
-                    onWillAccept: (data) => data != null &&
-                          data["row"] != null &&
-                          data["col"] != null,
+                    onAccept: (from) => Provider.of<CanvasViewModel>(context,
+                            listen: false)
+                        .moveCard(
+                            from, {"row": selectedCardMatrix.length, "col": 0}),
+                    onWillAccept: (data) =>
+                        data != null &&
+                        data["row"] != null &&
+                        data["col"] != null,
                   )
                 ]))),
         SizedBox(

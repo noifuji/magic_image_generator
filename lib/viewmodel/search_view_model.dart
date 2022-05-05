@@ -18,6 +18,12 @@ class SearchViewModel extends ChangeNotifier {
 
   SearchViewModel(this._repository);
 
+  void flip(CardInfoHeader card) {
+    int index = _searchResults.indexWhere((element) => element.displayId == card.displayId);
+    _searchResults[index].isFront = !_searchResults[index].isFront;
+    notifyListeners();
+  }
+
   Future<void> search(String query, Locale locale) async {
     //クエリの分析
     var analyzer = AnalyzeQueryUseCase();

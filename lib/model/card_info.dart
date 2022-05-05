@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:uuid/uuid.dart';
 
 class CardInfo{
@@ -11,7 +12,8 @@ class CardInfo{
   bool isFront = true;
 
 
-  String imageUrl(Locale locale) {
+  String imageUrlLocale(BuildContext context) {
+    Locale locale = Localizations.localeOf(context);
     if(locale.languageCode == "en") {
       return _imageUrl;
     } else if(locale.languageCode == "ja") {

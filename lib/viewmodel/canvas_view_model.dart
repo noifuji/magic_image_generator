@@ -30,16 +30,19 @@ class CanvasViewModel extends ChangeNotifier {
   }
 
   void flip(CardInfoHeader card) {
-    int rowIndex = selectedCards.indexWhere((row) => row.where((card) => card.displayId == card.displayId).toList().isNotEmpty);
-    int colIndex = selectedCards[rowIndex].indexWhere((card) => card.displayId == card.displayId);
+    int rowIndex = selectedCards.indexWhere((row) => row.where((c) => c.displayId == card.displayId).toList().isNotEmpty);
+    int colIndex = selectedCards[rowIndex].indexWhere((c) => c.displayId == card.displayId);
 
     _selectedCards[rowIndex][colIndex].isFront = !_selectedCards[rowIndex][colIndex].isFront;
     notifyListeners();
   }
 
 
-  void removeCard(int row, int col) {
-    _selectedCards[row].removeAt(col);
+  void removeCard(CardInfoHeader card) {
+    int rowIndex = selectedCards.indexWhere((row) => row.where((c) => c.displayId == card.displayId).toList().isNotEmpty);
+    int colIndex = selectedCards[rowIndex].indexWhere((c) => c.displayId == card.displayId);
+
+    _selectedCards[rowIndex].removeAt(colIndex);
 
     _selectedCards = _selectedCards
         .where((element) => element.isNotEmpty)
