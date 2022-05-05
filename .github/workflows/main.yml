@@ -30,7 +30,7 @@ jobs:
       # ipa ファイルの出力
       - name: build
         # GITHUB_RUN_NUMBER をビルドナンバーに指定することで被りがないようにしている。
-        run: flutter build web --release
+        run: flutter build web --release --web-renderer canvaskit
 
       - name: Deploy  # S3にデプロイ 
         env:
