@@ -319,7 +319,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ]),
                         floatingActionButton: Container(
                             margin: EdgeInsets.only(bottom: 0.0),
-                            child: Row(
+                            child: Column(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   if (_selectedIndex == 1)
@@ -331,7 +331,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                       tooltip:
                                           AppLocalizations.of(context)!.copy,
                                       child: const Icon(Icons.copy),
-                                    )
+                                    ),
+
+                                  if (_selectedIndex == 1)
+                                  const SizedBox(height: 16),
+
+                                  if (_selectedIndex == 1)
+                                  FloatingActionButton(
+                                    onPressed: () async {
+                                      await key.currentState?.downloadImage();
+                                    },
+                                    tooltip: AppLocalizations.of(context)!.download,
+                                    child: const Icon(Icons.download),
+                                  ),
                                 ])),
                         bottomNavigationBar: BottomNavigationBar(
                           items: <BottomNavigationBarItem>[
