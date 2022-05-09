@@ -4,9 +4,18 @@
     "searchCardHint": "Search cards",
     "copy": "Copy",
     "download": "Download",
+    "sort": "sort by",
+
+    "name": "Name",
+    "cmc": "Mana Value",
+    "asc": "Ascending",
+    "dsc": "Descending",
+
+    "hit": "cards",
 
     "menuSearchCard": "Search",
     "menuEditCardImage": "Edit Image",
+
 
     "msgCopyDone": "An image was copied!",
 

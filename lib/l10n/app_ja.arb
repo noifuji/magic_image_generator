@@ -4,6 +4,14 @@
   "searchCardHint": "カードを探す",
   "copy": "コピー",
   "download": "ダウンロード",
+  "sort": "並び順",
+
+  "name": "名前",
+  "cmc": "マナ総量",
+  "asc": "昇順",
+  "dsc": "降順",
+
+  "hit": "件ヒット",
 
   "menuSearchCard": "カード検索",
   "menuEditCardImage": "カード画像編集",

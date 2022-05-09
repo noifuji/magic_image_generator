@@ -9,6 +9,7 @@ class CardInfo{
   late String _imageUrl;
   late String _imageUrlJp;
   late String layout;
+  late int cmc;
   bool isFront = true;
 
 
@@ -29,6 +30,7 @@ class CardInfo{
     required String imageUrl,
     required String imageUrlJp,
     required this.layout,
+    required this.cmc,
   }) {
     _imageUrl = imageUrl;
     _imageUrlJp = imageUrlJp;
@@ -40,7 +42,8 @@ class CardInfo{
       name: name,
       imageUrl: _imageUrl,
       imageUrlJp: _imageUrlJp,
-      layout: layout
+      layout: layout,
+      cmc: cmc,
     );
 
     return card;

@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:isar/isar.dart';
 
 import '../model/card_info.dart';
@@ -62,7 +60,9 @@ class Card {
         name: name,
         imageUrl: imageUrl,
         imageUrlJp: imageUrlJp,
-        layout: layout);
+        layout: layout,
+        cmc: cmc,
+    );
 
     return ci;
   }

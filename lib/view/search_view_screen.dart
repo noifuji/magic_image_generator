@@ -1,8 +1,10 @@
 
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:magic_image_generator/view/search_box_widget.dart';
 import 'package:magic_image_generator/view/search_card.dart';
+import 'package:magic_image_generator/view/sort_drop_down.dart';
 import 'package:provider/provider.dart';
 
 import '../assets/constants.dart' as constants;
@@ -10,6 +12,7 @@ import '../assets/util.dart';
 import '../model/card_info_header.dart';
 import '../viewmodel/canvas_view_model.dart';
 import '../viewmodel/search_view_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchViewScreen extends StatefulWidget {
   int responsiveColumns;
@@ -45,6 +48,22 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
                       responsiveGutterWidth: widget.responsiveGutterWidth,
                     ))),
             Expanded(
+              flex: 0,
+              child: Container(
+                margin: const EdgeInsets.only(top: 5.0,),
+                child: Row(children:[
+                  Expanded(flex: 1,
+                  child: Text('''${searchResults.length} ${AppLocalizations.of(context)!.hit}''')),
+                  Expanded(flex: 1,
+                    child: SortDropdown(
+                      defaultSortKey: Provider.of<SearchViewModel>(context).sortKey,
+                      defaultSortOrder: Provider.of<SearchViewModel>(context).order,
+                    )
+                  )
+                ])
+              )
+            ),
+            Expanded(
                 flex: 1,
                 child: Container(
                     margin: const EdgeInsets.only(
@@ -57,9 +76,7 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
                       childAspectRatio: constants.cardAspectRatio,
                       children: List.generate(searchResults.length, (index) {
                         return GestureDetector(
-                            onTap: () {
-                              Provider.of<CanvasViewModel>(context, listen: false).addSelectedCards(0, searchResults[index].copyWith());
-                            },
+                            onTap: () => Provider.of<CanvasViewModel>(context, listen: false).addSelectedCards(0, searchResults[index].copyWith()),
                             child: Container(
                               margin: const EdgeInsets.only(
                                   top: 3.0,
@@ -67,8 +84,6 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
                                   left: 3.0,
                                   right: 3.0),
                               child: SearchCard(card:searchResults[index], scale: 1.0)
-                              //Image.network(searchResults[index].cardFaces[0].imageUrlLocale(context),
-                              //    fit: BoxFit.contain, width: constants.rawCardImageWidth),
                             ));
                       }),
                     )))

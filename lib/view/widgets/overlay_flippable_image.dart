@@ -42,28 +42,32 @@ class _OverlayFlippableImageState extends State<OverlayFlippableImage> {
   @override
   Widget build(BuildContext context) {
     List<Widget> stacks = [
-      FlippableImage(
-        frontSide: widget.frontSide,
-        backSide: widget.backSide,
-        width: widget.width,
-        onFlipped: widget.onFlipped,
-        controller: _fIController,
-      )
+      Align(
+          alignment: Alignment.topCenter,
+          child: FlippableImage(
+            frontSide: widget.frontSide,
+            backSide: widget.backSide,
+            width: widget.width,
+            onFlipped: widget.onFlipped,
+            controller: _fIController,
+          ))
     ];
 
     if (widget.overlays != null && _isMouseOn) {
       stacks.addAll(widget.overlays!);
     }
 
-    return MouseRegion(
-      onEnter: (details) => setState(() {
-        _isMouseOn = true;
-      }),
-      onExit: (details) => setState(() {
-        _isMouseOn = false;
-      }),
-      child: SizedBox(
-        width: widget.width,
+    print(widget.width);
+
+    return SizedBox(
+      width: widget.width,
+      child: MouseRegion(
+        onEnter: (details) => setState(() {
+          _isMouseOn = true;
+        }),
+        onExit: (details) => setState(() {
+          _isMouseOn = false;
+        }),
         child: Stack(children: stacks),
       ),
     );

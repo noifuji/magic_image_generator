@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
+import 'package:magic_image_generator/data/card_master_version.dart';
 import 'package:magic_image_generator/domain/rarity_type.dart';
 import 'package:magic_image_generator/domain/relational_operator_type.dart';
 import 'package:magic_image_generator/domain/search_condition.dart';
@@ -12,8 +13,6 @@ import 'package:magic_image_generator/domain/search_operator_type.dart';
 import '../domain/color_type.dart';
 import '../domain/search_query_symbol.dart';
 import 'card.dart';
-
-import '../assets/constants.dart' as constants;
 
 /*
 逆ポーランド記法形式のConditionとOperatorを解読しつつ、Isarの形式に変換する。
@@ -149,15 +148,15 @@ class CardLocalDataSource {
         }
 
         if(t.keyword == SearchKeywordType.rarity) {
-          stack.add(createRarityIsarFilter(t, propertyMap));
+          stack.add(_createRarityIsarFilter(t, propertyMap));
         } else if(t.keyword == SearchKeywordType.color) {
-          stack.add(createColorIsarFilter(t, propertyMap));
+          stack.add(_createColorIsarFilter(t, propertyMap));
         }
         else if(intValueKeywords.contains(t.keyword)) {
           t.value = int.parse(t.value.toString());
-          stack.add(createIsarFilter<int>(t, propertyMap));
+          stack.add(_createIsarFilter<int>(t, propertyMap));
         } else if(t.value is String) {
-          stack.add(createIsarFilter<String>(t, propertyMap));
+          stack.add(_createIsarFilter<String>(t, propertyMap));
         }
 
 
@@ -244,7 +243,35 @@ class CardLocalDataSource {
     });
   }
 
-  FilterOperation createIsarFilter<T>(SearchCondition condition, Map propertyMap) {
+  Future<void> clearAll() async {
+    await _isar.writeTxn((isar) async {
+      final cardList = await isar.cards.where()
+          .idProperty()
+          .findAll();
+
+      if(cardList.isEmpty) {
+        return;
+      }
+
+      await isar.cards.deleteAll(cardList.where((e) => e != null).map((e) => e!).toList());
+    });
+  }
+
+  Future<CardMasterVersion?> getVersion() async {
+    int? version = await _isar.cardMasterVersions.where().versionProperty().max();
+
+    return Future.value(version == null ? null : (CardMasterVersion()..version = version));
+  }
+
+  Future<void> insertVersion(CardMasterVersion v) async {
+    await _isar.writeTxn((isar) async {
+        await isar.cardMasterVersions.put(v);
+    });
+  }
+
+
+
+  FilterOperation _createIsarFilter<T>(SearchCondition condition, Map propertyMap) {
     if(condition.relationalOperatorType == RelationalOperatorType.greaterThanOrEquals) {
       return FilterGroup.and(
           [FilterCondition<T>(type: ConditionType.gt,
@@ -267,14 +294,14 @@ class CardLocalDataSource {
     }
   }
 
-  FilterOperation createRarityIsarFilter(SearchCondition condition, Map propertyMap) {
+  FilterOperation _createRarityIsarFilter(SearchCondition condition, Map propertyMap) {
     condition.value = rarityTypeMap[condition.value];
 
     if(condition.relationalOperatorType == RelationalOperatorType.contains) {
       condition.relationalOperatorType = RelationalOperatorType.equals;
     }
 
-    return createIsarFilter(condition, propertyMap);
+    return _createIsarFilter(condition, propertyMap);
   }
 
   /*
@@ -290,7 +317,7 @@ class CardLocalDataSource {
   = 単色 ->Xを含むかつcolorsが1
   = 複数色　-> Xを含むかつYを含むかつ色数がcolorsが一致
    */
-  FilterOperation createColorIsarFilter(SearchCondition condition, Map propertyMap) {
+  FilterOperation _createColorIsarFilter(SearchCondition condition, Map propertyMap) {
     if(![RelationalOperatorType.equals,RelationalOperatorType.contains].contains(condition.relationalOperatorType)) {
       throw Exception();
     }

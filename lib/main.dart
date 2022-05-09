@@ -21,6 +21,7 @@ import 'assets/util.dart';
 import 'data/card.dart';
 import 'data/card_fetch_csv_api.dart';
 import 'data/card_local_data_source.dart';
+import 'data/card_master_version.dart';
 import 'data/card_remote_data_source.dart';
 import 'data/card_repository_impl.dart';
 import 'domain/card_repository.dart';
@@ -46,21 +47,23 @@ import 'domain/card_repository.dart';
  * ・両面カードクルクル -> ok
  * ・キャンバスから画像削除 -> ok
  * ・スマホでコピーできない->ok
+ * ・スマホにダウンロードボタンない -> ok
+ * ・並び替え機能 -> ok
+ * ・ヒット件数表示 -> ok
  *
- * ・スマホにダウンロードボタンない
  * ・テキスト検索でオペレーターをつかえない
- * ・検索失敗メッセージ
- * ・ヒット件数表示
- *　・画像データ読み込み中になんか出す
- * ・カード移動時のエフェクト
+ * ・大量に画像いれると余白がマイナスになる。
+ * ・キャンバスで右端移動できない
  * ・CanvasScreen汚すぎ
- * ・アリーナっぽい検索画面
- * ・画像データ履歴保持
+ * ・ソート順でオーバーフロー
+ *
+ *　・画像データ読み込み中になんか出す
  * ・スマホのときは検索ボックス下へ(検索ボックス位置オプションをsearchScreeenにつける。)
  * ・クエリ入力補助(プルダウンで選択できる　o:xxx オラクル　c:xxx 色指定など)
- * ・キャンバスで右端移動できない
- * ・大量に画像いれると余白がマイナスになる。
- * ・並び替え機能
+ * ・検索失敗メッセージ
+ * ・画像データ履歴保持
+ * ・アリーナっぽい検索画面
+ * ・カード移動時のエフェクト
  */
 
 final key = GlobalKey<CanvasViewScreenState>();
@@ -114,7 +117,7 @@ class _MyAppState extends State<MyApp> {
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
-          brightness: Brightness.light, fontFamily: "NotoSansJP-Regular"),
+          brightness: Brightness.dark, fontFamily: "NotoSansJP-Regular"),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
       ),
@@ -152,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var isar = Isar.getInstance();
     if (isar == null || !isar.isOpen) {
       isar = await Isar.open(
-        schemas: [CardSchema],
+        schemas: [CardSchema, CardMasterVersionSchema],
       );
     }
 

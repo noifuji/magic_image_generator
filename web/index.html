@@ -37,7 +37,13 @@
     async function copyImageToClipboard(u8)  {
         console.log(u8);
         var blob = new Blob([u8], {type: "image/png"})
-        await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);
+
+	    //const content = document.getElementsByClassName('loading')[0].innerHTML;
+	    const content = document.createElement('div').innerHTML;
+        const blobInput = new Blob([content], {type: 'text/html'});
+
+
+        await navigator.clipboard.write([new ClipboardItem({"text/html":blobInput,"image/png":blob})]);
     }
   </script>
 

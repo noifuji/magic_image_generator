@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:csv/csv.dart' as csv;
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:magic_image_generator/data/card_master_version.dart';
 import '../assets/constants.dart' as constants;
 
 class CardFetchCsvApi {
@@ -17,6 +18,12 @@ class CardFetchCsvApi {
     List<List> listCreated= converter.convert(decodedResponseBody);
 
     return Future<List<List<dynamic>>>.value(listCreated);
+  }
+
+  Future<CardMasterVersion> fetchCardMasterVersion() async {
+    Response response = await http.get(Uri.parse(constants.cardMasterVersionUrlS3));
+
+    return CardMasterVersion.fromJson(jsonDecode(response.body));
   }
 
 }

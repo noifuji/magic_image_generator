@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:magic_image_generator/data/card_fetch_csv_api.dart';
+import 'package:magic_image_generator/data/card_master_version.dart';
 
 import '../assets/constants.dart' as constants;
 import 'card.dart';
@@ -8,6 +9,10 @@ class CardRemoteDataSource {
   final CardFetchCsvApi _api;
 
   CardRemoteDataSource(this._api);
+
+  Future<CardMasterVersion> getVersion() {
+    return _api.fetchCardMasterVersion();
+  }
 
   Future<List<Card>> getAll() async {
     var result = await _api.fetchCardCsv();
