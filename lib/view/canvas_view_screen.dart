@@ -175,6 +175,7 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
         if (boundary == null) {
           return;
         }
+        print(boundary.size);
         ui.Image image =
             await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);
         ByteData? byteData =
@@ -187,11 +188,11 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
               zeroCount++;
             }
           }
-          print("zero:" + zeroCount.toString());
+          print('''zero:${zeroCount.toString()}/${byteData.lengthInBytes}''');
 
           Uint8List pngBytes = byteData.buffer.asUint8List();
 
-          print("zero:" + pngBytes.fold<int>(0, (prev, ele) => ele == 0? prev+1: prev).toString());
+          print('''zero:${pngBytes.fold<int>(0, (prev, ele) => ele == 0? prev+1: prev).toString()}/${pngBytes.length}''');
 
           js.context.callMethod('copyImageToClipboard', [pngBytes]);
 
