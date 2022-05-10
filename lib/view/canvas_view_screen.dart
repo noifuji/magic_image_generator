@@ -4,6 +4,7 @@ import 'dart:js' as js;
 import 'dart:math';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -41,9 +42,13 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
 
   ScreenshotController screenshotController = ScreenshotController();
 
+  late _SamplePainter myPainter;
+
 
   @override
   Widget build(BuildContext context) {
+    myPainter = _SamplePainter();
+
     List<List<CardInfoHeader>> selectedCardMatrix =
         Provider.of<CanvasViewModel>(context).selectedCards;
     int selectedCardRowLengthMax = selectedCardMatrix.fold<int>(
@@ -128,15 +133,24 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
                       height: constants.rawCardImageHeight *
                           _canvasViewZoomRatio *
                           selectedCardMatrix.length,
-                      child: //RepaintBoundary(
+                      child:Container(
+                        width: 400,
+                        height: 400,
+                        child: CustomPaint(
+                          painter: myPainter,
+                        ),
+                      ),),
+
+
+                      //RepaintBoundary(
                           //key: _globalKey,
                           //child:
-                      Screenshot(
+/*                      Screenshot(
                           controller: screenshotController,
                           child:
                           Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: draggableImageMatrix))),
+                              children: draggableImageMatrix))),*/
                   DragTarget<Map<String, int>>(
                     builder: (
                       BuildContext context,
@@ -176,8 +190,7 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
   }
 
   Future<void> captureImage() async {
-    ui.Image? image = await screenshotController.captureAsUiImage(
-        pixelRatio: 1 / _canvasViewZoomRatio);
+    ui.Image? image = await getImage();
     if (image == null) {
       print("null");
       return;
@@ -252,13 +265,7 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
   Future<void> downloadImage() async {
     Future(() async {
       try {
-        RenderRepaintBoundary? boundary = _globalKey.currentContext
-            ?.findRenderObject() as RenderRepaintBoundary?;
-        if (boundary == null) {
-          return;
-        }
-        ui.Image image =
-            await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);
+        ui.Image image =await getImage();
         ByteData? byteData =
             await image.toByteData(format: ui.ImageByteFormat.png);
         if (byteData != null) {
@@ -292,5 +299,31 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<ui.Image> getImage() async {
+    final PictureRecorder recorder = PictureRecorder();
+    myPainter.paint(Canvas(recorder), Size(400, 400));
+    final Picture picture = recorder.endRecording();
+
+    return await picture.toImage(400, 400);
+  }
+}
+
+class _SamplePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = Colors.blue;
+    canvas.drawRect(Rect.fromLTWH(0, 0, 50, 50), paint);
+    paint.color = Colors.grey;
+    paint.strokeWidth = 5;
+    canvas.drawLine(Offset(140, 10), Offset(140, 60), paint);
+    paint.color = Colors.red;
+    canvas.drawCircle(Offset(100, 35), 25, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }
