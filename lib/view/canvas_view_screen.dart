@@ -205,6 +205,8 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
         }
         ui.Image image =
             await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);
+        image =
+        await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);
         ByteData? byteData =
             await image.toByteData(format: ui.ImageByteFormat.png);
         if (byteData != null) {
