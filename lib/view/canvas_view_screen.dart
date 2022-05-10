@@ -13,6 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:magic_image_generator/view/canvas_card.dart';
 import 'package:magic_image_generator/viewmodel/canvas_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:uuid/uuid.dart';
 
 import '../assets/constants.dart' as constants;
@@ -37,6 +38,9 @@ class CanvasViewScreen extends StatefulWidget {
 class CanvasViewScreenState extends State<CanvasViewScreen> {
   final GlobalKey _globalKey = GlobalKey();
   double _canvasViewZoomRatio = 1.0;
+
+  ScreenshotController screenshotController = ScreenshotController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -124,9 +128,13 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
                       height: constants.rawCardImageHeight *
                           _canvasViewZoomRatio *
                           selectedCardMatrix.length,
-                      child: RepaintBoundary(
-                          key: _globalKey,
-                          child: Column(
+                      child: //RepaintBoundary(
+                          //key: _globalKey,
+                          //child:
+                      Screenshot(
+                          controller: screenshotController,
+                          child:
+                          Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: draggableImageMatrix))),
                   DragTarget<Map<String, int>>(
@@ -165,6 +173,39 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
         )
       ]);
     });
+  }
+
+  Future<void> captureImage() async {
+    ui.Image? image = await screenshotController.captureAsUiImage(
+        pixelRatio: 1 / _canvasViewZoomRatio);
+    if (image == null) {
+      print("null");
+      return;
+    }
+
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+
+    if (byteData == null) {
+      print("null");
+      return;
+    }
+
+      int zeroCount = 0;
+      for (var i = 0; i < byteData.lengthInBytes; i++) {
+        if (byteData.getInt8(i) == 0) {
+          zeroCount++;
+        }
+      }
+      print('''zero:${zeroCount.toString()}/${byteData.lengthInBytes}''');
+
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+
+      print('''zero:${pngBytes.fold<int>(
+          0, (prev, ele) => ele == 0 ? prev + 1 : prev).toString()}/${pngBytes
+          .length}''');
+
+      js.context.callMethod('copyImageToClipboard', [pngBytes]);
+
   }
 
   Future<void> copyImageToClipBoard() async {

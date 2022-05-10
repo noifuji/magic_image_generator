@@ -260,7 +260,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             children: [
                           FloatingActionButton(
                             onPressed: () async {
-                              await key.currentState?.copyImageToClipBoard();
+                              //await key.currentState?.copyImageToClipBoard();
+                              await key.currentState?.captureImage();
                             },
                             tooltip: AppLocalizations.of(context)!.copy,
                             child: const Icon(Icons.copy),

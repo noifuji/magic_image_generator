@@ -48,6 +48,7 @@ dependencies:
   intl: ^0.17.0
   breakpoint: ^1.2.0
   uuid: ^3.0.6
+  screenshot: ^1.2.3
 
 dev_dependencies:
   flutter_test:
