@@ -179,8 +179,20 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
             await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);
         ByteData? byteData =
             await image.toByteData(format: ui.ImageByteFormat.png);
+
         if (byteData != null) {
+          int zeroCount = 0;
+          for(var i = 0; i < byteData.lengthInBytes; i++) {
+            if(byteData.getInt8(i) == 0) {
+              zeroCount++;
+            }
+          }
+          print("zero:" + zeroCount.toString());
+
           Uint8List pngBytes = byteData.buffer.asUint8List();
+
+          print("zero:" + pngBytes.fold<int>(0, (prev, ele) => ele == 0? prev+1: prev).toString());
+
           js.context.callMethod('copyImageToClipboard', [pngBytes]);
 
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -205,8 +217,6 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
         }
         ui.Image image =
             await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);
-        image =
-        await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);
         ByteData? byteData =
             await image.toByteData(format: ui.ImageByteFormat.png);
         if (byteData != null) {
