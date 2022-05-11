@@ -26,7 +26,7 @@ class GenerateCardImageUseCase {
     }).toList())).toList();
 
     List<List<ui.Image>> imageMatrix = await Future.wait(mapped);
-    _ImageMatrixPainter painter = _ImageMatrixPainter(matrix: imageMatrix, imageWidth: width,imageHeight: height);
+    ImageMatrixPainter painter = ImageMatrixPainter(matrix: imageMatrix, imageWidth: width,imageHeight: height);
 
     int maxColumnSize = imageMatrix.fold(0, (p, e) => e.length > p? e.length:p);
     return _getImage(painter, maxColumnSize * width, imageMatrix.length * height);
@@ -55,11 +55,11 @@ class GenerateCardImageUseCase {
 ///
 ///マトリクス形式の画像データ配列を1つの画像に変換する。
 ///画像は全て同じサイズの前提
-class _ImageMatrixPainter extends CustomPainter {
+class ImageMatrixPainter extends CustomPainter {
   final List<List<ui.Image>> matrix;
   final double imageWidth;
   final double imageHeight;
-  _ImageMatrixPainter({required this.matrix, required this.imageWidth, required this.imageHeight});
+  ImageMatrixPainter({required this.matrix, required this.imageWidth, required this.imageHeight});
 
   @override
   void paint(Canvas canvas, Size size) {
