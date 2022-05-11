@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:html' as html;
 import 'dart:js' as js;
@@ -10,12 +11,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:magic_image_generator/view/canvas_card.dart';
 import 'package:magic_image_generator/viewmodel/canvas_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:uuid/uuid.dart';
+
+import 'package:image/image.dart' as image;
 
 import '../assets/constants.dart' as constants;
 import '../model/card_info_header.dart';
@@ -42,12 +46,25 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
 
   ScreenshotController screenshotController = ScreenshotController();
 
-  late _SamplePainter myPainter;
+  late ImageMatrixPainter myPainter;
+  late ui.Image adeline;
 
 
   @override
+  void initState() {
+    super.initState();
+
+    Future(() async {
+      ui.Image img = await _fetchImage("https://magic-image-generator-card-images.s3.ap-northeast-1.amazonaws.com/534751.png");
+      setState(() {
+        adeline = img;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    myPainter = _SamplePainter();
+    myPainter = ImageMatrixPainter(matrix: [[adeline]], imageWidth: constants.rawCardImageWidth, imageHeight: constants.rawCardImageHeight);
 
     List<List<CardInfoHeader>> selectedCardMatrix =
         Provider.of<CanvasViewModel>(context).selectedCards;
@@ -301,12 +318,44 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
     }
   }
 
+  Future<ui.Image> _fetchImage(String path) async {
+    var completer = Completer<ImageInfo>();
+    var img = NetworkImage(path);
+    img.resolve(const ImageConfiguration()).addListener(ImageStreamListener((info, _) {
+      completer.complete(info);
+    }));
+    ImageInfo imageInfo = await completer.future;
+    return imageInfo.image;
+  }
+
+  Future<ui.Image> _getImage(CustomPainter painter, double width, double height) async {
+    final PictureRecorder recorder = PictureRecorder();
+    painter.paint(Canvas(recorder), Size(width, height));
+    final Picture picture = recorder.endRecording();
+
+    return await picture.toImage(width.toInt(), height.toInt());
+  }
+
+
   Future<ui.Image> getImage() async {
     final PictureRecorder recorder = PictureRecorder();
     myPainter.paint(Canvas(recorder), Size(400, 400));
     final Picture picture = recorder.endRecording();
 
     return await picture.toImage(400, 400);
+  }
+
+
+  Future<ui.Image> getUiImage(String imageAssetPath, int height, int width) async {
+    final ByteData assetImageByteData = await rootBundle.load(imageAssetPath);
+    final codec = await ui.instantiateImageCodec(
+      assetImageByteData.buffer.asUint8List(),
+      targetHeight: height,
+      targetWidth: width,
+    );
+    final image = (await codec.getNextFrame()).image;
+
+    return image;
   }
 }
 
@@ -320,6 +369,29 @@ class _SamplePainter extends CustomPainter {
     canvas.drawLine(Offset(140, 10), Offset(140, 60), paint);
     paint.color = Colors.red;
     canvas.drawCircle(Offset(100, 35), 25, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class ImageMatrixPainter extends CustomPainter {
+  final List<List<ui.Image>> matrix;
+  final double imageWidth;
+  final double imageHeight;
+  ImageMatrixPainter({required this.matrix, required this.imageWidth, required this.imageHeight});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint();
+
+    for(var row = 0; row < matrix.length; row++) {
+      for(var col = 0; col < matrix[row].length; col++) {
+        canvas.drawImage(matrix[row][col], Offset(col * imageWidth, row * imageHeight), paint);
+      }
+    }
   }
 
   @override
