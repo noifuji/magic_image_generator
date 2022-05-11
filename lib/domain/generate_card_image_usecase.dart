@@ -25,8 +25,10 @@ class GenerateCardImageUseCase {
       }
     }).toList())).toList();
 
+    ui.Image img =  await _fetchImage("https://magic-image-generator-card-images.s3.ap-northeast-1.amazonaws.com/534751.png");
+
     List<List<ui.Image>> imageMatrix = await Future.wait(mapped);
-    ImageMatrixPainter painter = ImageMatrixPainter(matrix: imageMatrix, imageWidth: width,imageHeight: height);
+    ImageMatrixPainter painter = ImageMatrixPainter(matrix: [[img]], imageWidth: width,imageHeight: height);
 
     int maxColumnSize = imageMatrix.fold(0, (p, e) => e.length > p? e.length:p);
     return _getImage(painter, maxColumnSize * width, imageMatrix.length * height);
