@@ -16,10 +16,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:magic_image_generator/view/canvas_card.dart';
 import 'package:magic_image_generator/viewmodel/canvas_view_model.dart';
 import 'package:provider/provider.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:uuid/uuid.dart';
-
-import 'package:image/image.dart' as image;
 
 import '../assets/constants.dart' as constants;
 import '../model/card_info_header.dart';
@@ -43,22 +40,6 @@ class CanvasViewScreen extends StatefulWidget {
 class CanvasViewScreenState extends State<CanvasViewScreen> {
   final GlobalKey _globalKey = GlobalKey();
   double _canvasViewZoomRatio = 1.0;
-
-
-  Future<List<List<ui.Image>>> getImages(List<List<CardInfoHeader>> cards, Locale locale) {
-    return Future.wait(cards.map((row) => Future.wait(row.map((card) async {
-      if(card.isTransform) {
-        if(card.isFront) {
-          return await _fetchImage(card.firstFace.imageUrlLocale(locale));
-        } else {
-          return await _fetchImage(card.secondFace!.imageUrlLocale(locale));
-        }
-      } else {
-        ui.Image img = await  _fetchImage(card.firstFace.imageUrlLocale(locale));
-        return img;
-      }
-    }).toList())).toList());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -149,9 +130,11 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
                                 height: constants.rawCardImageHeight *
                                     _canvasViewZoomRatio *
                                     selectedCardMatrix.length,
-                                child: Column(
+                                child: RepaintBoundary(
+                                    key: _globalKey,
+                                    child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: draggableImageMatrix)),
+                              children: draggableImageMatrix))),
                               DragTarget<Map<String, int>>(
                                 builder: (BuildContext context,
                                     List<dynamic> accepted,
@@ -194,66 +177,17 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
 
 
 
-  Future<void> captureImage(BuildContext constext) async {
-    List<List<ui.Image>> images = await getImages(
-    Provider.of<CanvasViewModel>(context, listen: false).selectedCards, Localizations.localeOf(context));
-    ImageMatrixPainter p = ImageMatrixPainter(matrix: images, imageWidth: constants.rawCardImageWidth, imageHeight: constants.rawCardImageHeight);
-
-    ui.Image? image = await _getImage(
-        p,
-        images.fold<int>(0, (p, e) => e.length>p? e.length: p) * constants.rawCardImageWidth,
-        images.length * constants.rawCardImageHeight);
-
-    if (image == null) {
-      print("null");
-      return;
-    }
-
-    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-
-    if (byteData == null) {
-      print("null");
-      return;
-    }
-
-    int zeroCount = 0;
-    for (var i = 0; i < byteData.lengthInBytes; i++) {
-      if (byteData.getInt8(i) == 0) {
-        zeroCount++;
-      }
-    }
-    print('''zero:${zeroCount.toString()}/${byteData.lengthInBytes}''');
-
-    Uint8List pngBytes = byteData.buffer.asUint8List();
-
-    print('''zero:${pngBytes.fold<int>(
-        0, (prev, ele) => ele == 0 ? prev + 1 : prev).toString()}/${pngBytes
-        .length}''');
-
-    js.context.callMethod('copyImageToClipboard', [pngBytes]);
-
-  }
-
   Future<void> copyImageToClipBoard(BuildContext context) async {
     Future(() async {
       try {
-/*        RenderRepaintBoundary? boundary = _globalKey.currentContext
+        RenderRepaintBoundary? boundary = _globalKey.currentContext
             ?.findRenderObject() as RenderRepaintBoundary?;
         if (boundary == null) {
           return;
         }
         print(boundary.size);
         ui.Image image =
-        await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);*/
-
-        List<List<ui.Image>> images = await getImages(
-            Provider.of<CanvasViewModel>(context, listen: false).selectedCards, Localizations.localeOf(context));
-        ImageMatrixPainter p = ImageMatrixPainter(matrix: images, imageWidth: constants.rawCardImageWidth, imageHeight: constants.rawCardImageHeight);
-
-        ui.Image? image = await _getImage(
-            p,
-            images.fold<int>(0, (p, e) => e.length>p? e.length: p) * constants.rawCardImageWidth,
-            images.length * constants.rawCardImageHeight);
+        await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);
 
         ByteData? byteData =
         await image.toByteData(format: ui.ImageByteFormat.png);
@@ -288,24 +222,14 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
   Future<void> downloadImage(BuildContext context) async {
     Future(() async {
       try {
-/*        RenderRepaintBoundary? boundary = _globalKey.currentContext
+        RenderRepaintBoundary? boundary = _globalKey.currentContext
             ?.findRenderObject() as RenderRepaintBoundary?;
         if (boundary == null) {
           return;
         }
         print(boundary.size);
         ui.Image image =
-        await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);*/
-
-
-        List<List<ui.Image>> images = await getImages(
-            Provider.of<CanvasViewModel>(context, listen: false).selectedCards, Localizations.localeOf(context));
-        ImageMatrixPainter p = ImageMatrixPainter(matrix: images, imageWidth: constants.rawCardImageWidth, imageHeight: constants.rawCardImageHeight);
-
-        ui.Image? image = await _getImage(
-            p,
-            images.fold<int>(0, (p, e) => e.length>p? e.length: p) * constants.rawCardImageWidth,
-            images.length * constants.rawCardImageHeight);
+        await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);
 
         ByteData? byteData =
         await image.toByteData(format: ui.ImageByteFormat.png);
@@ -342,45 +266,4 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
     }
   }
 
-  Future<ui.Image> _fetchImage(String path) async {
-    var completer = Completer<ImageInfo>();
-    var img = NetworkImage(path);
-    img.resolve(const ImageConfiguration()).addListener(ImageStreamListener((info, _) {
-      completer.complete(info);
-    }));
-    ImageInfo imageInfo = await completer.future;
-    return imageInfo.image;
-  }
-
-  Future<ui.Image> _getImage(CustomPainter painter, double width, double height) async {
-    final PictureRecorder recorder = PictureRecorder();
-    painter.paint(Canvas(recorder), Size(width, height));
-    final Picture picture = recorder.endRecording();
-
-    return await picture.toImage(width.toInt(), height.toInt());
-  }
-
-}
-
-class ImageMatrixPainter extends CustomPainter {
-  final List<List<ui.Image>> matrix;
-  final double imageWidth;
-  final double imageHeight;
-  ImageMatrixPainter({required this.matrix, required this.imageWidth, required this.imageHeight});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint();
-
-    for(var row = 0; row < matrix.length; row++) {
-      for(var col = 0; col < matrix[row].length; col++) {
-        canvas.drawImage(matrix[row][col], Offset(col * imageWidth, row * imageHeight), paint);
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
-  }
 }
