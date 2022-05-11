@@ -133,10 +133,10 @@ class CanvasViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<ui.Image> generateSelectedCardImage(Locale locale, double cardWidth, double cardHeight) {
+  Future<ui.Image> generateSelectedCardImage(Locale locale, double cardWidth, double cardHeight, ui.Image img) {
     var generator  = GenerateCardImageUseCase();
 
-    return generator.call(_selectedCards, cardWidth, cardHeight, locale);
+    return generator.call(_selectedCards, cardWidth, cardHeight, locale, img);
 
   }
 

@@ -10,7 +10,7 @@ import '../model/card_info_header.dart';
 
 class GenerateCardImageUseCase {
 
-  Future<ui.Image> call(List<List<CardInfoHeader>> cards, double width, double height, Locale locale) async {
+  Future<ui.Image> call(List<List<CardInfoHeader>> cards, double width, double height, Locale locale, ui.Image img) async {
     
     var mapped = cards.map((row) => Future.wait(row.map((card) async {
       if(card.isTransform) {
@@ -24,8 +24,6 @@ class GenerateCardImageUseCase {
         return img;
       }
     }).toList())).toList();
-
-    ui.Image img =  await _fetchImage("https://magic-image-generator-card-images.s3.ap-northeast-1.amazonaws.com/534751.png");
 
     List<List<ui.Image>> imageMatrix = await Future.wait(mapped);
     ImageMatrixPainter painter = ImageMatrixPainter(matrix: [[img]], imageWidth: width,imageHeight: height);

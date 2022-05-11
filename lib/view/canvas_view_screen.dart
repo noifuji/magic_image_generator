@@ -19,6 +19,7 @@ import 'package:screenshot/screenshot.dart';
 import 'package:uuid/uuid.dart';
 
 import '../assets/constants.dart' as constants;
+import '../domain/generate_card_image_usecase.dart';
 import '../model/card_info_header.dart';
 
 class CanvasViewScreen extends StatefulWidget {
@@ -38,8 +39,29 @@ class CanvasViewScreen extends StatefulWidget {
 }
 
 class CanvasViewScreenState extends State<CanvasViewScreen> {
-  final GlobalKey _globalKey = GlobalKey();
   double _canvasViewZoomRatio = 1.0;
+  late ui.Image aledine;
+
+  Future<ui.Image> _fetchImage(String path) async {
+    var completer = Completer<ImageInfo>();
+    var img = NetworkImage(path);
+    img.resolve(const ImageConfiguration()).addListener(ImageStreamListener((info, _) {
+      completer.complete(info);
+    }));
+    ImageInfo imageInfo = await completer.future;
+    return imageInfo.image;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future(() async {
+      ui.Image img = await _fetchImage("https://magic-image-generator-card-images.s3.ap-northeast-1.amazonaws.com/534751.png");
+      setState(() {
+        aledine = img;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +196,7 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
             .generateSelectedCardImage(
             Localizations.localeOf(context),
             constants.rawCardImageWidth,
-            constants.rawCardImageHeight);
+            constants.rawCardImageHeight, aledine);
 
         ByteData? byteData =
             await image.toByteData(format: ui.ImageByteFormat.png);
@@ -211,7 +233,7 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
             .generateSelectedCardImage(
             Localizations.localeOf(context),
             constants.rawCardImageWidth,
-            constants.rawCardImageHeight);
+            constants.rawCardImageHeight, aledine);
 
         ByteData? byteData =
             await image.toByteData(format: ui.ImageByteFormat.png);
