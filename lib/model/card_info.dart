@@ -13,8 +13,7 @@ class CardInfo{
   bool isFront = true;
 
 
-  String imageUrlLocale(BuildContext context) {
-    Locale locale = Localizations.localeOf(context);
+  String imageUrlLocale(Locale locale) {
     if(locale.languageCode == "en") {
       return _imageUrl;
     } else if(locale.languageCode == "ja") {

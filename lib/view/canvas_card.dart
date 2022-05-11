@@ -58,17 +58,17 @@ class _CanvasCardState extends State<CanvasCard> {
 
       if (widget.card.isFront) {
         frontImage =
-            Image.network(widget.card.firstFace.imageUrlLocale(context));
+            Image.network(widget.card.firstFace.imageUrlLocale(Localizations.localeOf(context)));
         backImage =
-            Image.network(widget.card.secondFace!.imageUrlLocale(context));
+            Image.network(widget.card.secondFace!.imageUrlLocale(Localizations.localeOf(context)));
       } else {
         frontImage =
-            Image.network(widget.card.secondFace!.imageUrlLocale(context));
+            Image.network(widget.card.secondFace!.imageUrlLocale(Localizations.localeOf(context)));
         backImage =
-            Image.network(widget.card.firstFace.imageUrlLocale(context));
+            Image.network(widget.card.firstFace.imageUrlLocale(Localizations.localeOf(context)));
       }
     } else {
-      frontImage = Image.network(widget.card.firstFace.imageUrlLocale(context));
+      frontImage = Image.network(widget.card.firstFace.imageUrlLocale(Localizations.localeOf(context)));
     }
 
     return Draggable<Map<String, int>>(

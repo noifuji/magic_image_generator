@@ -57,8 +57,6 @@ class _OverlayFlippableImageState extends State<OverlayFlippableImage> {
       stacks.addAll(widget.overlays!);
     }
 
-    print(widget.width);
-
     return SizedBox(
       width: widget.width,
       child: MouseRegion(

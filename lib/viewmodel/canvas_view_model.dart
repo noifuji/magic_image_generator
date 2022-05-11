@@ -2,8 +2,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:magic_image_generator/domain/generate_card_image_usecase.dart';
 
-import '../model/card_info.dart';
+import 'dart:ui' as ui;
 import '../model/card_info_header.dart';
 
 class CanvasViewModel extends ChangeNotifier {
@@ -128,11 +129,18 @@ class CanvasViewModel extends ChangeNotifier {
     }
 
     _selectedCards = copy;
-    removeEmptyRow();
+    _removeEmptyRow();
     notifyListeners();
   }
 
-  void removeEmptyRow() {
+  Future<ui.Image> generateSelectedCardImage(Locale locale, double cardWidth, double cardHeight) {
+    var generator  = GenerateCardImageUseCase();
+
+    return generator.call(_selectedCards, cardWidth, cardHeight, locale);
+
+  }
+
+  void _removeEmptyRow() {
     _selectedCards = _selectedCards
         .where((element) => element.isNotEmpty)
         .toList();
