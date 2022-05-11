@@ -260,7 +260,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             children: [
                           FloatingActionButton(
                             onPressed: () async {
-                              await key.currentState?.copyImageToClipBoard();
+                              await key.currentState?.copyImageToClipBoard(context);
+                              //await key.currentState?.captureImage(context);
                             },
                             tooltip: AppLocalizations.of(context)!.copy,
                             child: const Icon(Icons.copy),
@@ -270,7 +271,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                           FloatingActionButton(
                             onPressed: () async {
-                              await key.currentState?.downloadImage();
+                              await key.currentState?.downloadImage(context);
                             },
                             tooltip: AppLocalizations.of(context)!.download,
                             child: const Icon(Icons.download),
@@ -328,8 +329,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                   if (_selectedIndex == 1)
                                     FloatingActionButton(
                                       onPressed: () async {
-                                        await key.currentState
-                                            ?.copyImageToClipBoard();
+                                        await key.currentState?.copyImageToClipBoard(context);
+                                        //await key.currentState?.captureImage(context);
                                       },
                                       tooltip:
                                           AppLocalizations.of(context)!.copy,
@@ -342,7 +343,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   if (_selectedIndex == 1)
                                   FloatingActionButton(
                                     onPressed: () async {
-                                      await key.currentState?.downloadImage();
+                                      await key.currentState?.downloadImage(context);
                                     },
                                     tooltip: AppLocalizations.of(context)!.download,
                                     child: const Icon(Icons.download),

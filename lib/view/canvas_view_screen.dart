@@ -44,23 +44,6 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
   final GlobalKey _globalKey = GlobalKey();
   double _canvasViewZoomRatio = 1.0;
 
-  ScreenshotController screenshotController = ScreenshotController();
-
-  late ImageMatrixPainter myPainter;
-  late ui.Image adeline;
-
-
-  @override
-  void initState() {
-    super.initState();
-
-    Future(() async {
-      ui.Image img = await _fetchImage("https://magic-image-generator-card-images.s3.ap-northeast-1.amazonaws.com/534751.png");
-      setState(() {
-        adeline = img;
-      });
-    });
-  }
 
   Future<List<List<ui.Image>>> getImages(List<List<CardInfoHeader>> cards, Locale locale) {
     return Future.wait(cards.map((row) => Future.wait(row.map((card) async {
@@ -86,22 +69,7 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
     int selectedCardRowLengthMax = selectedCardMatrix.fold<int>(
         0, (p, e) => p = p < e.length ? e.length : p);
 
-    return FutureBuilder<List<List<ui.Image>>>(
-        future: getImages(selectedCardMatrix, Localizations.localeOf(context)),
-        builder: (context, dataSnapshot)
-    {
-      if (dataSnapshot.connectionState == ConnectionState.waiting) {
-        return const Center();
-      } else if (dataSnapshot.error != null) {
-        if (kDebugMode) {
-          print(dataSnapshot.error);
-        }
-        return Text(AppLocalizations.of(context)!.errorReload);
-      } else {
-        List<List<ui.Image>>? matrix = dataSnapshot.data;
-        myPainter = ImageMatrixPainter(matrix: matrix!, imageWidth: constants.rawCardImageWidth, imageHeight: constants.rawCardImageHeight);
-
-        return LayoutBuilder(
+    return LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
               _canvasViewZoomRatio = min(
                   constraints.maxWidth /
@@ -181,24 +149,9 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
                                 height: constants.rawCardImageHeight *
                                     _canvasViewZoomRatio *
                                     selectedCardMatrix.length,
-                                child: Container(
-                                  width: 400,
-                                  height: 400,
-                                  child: CustomPaint(
-                                    painter: myPainter,
-                                  ),
-                                ),),
-
-
-                              //RepaintBoundary(
-                              //key: _globalKey,
-                              //child:
-/*                      Screenshot(
-                          controller: screenshotController,
-                          child:
-                          Column(
+                                child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: draggableImageMatrix))),*/
+                              children: draggableImageMatrix)),
                               DragTarget<Map<String, int>>(
                                 builder: (BuildContext context,
                                     List<dynamic> accepted,
@@ -238,12 +191,19 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
               ]);
             });
       }
-    });
-      }
 
 
-  Future<void> captureImage() async {
-    ui.Image? image = await _getImage(myPainter, 265, 370);
+
+  Future<void> captureImage(BuildContext constext) async {
+    List<List<ui.Image>> images = await getImages(
+    Provider.of<CanvasViewModel>(context, listen: false).selectedCards, Localizations.localeOf(context));
+    ImageMatrixPainter p = ImageMatrixPainter(matrix: images, imageWidth: constants.rawCardImageWidth, imageHeight: constants.rawCardImageHeight);
+
+    ui.Image? image = await _getImage(
+        p,
+        images.fold<int>(0, (p, e) => e.length>p? e.length: p) * constants.rawCardImageWidth,
+        images.length * constants.rawCardImageHeight);
+
     if (image == null) {
       print("null");
       return;
@@ -274,17 +234,27 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
 
   }
 
-  Future<void> copyImageToClipBoard() async {
+  Future<void> copyImageToClipBoard(BuildContext context) async {
     Future(() async {
       try {
-        RenderRepaintBoundary? boundary = _globalKey.currentContext
+/*        RenderRepaintBoundary? boundary = _globalKey.currentContext
             ?.findRenderObject() as RenderRepaintBoundary?;
         if (boundary == null) {
           return;
         }
         print(boundary.size);
         ui.Image image =
-        await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);
+        await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);*/
+
+        List<List<ui.Image>> images = await getImages(
+            Provider.of<CanvasViewModel>(context, listen: false).selectedCards, Localizations.localeOf(context));
+        ImageMatrixPainter p = ImageMatrixPainter(matrix: images, imageWidth: constants.rawCardImageWidth, imageHeight: constants.rawCardImageHeight);
+
+        ui.Image? image = await _getImage(
+            p,
+            images.fold<int>(0, (p, e) => e.length>p? e.length: p) * constants.rawCardImageWidth,
+            images.length * constants.rawCardImageHeight);
+
         ByteData? byteData =
         await image.toByteData(format: ui.ImageByteFormat.png);
 
@@ -315,10 +285,28 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
     });
   }
 
-  Future<void> downloadImage() async {
+  Future<void> downloadImage(BuildContext context) async {
     Future(() async {
       try {
-        ui.Image? image = await _getImage(myPainter, 265, 370);
+/*        RenderRepaintBoundary? boundary = _globalKey.currentContext
+            ?.findRenderObject() as RenderRepaintBoundary?;
+        if (boundary == null) {
+          return;
+        }
+        print(boundary.size);
+        ui.Image image =
+        await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);*/
+
+
+        List<List<ui.Image>> images = await getImages(
+            Provider.of<CanvasViewModel>(context, listen: false).selectedCards, Localizations.localeOf(context));
+        ImageMatrixPainter p = ImageMatrixPainter(matrix: images, imageWidth: constants.rawCardImageWidth, imageHeight: constants.rawCardImageHeight);
+
+        ui.Image? image = await _getImage(
+            p,
+            images.fold<int>(0, (p, e) => e.length>p? e.length: p) * constants.rawCardImageWidth,
+            images.length * constants.rawCardImageHeight);
+
         ByteData? byteData =
         await image.toByteData(format: ui.ImageByteFormat.png);
         if (byteData != null) {
@@ -372,47 +360,6 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
     return await picture.toImage(width.toInt(), height.toInt());
   }
 
-
-/*
-  Future<ui.Image> getImage() async {
-    final PictureRecorder recorder = PictureRecorder();
-    myPainter.paint(Canvas(recorder), Size(400, 400));
-    final Picture picture = recorder.endRecording();
-
-    return await picture.toImage(400, 400);
-  }
-*/
-
-
-  Future<ui.Image> getUiImage(String imageAssetPath, int height, int width) async {
-    final ByteData assetImageByteData = await rootBundle.load(imageAssetPath);
-    final codec = await ui.instantiateImageCodec(
-      assetImageByteData.buffer.asUint8List(),
-      targetHeight: height,
-      targetWidth: width,
-    );
-    final image = (await codec.getNextFrame()).image;
-
-    return image;
-  }
-}
-
-class _SamplePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.blue;
-    canvas.drawRect(Rect.fromLTWH(0, 0, 50, 50), paint);
-    paint.color = Colors.grey;
-    paint.strokeWidth = 5;
-    canvas.drawLine(Offset(140, 10), Offset(140, 60), paint);
-    paint.color = Colors.red;
-    canvas.drawCircle(Offset(100, 35), 25, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
-  }
 }
 
 class ImageMatrixPainter extends CustomPainter {
