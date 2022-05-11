@@ -1,5 +1,6 @@
 
 import 'dart:async';
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'dart:ui';
 
@@ -19,7 +20,8 @@ class GenerateCardImageUseCase {
           return await _fetchImage(card.secondFace!.imageUrlLocale(locale));
         }
       } else {
-        return await _fetchImage(card.firstFace.imageUrlLocale(locale));
+        ui.Image img =  await _fetchImage(card.firstFace.imageUrlLocale(locale));
+        return img;
       }
     }).toList())).toList();
 

@@ -201,7 +201,7 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
           print("failed");
         }
       } catch (e) {
-        rethrow;
+        print(e);
       }
   }
 
