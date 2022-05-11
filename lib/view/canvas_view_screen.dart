@@ -169,7 +169,6 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
   }
 
   Future<void> copyImageToClipBoard() async {
-    Future(() async {
       try {
         ui.Image image = await Provider.of<CanvasViewModel>(context, listen:false)
             .generateSelectedCardImage(
@@ -204,11 +203,9 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
       } catch (e) {
         rethrow;
       }
-    });
   }
 
   Future<void> downloadImage() async {
-    Future(() async {
       try {
         ui.Image image =await Provider.of<CanvasViewModel>(context, listen:false)
             .generateSelectedCardImage(
@@ -227,7 +224,6 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
       } catch (e) {
         rethrow;
       }
-    });
   }
 
   Future<void> _download(Uint8List data) async {
