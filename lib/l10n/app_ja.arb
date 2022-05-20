@@ -4,7 +4,7 @@
   "searchCardHint": "カードを探す",
   "copy": "コピー",
   "download": "ダウンロード",
-  "sort": "並び順",
+  "sort": "ソート",
 
   "name": "名前",
   "cmc": "マナ総量",
@@ -16,7 +16,12 @@
   "menuSearchCard": "カード検索",
   "menuEditCardImage": "カード画像編集",
 
+
+  "japanese": "日本語",
+  "english": "英語",
+
   "msgCopyDone": "画像がコピーされたよ!",
 
-  "errorReload": "エラー。再ロードしてね。"
+  "errorReload": "エラー。再ロードしてね。",
+  "exceptionCode100": "検索失敗。検索クエリを確認してみてね。"
 }

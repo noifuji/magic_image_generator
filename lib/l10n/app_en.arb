@@ -16,8 +16,12 @@
     "menuSearchCard": "Search",
     "menuEditCardImage": "Edit Image",
 
+    "japanese": "Japanesee",
+    "english": "English",
+
 
     "msgCopyDone": "An image was copied!",
 
-    "errorReload": "Error. Please reload this page."
+    "errorReload": "Error. Please reload this page.",
+    "exceptionCode100": "Search failed. Confirm your query."
 }

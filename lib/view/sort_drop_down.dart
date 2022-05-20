@@ -36,7 +36,7 @@ class _SortDropdownState extends State<SortDropdown> {
   Widget build(BuildContext context) {
     return Row(children: [
       Expanded(
-          flex: 1,
+          flex: 2,
           child: Align(
               alignment: Alignment.centerRight,
               child: Container(
@@ -48,7 +48,7 @@ class _SortDropdownState extends State<SortDropdown> {
           flex: 2,
           child: DropdownButton<SortKey>(
             value: dropdownSortKeyValue,
-            icon: const Icon(Icons.arrow_downward),
+            //icon: const Icon(Icons.arrow_downward),
             elevation: 16,
             //style: TextStyle(color: Theme.of(context).colorScheme.primary),
             underline: Container(
@@ -71,10 +71,10 @@ class _SortDropdownState extends State<SortDropdown> {
             }).toList(),
           )),
       Expanded(
-          flex: 2,
+          flex: 1,
           child: DropdownButton<SortOrder>(
             value: dropdownSortOrderValue,
-            icon: const Icon(Icons.arrow_downward),
+            //icon: const Icon(Icons.arrow_downward),
             elevation: 16,
             underline: Container(
               height: 2,
