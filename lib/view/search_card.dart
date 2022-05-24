@@ -59,7 +59,13 @@ class _SearchCardState extends State<SearchCard> {
       frontImage = Image.network(widget.card.firstFace.imageUrlLocale(Localizations.localeOf(context)));
     }
 
-    return OverlayFlippableImage(
+    bool isInCanvas = Provider.of<CanvasViewModel>(context).isInCanvas(widget.card);
+    return Container(
+        foregroundDecoration: BoxDecoration(
+          color: Colors.black.withOpacity(isInCanvas ? 0.4 : 0),
+          //backgroundBlendMode: BlendMode.srcATop,
+        ),
+        child:OverlayFlippableImage(
           width: constants.rawCardImageWidth * widget.scale,
           frontSide: frontImage,
           controller: _ofiController,
@@ -67,7 +73,7 @@ class _SearchCardState extends State<SearchCard> {
           onFlipped: () =>
               Provider.of<SearchViewModel>(context, listen: false).flip(widget.card),
           overlays: overlays,
-        );
+        ));
   }
 
   Widget _createFlipButton() {

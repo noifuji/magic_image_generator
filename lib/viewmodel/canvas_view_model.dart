@@ -30,6 +30,15 @@ class CanvasViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool isInCanvas(CardInfoHeader card) {
+    bool result = false;
+    for(var row in _selectedCards) {
+      result = result || row.where((element) => element.firstFace.name == card.firstFace.name).toList().isNotEmpty;
+    }
+
+    return result;
+  }
+
   void flip(CardInfoHeader card) {
     int rowIndex = selectedCards.indexWhere((row) => row.where((c) => c.displayId == card.displayId).toList().isNotEmpty);
     int colIndex = selectedCards[rowIndex].indexWhere((c) => c.displayId == card.displayId);
