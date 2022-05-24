@@ -35,18 +35,19 @@ class _SortDropdownState extends State<SortDropdown> {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      Expanded(
-          flex: 2,
+/*      Expanded(
+          flex: 1,
           child: Align(
               alignment: Alignment.centerRight,
               child: Container(
                   margin: const EdgeInsets.only(
                     right: 10.0,
                   ),
-                  child: Text(AppLocalizations.of(context)!.sort)))),
+                  child: Text(AppLocalizations.of(context)!.sort)))),*/
       Expanded(
           flex: 2,
           child: DropdownButton<SortKey>(
+            isExpanded: true,
             value: dropdownSortKeyValue,
             //icon: const Icon(Icons.arrow_downward),
             elevation: 16,
@@ -71,8 +72,9 @@ class _SortDropdownState extends State<SortDropdown> {
             }).toList(),
           )),
       Expanded(
-          flex: 1,
+          flex: 2,
           child: DropdownButton<SortOrder>(
+            isExpanded: true,
             value: dropdownSortOrderValue,
             //icon: const Icon(Icons.arrow_downward),
             elevation: 16,

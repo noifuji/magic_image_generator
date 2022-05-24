@@ -40,6 +40,10 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
     SearchResult searchResult = Provider.of<SearchViewModel>(context).searchResult;
     List<CardInfoHeader> cards = searchResult.cards;
 
+    if(cards.isNotEmpty) {
+      print(cards[0].firstFace.name);
+    }
+
     String message = "";
 
     if(searchResult.isSuccess) {
@@ -80,7 +84,9 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
                     margin: const EdgeInsets.only(
                       top: 10.0,
                     ),
-                    child: GridView.count(
+                    child: Provider.of<SearchViewModel>(context).searchResult.cards.isEmpty?
+                    _createTutorialCard(context) :
+                      GridView.count(
                       controller: ScrollController(),
                       crossAxisCount: widget.responsiveColumns~/2,
                       crossAxisSpacing: widget.responsiveGutterWidth,
@@ -99,6 +105,43 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
                       }),
                     )))
           ]);
+  }
+
+  Widget _createTutorialCard(BuildContext context) {
+    return Align(
+        alignment: Alignment.topCenter,
+        child: Container(
+            width: widget.responsiveColumns * widget.responsiveColumnWidth + (widget.responsiveColumns-1) * widget.responsiveGutterWidth,
+            child:Card(child:Padding(
+                padding: const EdgeInsets.only(top:10,left: 20.0,bottom: 20),
+                child:Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                        margin:const EdgeInsets.only(top:5),
+                        child: ListTile(
+                          title: Text(AppLocalizations.of(context)!.howToUse),
+                        )),
+                    Container(
+                        margin:const EdgeInsets.only(top:5),
+                        child: ListTile(
+                          leading: Text(AppLocalizations.of(context)!.step1Title),
+                          title: Text(AppLocalizations.of(context)!.step1Content),
+                        )),
+                    Container(
+                        margin:const EdgeInsets.only(top:5),
+                        child: ListTile(
+                          leading: Text(AppLocalizations.of(context)!.step2Title),
+                          title: Text(AppLocalizations.of(context)!.step2Content),
+                        )),
+                    Container(
+                        margin:const EdgeInsets.only(top:5),
+                        child: ListTile(
+                          leading: Text(AppLocalizations.of(context)!.step3Title),
+                          title: Text(AppLocalizations.of(context)!.step3Content),
+                        ))
+                  ],
+                )))));
   }
 
 }

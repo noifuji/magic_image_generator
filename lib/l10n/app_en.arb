@@ -22,6 +22,17 @@
 
     "msgCopyDone": "An image was copied!",
 
+
+    "howToUse": "<<How To Use>>",
+    "step1Title": "Step1.",
+    "step1Content": "Enter queries and Search cards.",
+    "step2Title": "Step2.",
+    "step2Content": "Tap searched cards to add them to Canvas View (right side).",
+    "step3Title": "Step3.",
+    "step3Content": "Tap Copy Button or Download Button. You can get a card image!",
+
     "errorReload": "Error. Please reload this page.",
-    "exceptionCode100": "Search failed. Confirm your query."
+    "exceptionCode100": "Failed to search. Confirm your query.",
+    "exceptionCode200": "Failed to Copy. Please try download.",
+    "exceptionCode210": "Failed to Download."
 }

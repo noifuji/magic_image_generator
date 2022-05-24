@@ -22,6 +22,16 @@
 
   "msgCopyDone": "画像がコピーされたよ!",
 
-  "errorReload": "エラー。再ロードしてね。",
-  "exceptionCode100": "検索失敗。検索クエリを確認してみてね。"
+  "howToUse": "<<使い方>>",
+  "step1Title": "Step1.",
+  "step1Content": "検索ボックスからカードを検索しましょう.",
+  "step2Title": "Step2.",
+  "step2Content": "表示されたカードをタップして, キャンバス(画面右)にどんどん追加しましょう.",
+  "step3Title": "Step3.",
+  "step3Content": "コピーまたはダウンロードボタンをタップして, 画像データを取得できます!",
+
+  "errorReload": "エラー.  再ロードしてね.",
+  "exceptionCode100": "検索失敗.  検索クエリを確認してみてね.",
+  "exceptionCode200": "コピーに失敗しました. ダウンロードを試してみてね.",
+  "exceptionCode210": "ダウンロードに失敗しました."
 }

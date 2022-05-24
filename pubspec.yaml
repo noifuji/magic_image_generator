@@ -108,7 +108,7 @@ flutter:
   fonts:
     - family: NotoSansJP-Regular
       fonts:
-        - asset: assets/fonts/NotoSansJP-Regular.otf
+        - asset: assets/fonts/NotoSansJP-Regular_modified.otf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

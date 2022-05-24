@@ -55,21 +55,24 @@ import 'domain/card_repository.dart';
  * ・ヒット件数表示 -> ok
  * ・言語設定の保存 ->ok
  * ・検索エラーでメッセージ表示 -> ok
+ * ・アイコンがない->ok
+ * ・ソート順でオーバーフロー -> ok
+ * ・使い方 -> ok
+ * ・スマホでけせない -> ok
  *
  * ・テキスト検索でオペレーターをつかえない
  * ・大量に画像いれると余白がマイナスになる。
  * ・キャンバスで右端移動できない
  * ・CanvasScreen汚すぎ
- * ・ソート順でオーバーフロー
  *
- * ・アイコンがない
  *　・画像データ読み込み中になんか出す
  * ・スマホのときは検索ボックス下へ(検索ボックス位置オプションをsearchScreeenにつける。)
  * ・クエリ入力補助(プルダウンで選択できる　o:xxx オラクル　c:xxx 色指定など)
  * ・画像データ履歴保持
  * ・アリーナっぽい検索画面
  * ・カード移動時のエフェクト
- * ・使い方
+ * ・シェア機能
+ * ・コンタクト
  */
 
 final key = GlobalKey<CanvasViewScreenState>();
@@ -88,33 +91,26 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late Locale locale;
   late SharedPreferences prefs;
   SearchViewModel? _searchViewModel;
   CanvasViewModel? _canvasViewModel;
   AppSettingsViewModel? _appSettingsViewModel;
 
-  void setLocale(Locale value) {
-    setState(() {
-      locale = value;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    if (WidgetsBinding.instance != null) {
-      final List<Locale> systemLocales =
-          WidgetsBinding.instance!.window.locales;
-      locale = systemLocales.first;
-    } else {
-      locale = AppLocalizations.supportedLocales.first;
-    }
-  }
-
   Future<CardRepository> _initApp() async {
     prefs = await SharedPreferences.getInstance();
+    String? languageCode = prefs.getString("languageCode");
+    if (languageCode == null) {
+      Locale locale;
+      if (WidgetsBinding.instance != null) {
+        final List<Locale> systemLocales =
+            WidgetsBinding.instance!.window.locales;
+        locale = systemLocales.first;
+      } else {
+        locale = AppLocalizations.supportedLocales.first;
+      }
+
+      prefs.setString("languageCode", locale.languageCode);
+    }
 
     var isar = Isar.getInstance();
     if (isar == null || !isar.isOpen) {
@@ -147,17 +143,11 @@ class _MyAppState extends State<MyApp> {
             }
             return const MaterialApp(home: Center(child: Text("error")));
           } else {
-            String? languageCode = prefs.getString("languageCode");
-
-            if (languageCode != null) {
-              locale = AppLocalizations.supportedLocales.firstWhere(
-                  (element) => element.languageCode == languageCode);
-            }
-
             _searchViewModel =
                 _searchViewModel ?? SearchViewModel(dataSnapshot.data!);
             _canvasViewModel = _canvasViewModel ?? CanvasViewModel();
-            _appSettingsViewModel = _appSettingsViewModel ?? AppSettingsViewModel(prefs);
+            _appSettingsViewModel =
+                _appSettingsViewModel ?? AppSettingsViewModel(prefs);
 
             return MultiProvider(
                 providers: [
@@ -165,25 +155,37 @@ class _MyAppState extends State<MyApp> {
                   ChangeNotifierProvider.value(value: _canvasViewModel),
                   ChangeNotifierProvider.value(value: _appSettingsViewModel),
                 ],
-                child: MaterialApp(
-                  title: 'Magic Image Generator',
-                  locale: locale,
-                  localizationsDelegates: const [
-                    AppLocalizations.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                    GlobalCupertinoLocalizations.delegate,
-                  ],
-                  supportedLocales: AppLocalizations.supportedLocales,
-                  theme: ThemeData(
-                      brightness: Brightness.dark,
-                      fontFamily: "NotoSansJP-Regular"),
-                  darkTheme: ThemeData(
-                    brightness: Brightness.dark,
-                  ),
-                  themeMode: ThemeMode.dark,
-                  home: const MyHomePage(title: 'Magic Image Generator'),
-                ));
+                child: Builder(
+                    builder: (context) => GestureDetector(
+                      behavior:HitTestBehavior.opaque,
+                        onTap: () {
+
+                          FocusManager.instance.primaryFocus?.unfocus();
+                        },
+                        child: MaterialApp(
+                          title: 'Magic Image Generator',
+                          locale: AppLocalizations.supportedLocales.firstWhere(
+                              (element) =>
+                                  element.languageCode ==
+                                  Provider.of<AppSettingsViewModel>(context)
+                                      .getLanguageCode()),
+                          localizationsDelegates: const [
+                            AppLocalizations.delegate,
+                            GlobalMaterialLocalizations.delegate,
+                            GlobalWidgetsLocalizations.delegate,
+                            GlobalCupertinoLocalizations.delegate,
+                          ],
+                          supportedLocales: AppLocalizations.supportedLocales,
+                          theme: ThemeData(
+                              brightness: Brightness.dark,
+                              fontFamily: "NotoSansJP-Regular"),
+                          darkTheme: ThemeData(
+                            brightness: Brightness.dark,
+                          ),
+                          themeMode: ThemeMode.dark,
+                          home:
+                              const MyHomePage(title: 'Magic Image Generator'),
+                        ))));
           }
         });
   }
@@ -201,11 +203,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
   final List<Widget> _widgetOptions = <Widget>[];
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -231,11 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return Scaffold(
             appBar: AppBar(
               title: Text(AppLocalizations.of(context)!.appTitle),
-              actions: [
-                LanguageDropDownList(
-                  defaultLocale: MyApp.of(context)!.locale
-                )
-              ],
+              actions: [LanguageDropDownList()],
             ),
             body: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(
@@ -295,11 +288,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return Scaffold(
             appBar: AppBar(
               title: Text(AppLocalizations.of(context)!.appTitle),
-              actions: [
-                LanguageDropDownList(
-                  defaultLocale: MyApp.of(context)!.locale,
-                )
-              ],
+              actions: [LanguageDropDownList()],
             ),
             body: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(
@@ -335,10 +324,10 @@ class _MyHomePageState extends State<MyHomePage> {
             bottomNavigationBar: BottomNavigationBar(
               items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.search),
+                    icon: const Icon(Icons.search),
                     label: AppLocalizations.of(context)!.menuSearchCard),
                 BottomNavigationBarItem(
-                    icon: Icon(Icons.style),
+                    icon: const Icon(Icons.style),
                     label: AppLocalizations.of(context)!.menuEditCardImage),
               ],
               currentIndex: _selectedIndex,

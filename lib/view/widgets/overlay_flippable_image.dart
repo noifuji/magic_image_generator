@@ -28,7 +28,6 @@ class OverlayFlippableImage extends StatefulWidget {
 }
 
 class _OverlayFlippableImageState extends State<OverlayFlippableImage> {
-  bool _isMouseOn = false;
   late FlippableImageController _fIController;
 
   @override
@@ -53,21 +52,12 @@ class _OverlayFlippableImageState extends State<OverlayFlippableImage> {
           ))
     ];
 
-    if (widget.overlays != null && _isMouseOn) {
       stacks.addAll(widget.overlays!);
-    }
 
     return SizedBox(
       width: widget.width,
-      child: MouseRegion(
-        onEnter: (details) => setState(() {
-          _isMouseOn = true;
-        }),
-        onExit: (details) => setState(() {
-          _isMouseOn = false;
-        }),
-        child: Stack(children: stacks),
-      ),
+      child: Stack(children: stacks),
+
     );
   }
 

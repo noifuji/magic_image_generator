@@ -74,6 +74,7 @@ class _CanvasCardState extends State<CanvasCard> {
     return Draggable<Map<String, int>>(
         data: {"row": rowIndex, "col": colIndex},
         child: OverlayFlippableImage(
+          key:widget.key,
           width: constants.rawCardImageWidth * widget.scale,
           frontSide: frontImage,
           controller: _ofiController,

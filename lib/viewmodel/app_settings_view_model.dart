@@ -12,5 +12,6 @@ class AppSettingsViewModel extends ChangeNotifier {
 
   void saveLanguageCode(String languageCode) {
     prefs.setString('languageCode', languageCode);
+    notifyListeners();
   }
 }
