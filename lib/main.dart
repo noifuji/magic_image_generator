@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:breakpoint/breakpoint.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -9,8 +11,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:isar/isar.dart';
 import 'package:magic_image_generator/view/canvas_view_screen.dart';
-import 'package:magic_image_generator/view/language_drop_down_list.dart';
+import 'package:magic_image_generator/view/donate_screen.dart';
+import 'package:magic_image_generator/view/widgets/language_drop_down_list.dart';
 import 'package:magic_image_generator/view/search_view_screen.dart';
+import 'package:magic_image_generator/view/widgets/kofi_button.dart';
 import 'package:magic_image_generator/viewmodel/app_settings_view_model.dart';
 import 'package:magic_image_generator/viewmodel/canvas_view_model.dart';
 import 'package:magic_image_generator/viewmodel/search_view_model.dart';
@@ -28,6 +32,7 @@ import 'data/card_master_version.dart';
 import 'data/card_remote_data_source.dart';
 import 'data/card_repository_impl.dart';
 import 'domain/card_repository.dart';
+import 'firebase_options.dart';
 
 /*
  * ・両面札　scryfallからmultiverseを2種とってひもつけをつくる ->ok
@@ -59,26 +64,36 @@ import 'domain/card_repository.dart';
  * ・ソート順でオーバーフロー -> ok
  * ・使い方 -> ok
  * ・スマホでけせない -> ok
+ * ・日本語名のソートがきかない -> ok
+ * ・Edit Imageいったらクエリ消えてる問題 -> ok
+ * ・カード移動時のエフェクト->OK
+ * ・o:oがおそい -> ok
+ * ・コンタクト&寄付 -> ok
  *
  * ・テキスト検索でオペレーターをつかえない
  * ・大量に画像いれると余白がマイナスになる。
  * ・キャンバスで右端移動できない
  * ・CanvasScreen汚すぎ
+ * ・エラーメッセージでない
  *
  *　・画像データ読み込み中になんか出す
  * ・スマホのときは検索ボックス下へ(検索ボックス位置オプションをsearchScreeenにつける。)
  * ・クエリ入力補助(プルダウンで選択できる　o:xxx オラクル　c:xxx 色指定など)
  * ・画像データ履歴保持
  * ・アリーナっぽい検索画面
- * ・カード移動時のエフェクト
  * ・シェア機能
- * ・コンタクト
  */
 
 final key = GlobalKey<CanvasViewScreenState>();
 
-void main() {
+Future<void> main() async {
   configureApp();
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(MyApp());
 }
 
@@ -228,7 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return Scaffold(
             appBar: AppBar(
               title: Text(AppLocalizations.of(context)!.appTitle),
-              actions: [LanguageDropDownList()],
+              actions: [KofiButton(),LanguageDropDownList(), ],
             ),
             body: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(
@@ -256,8 +271,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 Column(mainAxisSize: MainAxisSize.min, children: [
               FloatingActionButton(
                 onPressed: () async {
+                  await FirebaseAnalytics.instance.logEvent(name: "click_copy_button");
                   await key.currentState?.copyImageToClipBoard(context);
-                  //await key.currentState?.captureImage(context);
                 },
                 tooltip: AppLocalizations.of(context)!.copy,
                 child: const Icon(Icons.copy),
@@ -265,6 +280,7 @@ class _MyHomePageState extends State<MyHomePage> {
               const SizedBox(height: 16),
               FloatingActionButton(
                 onPressed: () async {
+                  await FirebaseAnalytics.instance.logEvent(name: "click_download_button");
                   await key.currentState?.downloadImage(context);
                 },
                 tooltip: AppLocalizations.of(context)!.download,
@@ -284,6 +300,8 @@ class _MyHomePageState extends State<MyHomePage> {
           responsiveColumnWidth: _columnWidth,
           responsiveGutterWidth: _gutterWidth,
         ));
+
+        _widgetOptions.add(DonateScreen());
 
         return Scaffold(
             appBar: AppBar(
@@ -305,6 +323,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (_selectedIndex == 1)
                     FloatingActionButton(
                       onPressed: () async {
+                        await FirebaseAnalytics.instance.logEvent(name: "click_copy_button");
                         await key.currentState?.copyImageToClipBoard(context);
                         //await key.currentState?.captureImage(context);
                       },
@@ -315,6 +334,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (_selectedIndex == 1)
                     FloatingActionButton(
                       onPressed: () async {
+                        await FirebaseAnalytics.instance.logEvent(name: "click_download_button");
                         await key.currentState?.downloadImage(context);
                       },
                       tooltip: AppLocalizations.of(context)!.download,
@@ -329,6 +349,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 BottomNavigationBarItem(
                     icon: const Icon(Icons.style),
                     label: AppLocalizations.of(context)!.menuEditCardImage),
+                BottomNavigationBarItem(
+                    icon: const Icon(Icons.favorite),
+                    label: AppLocalizations.of(context)!.donate),
               ],
               currentIndex: _selectedIndex,
               onTap: _onItemTapped,

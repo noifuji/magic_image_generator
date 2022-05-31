@@ -61,7 +61,7 @@ class _SortDropdownState extends State<SortDropdown> {
                 dropdownSortKeyValue = newValue!;
               });
               Provider.of<SearchViewModel>(context, listen: false)
-                  .setSortKey(newValue!);
+                  .setSortKey(newValue!, Localizations.localeOf(context));
             },
             items: getSortKeys(context)
                 .map<DropdownMenuItem<SortKey>>((Map<String, dynamic> value) {
@@ -87,7 +87,7 @@ class _SortDropdownState extends State<SortDropdown> {
                 dropdownSortOrderValue = newValue!;
               });
               Provider.of<SearchViewModel>(context, listen: false)
-                  .setSortOrder(newValue!);
+                  .setSortOrder(newValue!, Localizations.localeOf(context));
             },
             items: getSortOrders(context)
                 .map<DropdownMenuItem<SortOrder>>((Map<String, dynamic> value) {

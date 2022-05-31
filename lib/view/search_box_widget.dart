@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -24,6 +25,7 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
 
   @override
   Widget build(BuildContext context) {
+    myController.text = Provider.of<SearchViewModel>(context).query;
     return Container(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.secondary.withAlpha(50),
@@ -46,6 +48,14 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                             border: InputBorder.none),
                         autofocus: false,
                         onSubmitted: (value) async {
+
+                          await FirebaseAnalytics.instance.logEvent(
+                            name: "submit_query",
+                            parameters: {
+                              "query": value,
+                            },
+                          );
+
                           await Provider.of<SearchViewModel>(context,
                                   listen: false)
                               .search(value, Localizations.localeOf(context));

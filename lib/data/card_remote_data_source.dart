@@ -49,6 +49,7 @@ class CardRemoteDataSource {
         ..flavor = e[13].toString()
         ..artist = e[14].toString()
         ..imageUrl = constants.imageUrlS3 + e[0].toString() + ".png"
+        ..nameJpYomi = e[15].toString()
         ..nameJp = e[16].toString()
         ..textJp = e[17].toString()
         ..typeJp = e[18].toString()

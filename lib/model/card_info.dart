@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 class CardInfo{
   late String multiverseId;
   late String name;
+  late String nameJpYomi;
   late String _imageUrl;
   late String _imageUrlJp;
   late String layout;
@@ -26,6 +27,7 @@ class CardInfo{
   CardInfo({
     required this.multiverseId,
     required this.name,
+    required this.nameJpYomi,
     required String imageUrl,
     required String imageUrlJp,
     required this.layout,
@@ -39,6 +41,7 @@ class CardInfo{
     CardInfo card =CardInfo(
       multiverseId: multiverseId,
       name: name,
+      nameJpYomi: nameJpYomi,
       imageUrl: _imageUrl,
       imageUrlJp: _imageUrlJp,
       layout: layout,

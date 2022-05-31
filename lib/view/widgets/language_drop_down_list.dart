@@ -8,7 +8,9 @@ class LanguageDropDownList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
+    return Row(children:[
+      const Icon(Icons.language),
+      DropdownButton<String>(
       value: Provider.of<AppSettingsViewModel>(context).getLanguageCode(),
       elevation: 16,
       //style: TextStyle(color: Theme.of(context).colorScheme.primary),
@@ -36,6 +38,6 @@ class LanguageDropDownList extends StatelessWidget {
           child: Text(languageName, overflow: TextOverflow.ellipsis),
         );
       }).toList(),
-    );
+    )]);
   }
 }

@@ -1,6 +1,6 @@
 {
   "@@locale": "ja",
-  "appTitle": "マジック画像ジェネレータ",
+  "appTitle": "マジック画像生成器",
   "searchCardHint": "カードを探す",
   "copy": "コピー",
   "download": "ダウンロード",
@@ -13,8 +13,9 @@
 
   "hit": "件ヒット",
 
-  "menuSearchCard": "カード検索",
-  "menuEditCardImage": "カード画像編集",
+  "menuSearchCard": "検索する",
+  "menuEditCardImage": "編集する",
+  "donate": "応援する",
 
 
   "japanese": "日本語",
@@ -33,5 +34,7 @@
   "errorReload": "エラー.  再ロードしてね.",
   "exceptionCode100": "検索失敗.  検索クエリを確認してみてね.",
   "exceptionCode200": "コピーに失敗しました. ダウンロードを試してみてね.",
-  "exceptionCode210": "ダウンロードに失敗しました."
+  "exceptionCode210": "ダウンロードに失敗しました.",
+
+  "kofi": "Buy Me a Coffee"
 }

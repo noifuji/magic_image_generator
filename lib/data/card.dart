@@ -30,6 +30,7 @@ class Card {
   late String artist;
   late String imageUrl;
   late String nameJp;
+  late String nameJpYomi;
   late String textJp;
   late String typeJp;
   String? flavorJp;
@@ -58,6 +59,7 @@ class Card {
     CardInfo ci = CardInfo(
         multiverseId: multiverseId,
         name: name,
+        nameJpYomi: nameJpYomi,
         imageUrl: imageUrl,
         imageUrlJp: imageUrlJp,
         layout: layout,

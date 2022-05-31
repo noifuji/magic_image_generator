@@ -15,7 +15,7 @@ extension GetCardCollection on Isar {
 const CardSchema = CollectionSchema(
   name: 'Card',
   schema:
-      '{"name":"Card","idName":"id","properties":[{"name":"artist","type":"String"},{"name":"backFaceMultiverseId","type":"String"},{"name":"cmc","type":"Long"},{"name":"colorIdentity","type":"String"},{"name":"colors","type":"Long"},{"name":"flavor","type":"String"},{"name":"flavorJp","type":"String"},{"name":"imageUrl","type":"String"},{"name":"imageUrlJp","type":"String"},{"name":"isBackFace","type":"Bool"},{"name":"layout","type":"String"},{"name":"legalityAlchemy","type":"Bool"},{"name":"legalityBrawl","type":"Bool"},{"name":"legalityCommander","type":"Bool"},{"name":"legalityDuel","type":"Bool"},{"name":"legalityExplorer","type":"Bool"},{"name":"legalityFuture","type":"Bool"},{"name":"legalityGladiator","type":"Bool"},{"name":"legalityHistoric","type":"Bool"},{"name":"legalityHistoricbrawl","type":"Bool"},{"name":"legalityLegacy","type":"Bool"},{"name":"legalityModern","type":"Bool"},{"name":"legalityPioneer","type":"Bool"},{"name":"legalityStandard","type":"Bool"},{"name":"legalityVintage","type":"Bool"},{"name":"loyalty","type":"String"},{"name":"loyaltyValue","type":"Long"},{"name":"manaCost","type":"String"},{"name":"multiverseId","type":"String"},{"name":"multiverseIdJp","type":"String"},{"name":"name","type":"String"},{"name":"nameJp","type":"String"},{"name":"power","type":"String"},{"name":"powerValue","type":"Long"},{"name":"rarity","type":"String"},{"name":"rarityValue","type":"Long"},{"name":"set","type":"String"},{"name":"text","type":"String"},{"name":"textJp","type":"String"},{"name":"toughness","type":"String"},{"name":"toughnessValue","type":"Long"},{"name":"type","type":"String"},{"name":"typeJp","type":"String"}],"indexes":[],"links":[]}',
+      '{"name":"Card","idName":"id","properties":[{"name":"artist","type":"String"},{"name":"backFaceMultiverseId","type":"String"},{"name":"cmc","type":"Long"},{"name":"colorIdentity","type":"String"},{"name":"colors","type":"Long"},{"name":"flavor","type":"String"},{"name":"flavorJp","type":"String"},{"name":"imageUrl","type":"String"},{"name":"imageUrlJp","type":"String"},{"name":"isBackFace","type":"Bool"},{"name":"layout","type":"String"},{"name":"legalityAlchemy","type":"Bool"},{"name":"legalityBrawl","type":"Bool"},{"name":"legalityCommander","type":"Bool"},{"name":"legalityDuel","type":"Bool"},{"name":"legalityExplorer","type":"Bool"},{"name":"legalityFuture","type":"Bool"},{"name":"legalityGladiator","type":"Bool"},{"name":"legalityHistoric","type":"Bool"},{"name":"legalityHistoricbrawl","type":"Bool"},{"name":"legalityLegacy","type":"Bool"},{"name":"legalityModern","type":"Bool"},{"name":"legalityPioneer","type":"Bool"},{"name":"legalityStandard","type":"Bool"},{"name":"legalityVintage","type":"Bool"},{"name":"loyalty","type":"String"},{"name":"loyaltyValue","type":"Long"},{"name":"manaCost","type":"String"},{"name":"multiverseId","type":"String"},{"name":"multiverseIdJp","type":"String"},{"name":"name","type":"String"},{"name":"nameJp","type":"String"},{"name":"nameJpYomi","type":"String"},{"name":"power","type":"String"},{"name":"powerValue","type":"Long"},{"name":"rarity","type":"String"},{"name":"rarityValue","type":"Long"},{"name":"set","type":"String"},{"name":"text","type":"String"},{"name":"textJp","type":"String"},{"name":"toughness","type":"String"},{"name":"toughnessValue","type":"Long"},{"name":"type","type":"String"},{"name":"typeJp","type":"String"}],"indexes":[],"links":[]}',
   idName: 'id',
   propertyIds: {
     'artist': 0,
@@ -50,17 +50,18 @@ const CardSchema = CollectionSchema(
     'multiverseIdJp': 29,
     'name': 30,
     'nameJp': 31,
-    'power': 32,
-    'powerValue': 33,
-    'rarity': 34,
-    'rarityValue': 35,
-    'set': 36,
-    'text': 37,
-    'textJp': 38,
-    'toughness': 39,
-    'toughnessValue': 40,
-    'type': 41,
-    'typeJp': 42
+    'nameJpYomi': 32,
+    'power': 33,
+    'powerValue': 34,
+    'rarity': 35,
+    'rarityValue': 36,
+    'set': 37,
+    'text': 38,
+    'textJp': 39,
+    'toughness': 40,
+    'toughnessValue': 41,
+    'type': 42,
+    'typeJp': 43
   },
   listProperties: {},
   indexIds: {},
@@ -192,41 +193,44 @@ void _cardSerializeNative(IsarCollection<Card> collection, IsarRawObject rawObj,
   final value31 = object.nameJp;
   final _nameJp = IsarBinaryWriter.utf8Encoder.convert(value31);
   dynamicSize += (_nameJp.length) as int;
-  final value32 = object.power;
+  final value32 = object.nameJpYomi;
+  final _nameJpYomi = IsarBinaryWriter.utf8Encoder.convert(value32);
+  dynamicSize += (_nameJpYomi.length) as int;
+  final value33 = object.power;
   IsarUint8List? _power;
-  if (value32 != null) {
-    _power = IsarBinaryWriter.utf8Encoder.convert(value32);
+  if (value33 != null) {
+    _power = IsarBinaryWriter.utf8Encoder.convert(value33);
   }
   dynamicSize += (_power?.length ?? 0) as int;
-  final value33 = object.powerValue;
-  final _powerValue = value33;
-  final value34 = object.rarity;
-  final _rarity = IsarBinaryWriter.utf8Encoder.convert(value34);
+  final value34 = object.powerValue;
+  final _powerValue = value34;
+  final value35 = object.rarity;
+  final _rarity = IsarBinaryWriter.utf8Encoder.convert(value35);
   dynamicSize += (_rarity.length) as int;
-  final value35 = object.rarityValue;
-  final _rarityValue = value35;
-  final value36 = object.set;
-  final _set = IsarBinaryWriter.utf8Encoder.convert(value36);
+  final value36 = object.rarityValue;
+  final _rarityValue = value36;
+  final value37 = object.set;
+  final _set = IsarBinaryWriter.utf8Encoder.convert(value37);
   dynamicSize += (_set.length) as int;
-  final value37 = object.text;
-  final _text = IsarBinaryWriter.utf8Encoder.convert(value37);
+  final value38 = object.text;
+  final _text = IsarBinaryWriter.utf8Encoder.convert(value38);
   dynamicSize += (_text.length) as int;
-  final value38 = object.textJp;
-  final _textJp = IsarBinaryWriter.utf8Encoder.convert(value38);
+  final value39 = object.textJp;
+  final _textJp = IsarBinaryWriter.utf8Encoder.convert(value39);
   dynamicSize += (_textJp.length) as int;
-  final value39 = object.toughness;
+  final value40 = object.toughness;
   IsarUint8List? _toughness;
-  if (value39 != null) {
-    _toughness = IsarBinaryWriter.utf8Encoder.convert(value39);
+  if (value40 != null) {
+    _toughness = IsarBinaryWriter.utf8Encoder.convert(value40);
   }
   dynamicSize += (_toughness?.length ?? 0) as int;
-  final value40 = object.toughnessValue;
-  final _toughnessValue = value40;
-  final value41 = object.type;
-  final _type = IsarBinaryWriter.utf8Encoder.convert(value41);
+  final value41 = object.toughnessValue;
+  final _toughnessValue = value41;
+  final value42 = object.type;
+  final _type = IsarBinaryWriter.utf8Encoder.convert(value42);
   dynamicSize += (_type.length) as int;
-  final value42 = object.typeJp;
-  final _typeJp = IsarBinaryWriter.utf8Encoder.convert(value42);
+  final value43 = object.typeJp;
+  final _typeJp = IsarBinaryWriter.utf8Encoder.convert(value43);
   dynamicSize += (_typeJp.length) as int;
   final size = staticSize + dynamicSize;
 
@@ -266,17 +270,18 @@ void _cardSerializeNative(IsarCollection<Card> collection, IsarRawObject rawObj,
   writer.writeBytes(offsets[29], _multiverseIdJp);
   writer.writeBytes(offsets[30], _name);
   writer.writeBytes(offsets[31], _nameJp);
-  writer.writeBytes(offsets[32], _power);
-  writer.writeLong(offsets[33], _powerValue);
-  writer.writeBytes(offsets[34], _rarity);
-  writer.writeLong(offsets[35], _rarityValue);
-  writer.writeBytes(offsets[36], _set);
-  writer.writeBytes(offsets[37], _text);
-  writer.writeBytes(offsets[38], _textJp);
-  writer.writeBytes(offsets[39], _toughness);
-  writer.writeLong(offsets[40], _toughnessValue);
-  writer.writeBytes(offsets[41], _type);
-  writer.writeBytes(offsets[42], _typeJp);
+  writer.writeBytes(offsets[32], _nameJpYomi);
+  writer.writeBytes(offsets[33], _power);
+  writer.writeLong(offsets[34], _powerValue);
+  writer.writeBytes(offsets[35], _rarity);
+  writer.writeLong(offsets[36], _rarityValue);
+  writer.writeBytes(offsets[37], _set);
+  writer.writeBytes(offsets[38], _text);
+  writer.writeBytes(offsets[39], _textJp);
+  writer.writeBytes(offsets[40], _toughness);
+  writer.writeLong(offsets[41], _toughnessValue);
+  writer.writeBytes(offsets[42], _type);
+  writer.writeBytes(offsets[43], _typeJp);
 }
 
 Card _cardDeserializeNative(IsarCollection<Card> collection, int id,
@@ -315,17 +320,18 @@ Card _cardDeserializeNative(IsarCollection<Card> collection, int id,
   object.multiverseIdJp = reader.readString(offsets[29]);
   object.name = reader.readString(offsets[30]);
   object.nameJp = reader.readString(offsets[31]);
-  object.power = reader.readStringOrNull(offsets[32]);
-  object.powerValue = reader.readLongOrNull(offsets[33]);
-  object.rarity = reader.readString(offsets[34]);
-  object.rarityValue = reader.readLong(offsets[35]);
-  object.set = reader.readString(offsets[36]);
-  object.text = reader.readString(offsets[37]);
-  object.textJp = reader.readString(offsets[38]);
-  object.toughness = reader.readStringOrNull(offsets[39]);
-  object.toughnessValue = reader.readLongOrNull(offsets[40]);
-  object.type = reader.readString(offsets[41]);
-  object.typeJp = reader.readString(offsets[42]);
+  object.nameJpYomi = reader.readString(offsets[32]);
+  object.power = reader.readStringOrNull(offsets[33]);
+  object.powerValue = reader.readLongOrNull(offsets[34]);
+  object.rarity = reader.readString(offsets[35]);
+  object.rarityValue = reader.readLong(offsets[36]);
+  object.set = reader.readString(offsets[37]);
+  object.text = reader.readString(offsets[38]);
+  object.textJp = reader.readString(offsets[39]);
+  object.toughness = reader.readStringOrNull(offsets[40]);
+  object.toughnessValue = reader.readLongOrNull(offsets[41]);
+  object.type = reader.readString(offsets[42]);
+  object.typeJp = reader.readString(offsets[43]);
   return object;
 }
 
@@ -399,26 +405,28 @@ P _cardDeserializePropNative<P>(
     case 31:
       return (reader.readString(offset)) as P;
     case 32:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 33:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 34:
-      return (reader.readString(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 35:
-      return (reader.readLong(offset)) as P;
-    case 36:
       return (reader.readString(offset)) as P;
+    case 36:
+      return (reader.readLong(offset)) as P;
     case 37:
       return (reader.readString(offset)) as P;
     case 38:
       return (reader.readString(offset)) as P;
     case 39:
-      return (reader.readStringOrNull(offset)) as P;
-    case 40:
-      return (reader.readLongOrNull(offset)) as P;
-    case 41:
       return (reader.readString(offset)) as P;
+    case 40:
+      return (reader.readStringOrNull(offset)) as P;
+    case 41:
+      return (reader.readLongOrNull(offset)) as P;
     case 42:
+      return (reader.readString(offset)) as P;
+    case 43:
       return (reader.readString(offset)) as P;
     default:
       throw 'Illegal propertyIndex';
@@ -462,6 +470,7 @@ dynamic _cardSerializeWeb(IsarCollection<Card> collection, Card object) {
   IsarNative.jsObjectSet(jsObj, 'multiverseIdJp', object.multiverseIdJp);
   IsarNative.jsObjectSet(jsObj, 'name', object.name);
   IsarNative.jsObjectSet(jsObj, 'nameJp', object.nameJp);
+  IsarNative.jsObjectSet(jsObj, 'nameJpYomi', object.nameJpYomi);
   IsarNative.jsObjectSet(jsObj, 'power', object.power);
   IsarNative.jsObjectSet(jsObj, 'powerValue', object.powerValue);
   IsarNative.jsObjectSet(jsObj, 'rarity', object.rarity);
@@ -526,6 +535,7 @@ Card _cardDeserializeWeb(IsarCollection<Card> collection, dynamic jsObj) {
   object.multiverseIdJp = IsarNative.jsObjectGet(jsObj, 'multiverseIdJp') ?? '';
   object.name = IsarNative.jsObjectGet(jsObj, 'name') ?? '';
   object.nameJp = IsarNative.jsObjectGet(jsObj, 'nameJp') ?? '';
+  object.nameJpYomi = IsarNative.jsObjectGet(jsObj, 'nameJpYomi') ?? '';
   object.power = IsarNative.jsObjectGet(jsObj, 'power');
   object.powerValue = IsarNative.jsObjectGet(jsObj, 'powerValue');
   object.rarity = IsarNative.jsObjectGet(jsObj, 'rarity') ?? '';
@@ -612,6 +622,8 @@ P _cardDeserializePropWeb<P>(Object jsObj, String propertyName) {
       return (IsarNative.jsObjectGet(jsObj, 'name') ?? '') as P;
     case 'nameJp':
       return (IsarNative.jsObjectGet(jsObj, 'nameJp') ?? '') as P;
+    case 'nameJpYomi':
+      return (IsarNative.jsObjectGet(jsObj, 'nameJpYomi') ?? '') as P;
     case 'power':
       return (IsarNative.jsObjectGet(jsObj, 'power')) as P;
     case 'powerValue':
@@ -2513,6 +2525,109 @@ extension CardQueryFilter on QueryBuilder<Card, Card, QFilterCondition> {
     ));
   }
 
+  QueryBuilder<Card, Card, QAfterFilterCondition> nameJpYomiEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'nameJpYomi',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterFilterCondition> nameJpYomiGreaterThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'nameJpYomi',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterFilterCondition> nameJpYomiLessThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'nameJpYomi',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterFilterCondition> nameJpYomiBetween(
+    String lower,
+    String upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'nameJpYomi',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterFilterCondition> nameJpYomiStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'nameJpYomi',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterFilterCondition> nameJpYomiEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'nameJpYomi',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterFilterCondition> nameJpYomiContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'nameJpYomi',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterFilterCondition> nameJpYomiMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'nameJpYomi',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
   QueryBuilder<Card, Card, QAfterFilterCondition> powerIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
@@ -3767,6 +3882,14 @@ extension CardQueryWhereSortBy on QueryBuilder<Card, Card, QSortBy> {
     return addSortByInternal('nameJp', Sort.desc);
   }
 
+  QueryBuilder<Card, Card, QAfterSortBy> sortByNameJpYomi() {
+    return addSortByInternal('nameJpYomi', Sort.asc);
+  }
+
+  QueryBuilder<Card, Card, QAfterSortBy> sortByNameJpYomiDesc() {
+    return addSortByInternal('nameJpYomi', Sort.desc);
+  }
+
   QueryBuilder<Card, Card, QAfterSortBy> sortByPower() {
     return addSortByInternal('power', Sort.asc);
   }
@@ -4121,6 +4244,14 @@ extension CardQueryWhereSortThenBy on QueryBuilder<Card, Card, QSortThenBy> {
     return addSortByInternal('nameJp', Sort.desc);
   }
 
+  QueryBuilder<Card, Card, QAfterSortBy> thenByNameJpYomi() {
+    return addSortByInternal('nameJpYomi', Sort.asc);
+  }
+
+  QueryBuilder<Card, Card, QAfterSortBy> thenByNameJpYomiDesc() {
+    return addSortByInternal('nameJpYomi', Sort.desc);
+  }
+
   QueryBuilder<Card, Card, QAfterSortBy> thenByPower() {
     return addSortByInternal('power', Sort.asc);
   }
@@ -4359,6 +4490,11 @@ extension CardQueryWhereDistinct on QueryBuilder<Card, Card, QDistinct> {
     return addDistinctByInternal('nameJp', caseSensitive: caseSensitive);
   }
 
+  QueryBuilder<Card, Card, QDistinct> distinctByNameJpYomi(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('nameJpYomi', caseSensitive: caseSensitive);
+  }
+
   QueryBuilder<Card, Card, QDistinct> distinctByPower(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('power', caseSensitive: caseSensitive);
@@ -4543,6 +4679,10 @@ extension CardQueryProperty on QueryBuilder<Card, Card, QQueryProperty> {
 
   QueryBuilder<Card, String, QQueryOperations> nameJpProperty() {
     return addPropertyNameInternal('nameJp');
+  }
+
+  QueryBuilder<Card, String, QQueryOperations> nameJpYomiProperty() {
+    return addPropertyNameInternal('nameJpYomi');
   }
 
   QueryBuilder<Card, String?, QQueryOperations> powerProperty() {

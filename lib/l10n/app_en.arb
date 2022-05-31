@@ -15,6 +15,7 @@
 
     "menuSearchCard": "Search",
     "menuEditCardImage": "Edit Image",
+    "donate": "Support",
 
     "japanese": "Japanesee",
     "english": "English",
@@ -34,5 +35,7 @@
     "errorReload": "Error. Please reload this page.",
     "exceptionCode100": "Failed to search. Confirm your query.",
     "exceptionCode200": "Failed to Copy. Please try download.",
-    "exceptionCode210": "Failed to Download."
+    "exceptionCode210": "Failed to Download.",
+
+    "kofi": "Buy Me a Coffee"
 }
