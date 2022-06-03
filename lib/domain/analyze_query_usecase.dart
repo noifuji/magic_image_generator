@@ -261,6 +261,7 @@ d. その他（演算子）の場合
 
   List<SearchQuerySymbol> convertToSearchQuerySymbol(List<List<String>> p) {
     return p.map((e) {
+      e = e.map((ele) => ele.toLowerCase()).toList();
       if(SearchOperator.isSearchOperator(e)) {
         return SearchOperator(e);
       } else if(SearchConditionMapper.isMappable(e)) {

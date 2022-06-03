@@ -8,6 +8,7 @@ import 'package:magic_image_generator/model/search_result.dart';
 import 'package:magic_image_generator/view/sort_drop_down.dart';
 
 import '../assets/util.dart';
+import '../domain/analyze_filter_usecase.dart';
 import '../domain/analyze_query_usecase.dart';
 import '../model/card_info.dart';
 import '../model/card_info_header.dart';
@@ -18,6 +19,7 @@ class SearchViewModel extends ChangeNotifier {
   SortOrder _sortOrder = SortOrder.asc;
   SearchResult _searchResult = SearchResult(cards: [], isSuccess: false);
   String query = "";
+  Map<SearchFilter, bool> searchFilters = {};
 
   SearchResult get searchResult => _searchResult;
 
@@ -25,7 +27,11 @@ class SearchViewModel extends ChangeNotifier {
   SortOrder get order => _sortOrder;
 
 
-  SearchViewModel(this._repository);
+  SearchViewModel(this._repository) {
+    for(var v in SearchFilter.values) {
+      searchFilters[v] = false;
+    }
+  }
 
   void flip(CardInfoHeader card) {
     int index = _searchResult.cards.indexWhere((element) => element.displayId == card.displayId);
@@ -39,23 +45,20 @@ class SearchViewModel extends ChangeNotifier {
     //クエリの分析
     this.query = query;
 
-    try {
-      var analyzer = AnalyzeQueryUseCase();
-      var conditions = analyzer.call(query);
-
-      //リポジトリから結果の取り出し
-      List<CardInfoHeader> results = await _repository.get(conditions, locale);
-      _searchResult = SearchResult(cards: results, isSuccess: true);
-      sortSearchResults(locale);
-    } catch(e) {
-      _searchResult = SearchResult(cards: [], isSuccess: false, exception: MIGException(100));
-      if (kDebugMode) {
-        print(e);
-      }
+    if(_hasFilter()) {
+      query = query + " " + AnalyzeFilterUseCase().call(searchFilters, locale);
     }
 
-    //リザルトを更新
-    notifyListeners();
+    await _search(query, locale);
+  }
+
+  Future<void> searchFromAdvanced(Locale locale) async {
+    if(!_hasFilter()) {
+      return;
+    }
+
+    String query = AnalyzeFilterUseCase().call(searchFilters, locale);
+    await _search(this.query + " " + query, locale);
   }
 
   void setSortKey(SortKey sortKey, Locale locale) {
@@ -85,4 +88,56 @@ class SearchViewModel extends ChangeNotifier {
 
     }
   }
+
+  void switchSearchFilter(SearchFilter filter) {
+    searchFilters[filter] = !searchFilters[filter]!;
+    notifyListeners();
+  }
+
+  void resetSearchFilter() {
+    for(var f in SearchFilter.values) {
+      searchFilters[f] = false;
+    }
+    notifyListeners();
+  }
+
+  bool _hasFilter() {
+    bool sum = false;
+    for(var f in SearchFilter.values) {
+      sum = sum || searchFilters[f]!;
+    }
+
+    return sum;
+  }
+
+
+  Future<void> _search(String query, Locale locale) async {
+
+    try {
+      var analyzer = AnalyzeQueryUseCase();
+      var conditions = analyzer.call(query);
+
+      //リポジトリから結果の取り出し
+      List<CardInfoHeader> results = await _repository.get(conditions, locale);
+      _searchResult = SearchResult(cards: results, isSuccess: true);
+      sortSearchResults(locale);
+    } catch(e) {
+      _searchResult = SearchResult(cards: [], isSuccess: false, exception: MIGException(100));
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+
+    //リザルトを更新
+    notifyListeners();
+  }
+
+}
+
+enum SearchFilter{
+  colorWhite,colorBlue,colorBlack,colorRed,colorGreen,colorColorless,colorMulti,
+  rarityCommon,rarityUncommon,rarityRare,rarityMythic,
+  typeCreature,typePlaneswalker,typeInstant,typeSorcery,typeEnchantment,typeArtifact,typeLand,
+  manaValue0,manaValue1,manaValue2,manaValue3,manaValue4,manaValue5,manaValue6,manaValue7AndMore,
+  setSnc,setNeo,setVow,setMid,setAfr,setStx,setKhm,setZnr
 }

@@ -80,7 +80,7 @@ import 'firebase_options.dart';
  * ・スマホのときは検索ボックス下へ(検索ボックス位置オプションをsearchScreeenにつける。)
  * ・クエリ入力補助(プルダウンで選択できる　o:xxx オラクル　c:xxx 色指定など)
  * ・画像データ履歴保持
- * ・アリーナっぽい検索画面
+ * ・アリーナっぽい検索画面->ok
  * ・シェア機能
  */
 
@@ -172,9 +172,8 @@ class _MyAppState extends State<MyApp> {
                 ],
                 child: Builder(
                     builder: (context) => GestureDetector(
-                      behavior:HitTestBehavior.opaque,
+                        behavior: HitTestBehavior.opaque,
                         onTap: () {
-
                           FocusManager.instance.primaryFocus?.unfocus();
                         },
                         child: MaterialApp(
@@ -196,6 +195,7 @@ class _MyAppState extends State<MyApp> {
                               fontFamily: "NotoSansJP-Regular"),
                           darkTheme: ThemeData(
                             brightness: Brightness.dark,
+                              fontFamily: "NotoSansJP-Regular"
                           ),
                           themeMode: ThemeMode.dark,
                           home:
@@ -243,7 +243,10 @@ class _MyHomePageState extends State<MyHomePage> {
         return Scaffold(
             appBar: AppBar(
               title: Text(AppLocalizations.of(context)!.appTitle),
-              actions: [KofiButton(),LanguageDropDownList(), ],
+              actions: [
+                KofiButton(),
+                LanguageDropDownList(),
+              ],
             ),
             body: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(
@@ -270,8 +273,12 @@ class _MyHomePageState extends State<MyHomePage> {
             floatingActionButton:
                 Column(mainAxisSize: MainAxisSize.min, children: [
               FloatingActionButton(
+                heroTag: "copy",
                 onPressed: () async {
-                  await FirebaseAnalytics.instance.logEvent(name: "click_copy_button");
+                  if (constants.buildType == "production") {
+                    await FirebaseAnalytics.instance
+                        .logEvent(name: "click_copy_button");
+                  }
                   await key.currentState?.copyImageToClipBoard(context);
                 },
                 tooltip: AppLocalizations.of(context)!.copy,
@@ -279,8 +286,12 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               const SizedBox(height: 16),
               FloatingActionButton(
+                heroTag: "download",
                 onPressed: () async {
-                  await FirebaseAnalytics.instance.logEvent(name: "click_download_button");
+                  if (constants.buildType == "production") {
+                    await FirebaseAnalytics.instance
+                        .logEvent(name: "click_download_button");
+                  }
                   await key.currentState?.downloadImage(context);
                 },
                 tooltip: AppLocalizations.of(context)!.download,
@@ -322,8 +333,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     Column(mainAxisAlignment: MainAxisAlignment.end, children: [
                   if (_selectedIndex == 1)
                     FloatingActionButton(
+                      heroTag: "copy",
                       onPressed: () async {
-                        await FirebaseAnalytics.instance.logEvent(name: "click_copy_button");
+                        if (constants.buildType == "production") {
+                          await FirebaseAnalytics.instance
+                              .logEvent(name: "click_copy_button");
+                        }
                         await key.currentState?.copyImageToClipBoard(context);
                         //await key.currentState?.captureImage(context);
                       },
@@ -333,8 +348,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   if (_selectedIndex == 1) const SizedBox(height: 16),
                   if (_selectedIndex == 1)
                     FloatingActionButton(
+                      heroTag: "download",
                       onPressed: () async {
-                        await FirebaseAnalytics.instance.logEvent(name: "click_download_button");
+                        if (constants.buildType == "production") {
+                          await FirebaseAnalytics.instance
+                              .logEvent(name: "click_download_button");
+                        }
                         await key.currentState?.downloadImage(context);
                       },
                       tooltip: AppLocalizations.of(context)!.download,

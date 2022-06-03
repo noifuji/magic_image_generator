@@ -2,7 +2,9 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:magic_image_generator/view/advanced_search_screen.dart';
 import 'package:provider/provider.dart';
+import '../assets/constants.dart' as constants;
 
 import '../viewmodel/search_view_model.dart';
 
@@ -41,40 +43,54 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                   ),
                   child: SizedBox(
                       child: TextField(
-                        controller: myController,
-                        decoration: InputDecoration(
-                            hintText:
-                                AppLocalizations.of(context)!.searchCardHint,
-                            border: InputBorder.none),
-                        autofocus: false,
-                        onSubmitted: (value) async {
+                    controller: myController,
+                    decoration: InputDecoration(
+                        hintText: AppLocalizations.of(context)!.searchCardHint,
+                        border: InputBorder.none),
+                    autofocus: false,
+                    onSubmitted: (value) async {
+                      if (constants.buildType == "production") {
+                        await FirebaseAnalytics.instance.logEvent(
+                          name: "submit_query",
+                          parameters: {
+                            "query": value,
+                          },
+                        );
+                      }
 
-                          await FirebaseAnalytics.instance.logEvent(
-                            name: "submit_query",
-                            parameters: {
-                              "query": value,
-                            },
-                          );
-
-                          await Provider.of<SearchViewModel>(context,
-                                  listen: false)
-                              .search(value, Localizations.localeOf(context));
-                        },
-                      )))),
+                      await Provider.of<SearchViewModel>(context, listen: false)
+                          .search(value, Localizations.localeOf(context));
+                    },
+                  )))),
           Expanded(
               flex: 0,
               child: Container(
-                  margin: const EdgeInsets.only(right: 10,),
-                  child: SizedBox(
-                      child: IconButton(
-                        icon: const Icon(Icons.search),
-                        onPressed: () async {
-                          await Provider.of<SearchViewModel>(context,
-                                  listen: false)
-                              .search(myController.text,
-                                  Localizations.localeOf(context));
-                        },
-                      )))),
+                  child: IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () async {
+                  await Provider.of<SearchViewModel>(context, listen: false)
+                      .search(
+                          myController.text, Localizations.localeOf(context));
+                },
+              ))),
+          Expanded(
+              flex: 0,
+              child: Container(
+                  margin: const EdgeInsets.only(
+                    right: 10,
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.tune),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return AdvancedSearchScreen();
+                          },
+                        ),
+                      );
+                    },
+                  ))),
         ]));
   }
 }
