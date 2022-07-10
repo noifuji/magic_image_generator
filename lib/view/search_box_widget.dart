@@ -49,19 +49,26 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                         border: InputBorder.none),
                     autofocus: false,
                     onSubmitted: (value) async {
-                      if (constants.buildType == "production") {
-                        await FirebaseAnalytics.instance.logEvent(
-                          name: "submit_query",
-                          parameters: {
-                            "query": value,
-                          },
-                        );
-                      }
 
                       await Provider.of<SearchViewModel>(context, listen: false)
                           .search(value, Localizations.localeOf(context));
                     },
+                    onChanged: (value) {
+                      Provider.of<SearchViewModel>(context, listen: false)
+                          .query = value;
+                    },
                   )))),
+          Expanded(
+              flex: 0,
+              child: Container(
+                  child: IconButton(
+                icon: const Icon(Icons.cancel),
+                onPressed: () async {
+                  myController.text = "";
+                  Provider.of<SearchViewModel>(context, listen: false)
+                      .query = "";
+                },
+              ))),
           Expanded(
               flex: 0,
               child: Container(

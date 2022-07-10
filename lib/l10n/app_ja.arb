@@ -47,6 +47,10 @@
   "setStx": "ストリクスヘイヴン 魔法学院",
   "setKhm": "カルドハイム",
   "setZnr": "ゼンディカーの夜明け",
+  "setYMid": "アルケミー: イニストラード",
+  "setYNeo": "アルケミー: 神河",
+  "setYSnc": "アルケミー: ニューカペナ",
+  "setHbg": "アルケミーホライゾン: バルダーズ・ゲート",
 
   "resetButton": "リセット",
   "searchButton": "OK",
@@ -75,5 +79,5 @@
   "exceptionCode200": "コピーに失敗しました. ダウンロードを試してみてね.",
   "exceptionCode210": "ダウンロードに失敗しました.",
 
-  "kofi": "Buy Me a Coffee"
+  "kofi": "投げ銭する"
 }

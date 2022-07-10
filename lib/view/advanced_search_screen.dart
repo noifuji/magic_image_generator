@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +21,8 @@ class AdvancedSearchScreen extends StatelessWidget {
 
   final List<SearchFilter> _cardSets = [
     SearchFilter.setSnc,SearchFilter.setNeo,SearchFilter.setVow,SearchFilter.setMid,
-  SearchFilter.setAfr,SearchFilter.setStx,SearchFilter.setKhm,SearchFilter.setZnr,];
+  SearchFilter.setAfr,SearchFilter.setStx,SearchFilter.setKhm,SearchFilter.setZnr,
+    SearchFilter.setYMid,SearchFilter.setYNeo,SearchFilter.setYSnc,SearchFilter.setHbg,];
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +81,7 @@ class AdvancedSearchScreen extends StatelessWidget {
                     children: _breakpoint.columns > 8? ([
                       Expanded(
                           flex: 1,
-                          child: Column(children: [
+                          child: SingleChildScrollView(child:Column(children: [
                             Container(height: responsive.horizontalMarginWidth,),
 
                             _createTitle(context, AppLocalizations.of(context)!.filterTitleColor, responsive),
@@ -92,7 +95,7 @@ class AdvancedSearchScreen extends StatelessWidget {
                             Container(height: responsive.verticalGutterHeight,),
                             _createTitle(context, AppLocalizations.of(context)!.filterTitleType, responsive),
                             _createButtonGrid(context,_cardTypes, cardTypeColNum,responsive)
-                          ])),
+                          ]))),
                       Container(width:responsive.horizontalGutterWidth),
                       Expanded(
                           flex: 1,
@@ -162,7 +165,7 @@ class AdvancedSearchScreen extends StatelessWidget {
                                   },
                                   style: TextButton.styleFrom(backgroundColor: Colors.grey),
                                   child: Text(AppLocalizations.of(context)!.resetButton,
-                                      style: const TextStyle(color:Colors.white, fontSize: 20)))),
+                                      style: TextStyle(color:Colors.white, fontSize: responsive.rowHeight*0.6*0.75*0.5)))),
                           Container(width: responsive.columnWidth*bottomBarCenterSpaceColSize + responsive.horizontalGutterWidth*(bottomBarMarginColSize + 1),),
                           Container(
                               width: responsive.columnWidth*2 + responsive.horizontalGutterWidth,
@@ -174,7 +177,7 @@ class AdvancedSearchScreen extends StatelessWidget {
                                   },
                                   style: TextButton.styleFrom(backgroundColor: Colors.orange),
                                   child: Text(AppLocalizations.of(context)!.searchButton,
-                                      style: const TextStyle(color:Colors.white, fontSize: 20)))),
+                                      style: TextStyle(color:Colors.white, fontSize: responsive.rowHeight*0.6*0.75*0.5)))),
                         ])))
               ])));
     });
@@ -195,7 +198,7 @@ class AdvancedSearchScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(30.0),
         ),
         child: Padding(padding: EdgeInsets.only(left:res.horizontalGutterWidth),
-            child:Row(children:[Text(title, style: TextStyle(fontSize: 24),)])))]));
+            child:Row(children:[Text(title, style: TextStyle(fontSize: res.rowHeight*0.6*0.75*0.8),)])))]));
   }
 
   Widget _createColorButtons(BuildContext context, ResponsiveGridValues res) {
@@ -208,7 +211,6 @@ class AdvancedSearchScreen extends StatelessWidget {
         (res.columnSize * res.columnWidth + (res.columnSize - 1) * res.horizontalGutterWidth) /
         (filters.length * res.columnWidth + (filters.length - 1) * res.horizontalGutterWidth);
     double g = w * res.horizontalGutterWidth / res.columnWidth;
-
     List<Widget> result = [];
 
     for (var i = 0; i < filters.length; i++) {
@@ -219,11 +221,14 @@ class AdvancedSearchScreen extends StatelessWidget {
               : const EdgeInsets.only(),
           width: w,
           height: res.rowHeight,
-          child: IconButton(
+          child: Opacity(opacity:isOn? 1.0: 0.3, child:
+          IconButton(
               onPressed: () {
                 Provider.of<SearchViewModel>(context, listen: false).switchSearchFilter(filters[i]);
                 },
-              icon: Opacity(opacity:isOn? 1.0: 0.3, child:Image.asset(_getFilterText(context, filters[i]),)))));
+              padding: EdgeInsets.zero,
+              splashColor: Colors.transparent,
+              icon: Image.asset(_getFilterText(context, filters[i]),)))));
     }
     return Row(children: result);
   }
@@ -244,6 +249,7 @@ class AdvancedSearchScreen extends StatelessWidget {
         (filters.length * res.columnWidth + (filters.length - 1) * res.horizontalGutterWidth);
     double g = w * res.horizontalGutterWidth / res.columnWidth;
 
+
     List<Widget> result = [];
 
     for (var i = 0; i < filters.length; i++) {
@@ -255,19 +261,23 @@ class AdvancedSearchScreen extends StatelessWidget {
               : const EdgeInsets.only(),
           width: w,
           height: res.rowHeight,
-          child: FittedBox(
+          child:/* FittedBox(
               fit: BoxFit.contain,
-              child: Opacity(opacity:isOn? 1.0: 0.3, child:TextButton(
+              child: */Opacity(
+                  opacity:isOn? 1.0: 0.3,
+                  child: TextButton(
               onPressed: () {
                 Provider.of<SearchViewModel>(context, listen: false).switchSearchFilter(filters[i]);
               },
               style: TextButton.styleFrom(
-                  shape: const CircleBorder(),
+                splashFactory: NoSplash.splashFactory,
+                shape: const CircleBorder(),
                 backgroundColor: Colors.white70,
+                side: const BorderSide(color: Colors.black),
               ),
             child: Text(_getFilterText(context, filters[i]),
-                style: TextStyle(color: Colors.black)),)
-          ))));
+                style: TextStyle(color: Colors.black, fontSize: min(w,res.rowHeight) * 0.75 * 0.5)),)
+          )));
     }
     return Row(children: result);
   }
@@ -302,9 +312,7 @@ class AdvancedSearchScreen extends StatelessWidget {
           margin: i < filters.length - 1
               ? EdgeInsets.only(right: g)
               : const EdgeInsets.only(),
-          width: w,
-          height:res.rowHeight,
-          child: _createToggleTextButton(context, filters[i])));
+          child: _createToggleTextButton(context, filters[i], w, res.rowHeight)));
     }
     return Row(children:result);
   }
@@ -318,24 +326,31 @@ class AdvancedSearchScreen extends StatelessWidget {
    * ・表示するテキストを指定できる
    */
   Widget _createToggleTextButton(
-      BuildContext context, SearchFilter filter) {
+      BuildContext context, SearchFilter filter, double w, double h) {
     bool isOn = Provider.of<SearchViewModel>(context).searchFilters[filter]!;
-    return Container(
+    return Stack(children: [
+      Transform.scale(scaleY:0.5, scaleX:2,origin:Offset(-w*0.25, 0),child:Container(
+            width: 0.5*w,
+            height: h,
       decoration: isOn? BoxDecoration(
         gradient: RadialGradient(
-          radius: 1,
+          radius: 0.5,
           colors: [Colors.orange.withAlpha(100), Theme.of(context).canvasColor],
         ),
-      ) : const BoxDecoration(),
-        child: TextButton(
-            onPressed: () {
-              //ビューモデルの値を変更する
-              Provider.of<SearchViewModel>(context, listen: false).switchSearchFilter(filter);
-            },
-            style:isOn? TextButton.styleFrom(backgroundColor: Colors.orange.withAlpha(10)):
-            TextButton.styleFrom(),
-            child: Text(_getFilterText(context, filter),
-            style: TextStyle(color: isOn? Colors.white.withAlpha(255) : Colors.white.withAlpha(150)),)));
+      ) : const BoxDecoration(),)),
+    Container(
+        width: w,
+        height: h,
+        child:TextButton(
+        onPressed: () {
+          //ビューモデルの値を変更する
+          Provider.of<SearchViewModel>(context, listen: false).switchSearchFilter(filter);
+        },
+        style:isOn? TextButton.styleFrom(backgroundColor: Colors.orange.withAlpha(10), splashFactory: NoSplash.splashFactory):
+        TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
+        child: Text(_getFilterText(context, filter),
+          style: TextStyle(color: isOn? Colors.white.withAlpha(255) : Colors.white.withAlpha(150),
+          fontSize: h*0.75*0.3),)))],);
   }
 
   String _getFilterText(BuildContext context, SearchFilter f) {
@@ -393,6 +408,14 @@ class AdvancedSearchScreen extends StatelessWidget {
       return AppLocalizations.of(context)!.setVow;
     } else if(f == SearchFilter.setZnr) {
       return AppLocalizations.of(context)!.setZnr;
+    } else if(f == SearchFilter.setYMid) {
+      return AppLocalizations.of(context)!.setYMid;
+    } else if(f == SearchFilter.setYNeo) {
+      return AppLocalizations.of(context)!.setYNeo;
+    } else if(f == SearchFilter.setYSnc) {
+      return AppLocalizations.of(context)!.setYSnc;
+    } else if(f == SearchFilter.setHbg) {
+      return AppLocalizations.of(context)!.setHbg;
     } else if(f == SearchFilter.colorWhite) {
       return "assets/images/white.png";
     } else if(f == SearchFilter.colorBlue) {

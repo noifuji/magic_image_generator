@@ -48,6 +48,10 @@
     "setStx": "Strixhaven",
     "setKhm": "Kaldheim",
     "setZnr": "Zendikar Rising",
+    "setYMid": "Alchemy: Innistrad",
+    "setYNeo": "Alchemy: Kamigawa",
+    "setYSnc": "Alchemy: New Capena",
+    "setHbg": "Alchemy Horizons: Baldur's Gate",
 
     "resetButton": "Reset",
     "searchButton": "OK",

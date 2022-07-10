@@ -38,7 +38,11 @@ class AnalyzeFilterUseCase {
     SearchFilter.setAfr: "set",
     SearchFilter.setStx: "set",
     SearchFilter.setKhm: "set",
-    SearchFilter.setZnr: "set"
+    SearchFilter.setZnr: "set",
+    SearchFilter.setYMid: "set",
+    SearchFilter.setYNeo: "set",
+    SearchFilter.setYSnc: "set",
+    SearchFilter.setHbg: "set"
   };
 
   final Map<SearchFilter, String> seachFilterValueMap = {
@@ -75,7 +79,11 @@ class AnalyzeFilterUseCase {
     SearchFilter.setAfr: "afr",
     SearchFilter.setStx: "stx",
     SearchFilter.setKhm: "khm",
-    SearchFilter.setZnr: "znr"
+    SearchFilter.setZnr: "znr",
+    SearchFilter.setYMid: "ymid",
+    SearchFilter.setYNeo: "yneo",
+    SearchFilter.setYSnc: "ysnc",
+    SearchFilter.setHbg: "hbg"
   };
 
   final Map<SearchFilter, String> seachFilterValueMapJa = {
@@ -112,7 +120,11 @@ class AnalyzeFilterUseCase {
     SearchFilter.setAfr: "afr",
     SearchFilter.setStx: "stx",
     SearchFilter.setKhm: "khm",
-    SearchFilter.setZnr: "znr"
+    SearchFilter.setZnr: "znr",
+    SearchFilter.setYMid: "ymid",
+    SearchFilter.setYNeo: "yneo",
+    SearchFilter.setYSnc: "ysnc",
+    SearchFilter.setHbg: "hbg"
   };
 
   String call(Map<SearchFilter, bool> filterState, Locale locale) {
@@ -162,7 +174,11 @@ class AnalyzeFilterUseCase {
       SearchFilter.setAfr,
       SearchFilter.setStx,
       SearchFilter.setKhm,
-      SearchFilter.setZnr
+      SearchFilter.setZnr,
+      SearchFilter.setYMid,
+      SearchFilter.setYNeo,
+      SearchFilter.setYSnc,
+      SearchFilter.setHbg
     ]));
 
     String result = "";

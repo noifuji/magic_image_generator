@@ -17,6 +17,7 @@ import 'package:magic_image_generator/view/canvas_card.dart';
 import 'package:magic_image_generator/viewmodel/canvas_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
+import 'package:image/image.dart' as IMG;
 
 import '../assets/constants.dart' as constants;
 import '../model/card_info_header.dart';

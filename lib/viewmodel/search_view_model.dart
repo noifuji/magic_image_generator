@@ -1,5 +1,4 @@
-
-
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:magic_image_generator/assets/mig_exception.dart';
@@ -7,10 +6,10 @@ import 'package:magic_image_generator/domain/card_repository.dart';
 import 'package:magic_image_generator/model/search_result.dart';
 import 'package:magic_image_generator/view/sort_drop_down.dart';
 
+import '../assets/constants.dart' as constants;
 import '../assets/util.dart';
 import '../domain/analyze_filter_usecase.dart';
 import '../domain/analyze_query_usecase.dart';
-import '../model/card_info.dart';
 import '../model/card_info_header.dart';
 
 class SearchViewModel extends ChangeNotifier {
@@ -47,6 +46,7 @@ class SearchViewModel extends ChangeNotifier {
 
     if(_hasFilter()) {
       query = query + " " + AnalyzeFilterUseCase().call(searchFilters, locale);
+      print(query);
     }
 
     await _search(query, locale);
@@ -113,6 +113,15 @@ class SearchViewModel extends ChangeNotifier {
 
   Future<void> _search(String query, Locale locale) async {
 
+    if (constants.buildType == "production") {
+      await FirebaseAnalytics.instance.logEvent(
+        name: "submit_query",
+        parameters: {
+          "query": query,
+        },
+      );
+    }
+
     try {
       var analyzer = AnalyzeQueryUseCase();
       var conditions = analyzer.call(query);
@@ -139,5 +148,5 @@ enum SearchFilter{
   rarityCommon,rarityUncommon,rarityRare,rarityMythic,
   typeCreature,typePlaneswalker,typeInstant,typeSorcery,typeEnchantment,typeArtifact,typeLand,
   manaValue0,manaValue1,manaValue2,manaValue3,manaValue4,manaValue5,manaValue6,manaValue7AndMore,
-  setSnc,setNeo,setVow,setMid,setAfr,setStx,setKhm,setZnr
+  setSnc,setNeo,setVow,setMid,setAfr,setStx,setKhm,setZnr,setYMid,setYNeo,setYSnc,setHbg
 }

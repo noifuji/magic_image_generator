@@ -5,9 +5,9 @@ class DonateScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(child: Container(
-        width:200,
-        height:50,
-        child:KofiButton())
+        width:300,
+        height:80,
+        child:KofiButton(width: 200, height: 50,))
     );
   }
   
