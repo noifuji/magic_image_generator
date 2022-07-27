@@ -10,7 +10,7 @@ const int searchViewRatio = 1;
 const int canvasViewRatio = 1;
 const String imageUrlS3 = "https://magic-image-generator-card-images.s3.ap-northeast-1.amazonaws.com/";
 const String cardMasterUrlS3 = ((buildType == "production") ?
-"https://mig.ezway.link/cardmaster.csv" :
+"https://mig.ezway.link/cardmaster.csv.gz" :
 "https://magic-image-generator-staging.s3.ap-northeast-1.amazonaws.com/cardmaster.csv.gz");
 
 const String cardMasterVersionUrlS3 = ((buildType == "production") ?
