@@ -3,25 +3,35 @@ import 'dart:math';
 import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:magic_image_generator/viewmodel/search_view_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:magic_image_generator/viewmodel/search_view_model.dart';
 import 'package:provider/provider.dart';
 
-class AdvancedSearchScreen extends StatelessWidget {
-  final List<SearchFilter> _rarities = [
-    SearchFilter.rarityCommon,
-    SearchFilter.rarityUncommon,
-    SearchFilter.rarityRare,
-    SearchFilter.rarityMythic,];
+import '../assets/constants.dart' as constants;
+import '../assets/search_filter.dart';
 
-  final List<SearchFilter> _cardTypes =[
-    SearchFilter.typeCreature,SearchFilter.typePlaneswalker,SearchFilter.typeInstant,
-  SearchFilter.typeSorcery,SearchFilter.typeEnchantment,SearchFilter.typeArtifact,
-  SearchFilter.typeLand,];
+class AdvancedSearchScreen extends StatelessWidget {
+  final List<SearchFilter> _rarities =
+  constants.seachFilterKeywordMap.keys.toList().where((x) => constants.seachFilterKeywordMap[x]=="r").toList();
+
+  final List<SearchFilter> _cardTypes =
+  constants.seachFilterKeywordMap.keys.toList().where((x) => constants.seachFilterKeywordMap[x]=="t").toList();
+
+  final List<SearchFilter> _costValues =
+  constants.seachFilterKeywordMap.keys.toList().where((x) => constants.seachFilterKeywordMap[x]=="cmc").toList();
+
+  final List<SearchFilter> _colors =
+  constants.seachFilterKeywordMap.keys.toList().where((x) => constants.seachFilterKeywordMap[x]=="c").toList();
 
   final List<SearchFilter> _cardSets = [
     SearchFilter.setSnc,SearchFilter.setNeo,SearchFilter.setVow,SearchFilter.setMid,
-  SearchFilter.setAfr,SearchFilter.setStx,SearchFilter.setKhm,SearchFilter.setZnr,
+    SearchFilter.setAfr,SearchFilter.setStx,SearchFilter.setKhm,SearchFilter.setZnr,
+    SearchFilter.setM21,SearchFilter.setIko,SearchFilter.setThb,SearchFilter.setEld,
+    SearchFilter.setM20, SearchFilter.setWar, SearchFilter.setRna, SearchFilter.setGrn,
+    SearchFilter.setM19, SearchFilter.setDom, SearchFilter.setRix, SearchFilter.setXln,
+  ];
+
+  final List<SearchFilter> _alchemyCardSets = [
     SearchFilter.setYMid,SearchFilter.setYNeo,SearchFilter.setYSnc,SearchFilter.setHbg,];
 
   @override
@@ -81,7 +91,9 @@ class AdvancedSearchScreen extends StatelessWidget {
                     children: _breakpoint.columns > 8? ([
                       Expanded(
                           flex: 1,
-                          child: SingleChildScrollView(child:Column(children: [
+                          child: SingleChildScrollView(
+                              primary: false,
+                              child:Column(children: [
                             Container(height: responsive.horizontalMarginWidth,),
 
                             _createTitle(context, AppLocalizations.of(context)!.filterTitleColor, responsive),
@@ -99,7 +111,9 @@ class AdvancedSearchScreen extends StatelessWidget {
                       Container(width:responsive.horizontalGutterWidth),
                       Expanded(
                           flex: 1,
-                          child: SingleChildScrollView(child:Column(children: [
+                          child: SingleChildScrollView(
+                              primary: false,
+                              child:Column(children: [
                             Container(height: responsive.verticalMarginHeight,),
 
                             //マナコスト
@@ -110,11 +124,17 @@ class AdvancedSearchScreen extends StatelessWidget {
 
                             //カードセット
                             _createTitle(context, AppLocalizations.of(context)!.filterTitleSet, responsive),
-                            _createButtonGrid(context,_cardSets, cardSetColNum, responsive)
+                            _createButtonGrid(context,_cardSets, cardSetColNum, responsive),
+
+                            //アルケミーカードセット
+                            _createTitle(context, AppLocalizations.of(context)!.filterTitleAlchemySet, responsive),
+                            _createButtonGrid(context,_alchemyCardSets, cardSetColNum, responsive)
                           ]))),
                     ]) : ([
 
-                      SingleChildScrollView(child:
+                      SingleChildScrollView(
+                        primary: false,
+                          child:
                       Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -144,7 +164,12 @@ class AdvancedSearchScreen extends StatelessWidget {
 
                         //カードセット
                         _createTitle(context, AppLocalizations.of(context)!.filterTitleSet, responsive),
-                        _createButtonGrid(context,_cardSets, cardSetColNum, responsive)
+                        _createButtonGrid(context,_cardSets, cardSetColNum, responsive),
+                        Container(height: responsive.verticalGutterHeight,),
+
+                        //アルケミーカードセット
+                        _createTitle(context, AppLocalizations.of(context)!.filterTitleAlchemySet, responsive),
+                        _createButtonGrid(context,_alchemyCardSets, cardSetColNum, responsive),
                       ]))
 
                     ]),
@@ -202,21 +227,16 @@ class AdvancedSearchScreen extends StatelessWidget {
   }
 
   Widget _createColorButtons(BuildContext context, ResponsiveGridValues res) {
-    List<SearchFilter> filters = [SearchFilter.colorWhite,SearchFilter.colorBlue,
-      SearchFilter.colorBlack, SearchFilter.colorRed,
-      SearchFilter.colorGreen, SearchFilter.colorColorless,
-      SearchFilter.colorMulti,];
-
     double w = res.columnWidth *
         (res.columnSize * res.columnWidth + (res.columnSize - 1) * res.horizontalGutterWidth) /
-        (filters.length * res.columnWidth + (filters.length - 1) * res.horizontalGutterWidth);
+        (_colors.length * res.columnWidth + (_colors.length - 1) * res.horizontalGutterWidth);
     double g = w * res.horizontalGutterWidth / res.columnWidth;
     List<Widget> result = [];
 
-    for (var i = 0; i < filters.length; i++) {
-      bool isOn = Provider.of<SearchViewModel>(context).searchFilters[filters[i]]!;
+    for (var i = 0; i < _colors.length; i++) {
+      bool isOn = Provider.of<SearchViewModel>(context).searchFilters[_colors[i]]!;
       result.add(Container(
-          margin: i < filters.length - 1
+          margin: i < _colors.length - 1
               ? EdgeInsets.only(right: g)
               : const EdgeInsets.only(),
           width: w,
@@ -224,39 +244,29 @@ class AdvancedSearchScreen extends StatelessWidget {
           child: Opacity(opacity:isOn? 1.0: 0.3, child:
           IconButton(
               onPressed: () {
-                Provider.of<SearchViewModel>(context, listen: false).switchSearchFilter(filters[i]);
+                Provider.of<SearchViewModel>(context, listen: false).switchSearchFilter(_colors[i]);
                 },
               padding: EdgeInsets.zero,
               splashColor: Colors.transparent,
-              icon: Image.asset(_getFilterText(context, filters[i]),)))));
+              icon: Image.asset(constants.searchFilterColorImagePath[_colors[i]]!)))));
     }
     return Row(children: result);
   }
 
   Widget _createManaValueButtons(BuildContext context,ResponsiveGridValues res) {
-  List<SearchFilter> filters = [
-      SearchFilter.manaValue0,
-      SearchFilter.manaValue1,
-      SearchFilter.manaValue2,
-      SearchFilter.manaValue3,
-      SearchFilter.manaValue4,
-      SearchFilter.manaValue5,
-      SearchFilter.manaValue6,
-      SearchFilter.manaValue7AndMore,
-    ];
     double w = res.columnWidth *
         (res.columnSize * res.columnWidth + (res.columnSize - 1) * res.horizontalGutterWidth) /
-        (filters.length * res.columnWidth + (filters.length - 1) * res.horizontalGutterWidth);
+        (_costValues.length * res.columnWidth + (_costValues.length - 1) * res.horizontalGutterWidth);
     double g = w * res.horizontalGutterWidth / res.columnWidth;
 
 
     List<Widget> result = [];
 
-    for (var i = 0; i < filters.length; i++) {
+    for (var i = 0; i < _costValues.length; i++) {
 
-      bool isOn = Provider.of<SearchViewModel>(context).searchFilters[filters[i]]!;
+      bool isOn = Provider.of<SearchViewModel>(context).searchFilters[_costValues[i]]!;
       result.add(Container(
-          margin: i < filters.length - 1
+          margin: i < _costValues.length - 1
               ? EdgeInsets.only(right: g)
               : const EdgeInsets.only(),
           width: w,
@@ -267,7 +277,7 @@ class AdvancedSearchScreen extends StatelessWidget {
                   opacity:isOn? 1.0: 0.3,
                   child: TextButton(
               onPressed: () {
-                Provider.of<SearchViewModel>(context, listen: false).switchSearchFilter(filters[i]);
+                Provider.of<SearchViewModel>(context, listen: false).switchSearchFilter(_costValues[i]);
               },
               style: TextButton.styleFrom(
                 splashFactory: NoSplash.splashFactory,
@@ -275,7 +285,7 @@ class AdvancedSearchScreen extends StatelessWidget {
                 backgroundColor: Colors.white70,
                 side: const BorderSide(color: Colors.black),
               ),
-            child: Text(_getFilterText(context, filters[i]),
+            child: Text(_getFilterText(context, _costValues[i]),
                 style: TextStyle(color: Colors.black, fontSize: min(w,res.rowHeight) * 0.75 * 0.5)),)
           )));
     }
@@ -408,7 +418,31 @@ class AdvancedSearchScreen extends StatelessWidget {
       return AppLocalizations.of(context)!.setVow;
     } else if(f == SearchFilter.setZnr) {
       return AppLocalizations.of(context)!.setZnr;
-    } else if(f == SearchFilter.setYMid) {
+    } else if(f == SearchFilter.setM21) {
+      return AppLocalizations.of(context)!.setM21;
+    }  else if(f == SearchFilter.setIko) {
+      return AppLocalizations.of(context)!.setIko;
+    }  else if(f == SearchFilter.setThb) {
+      return AppLocalizations.of(context)!.setThb;
+    }  else if(f == SearchFilter.setEld) {
+      return AppLocalizations.of(context)!.setEld;
+    }  else if(f == SearchFilter.setM20) {
+      return AppLocalizations.of(context)!.setM20;
+    }   else if(f == SearchFilter.setWar) {
+      return AppLocalizations.of(context)!.setWar;
+    }   else if(f == SearchFilter.setRna) {
+      return AppLocalizations.of(context)!.setRna;
+    }   else if(f == SearchFilter.setGrn) {
+      return AppLocalizations.of(context)!.setGrn;
+    }   else if(f == SearchFilter.setM19) {
+      return AppLocalizations.of(context)!.setM19;
+    }   else if(f == SearchFilter.setDom) {
+      return AppLocalizations.of(context)!.setDom;
+    }   else if(f == SearchFilter.setRix) {
+      return AppLocalizations.of(context)!.setRix;
+    }   else if(f == SearchFilter.setXln) {
+      return AppLocalizations.of(context)!.setXln;
+    }   else if(f == SearchFilter.setYMid) {
       return AppLocalizations.of(context)!.setYMid;
     } else if(f == SearchFilter.setYNeo) {
       return AppLocalizations.of(context)!.setYNeo;
@@ -416,20 +450,6 @@ class AdvancedSearchScreen extends StatelessWidget {
       return AppLocalizations.of(context)!.setYSnc;
     } else if(f == SearchFilter.setHbg) {
       return AppLocalizations.of(context)!.setHbg;
-    } else if(f == SearchFilter.colorWhite) {
-      return "assets/images/white.png";
-    } else if(f == SearchFilter.colorBlue) {
-      return "assets/images/blue.png";
-    } else if(f == SearchFilter.colorBlack) {
-      return "assets/images/black.png";
-    } else if(f == SearchFilter.colorRed) {
-      return "assets/images/red.png";
-    } else if(f == SearchFilter.colorGreen) {
-      return "assets/images/green.png";
-    } else if(f == SearchFilter.colorColorless) {
-      return "assets/images/colorless.png";
-    } else if(f == SearchFilter.colorMulti) {
-      return "assets/images/multi.png";
     }
 
     return "";

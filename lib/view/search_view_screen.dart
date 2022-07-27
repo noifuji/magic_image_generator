@@ -132,6 +132,12 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
                     Container(
                         margin:const EdgeInsets.only(top:5),
                         child: ListTile(
+                          leading: const Icon(Icons.tune),
+                          title: Text(AppLocalizations.of(context)!.step1_5Content),
+                        )),
+                    Container(
+                        margin:const EdgeInsets.only(top:5),
+                        child: ListTile(
                           leading: Text(AppLocalizations.of(context)!.step2Title),
                           title: Text(AppLocalizations.of(context)!.step2Content),
                         )),

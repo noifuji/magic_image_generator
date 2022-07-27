@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:archive/archive.dart';
 import 'package:csv/csv.dart' as csv;
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -9,7 +10,11 @@ import '../assets/constants.dart' as constants;
 class CardFetchCsvApi {
   Future<List<List<dynamic>>> fetchCardCsv() async {
     Response response = await http.get(Uri.parse(constants.cardMasterUrlS3), headers: {"Cache-Control": "no-cache"});
-    String decodedResponseBody = Utf8Decoder().convert(response.bodyBytes);
+
+    var rawBytes = GZipDecoder().decodeBytes(response.bodyBytes);
+    String decodedResponseBody = const Utf8Decoder().convert(rawBytes);
+
+    //String decodedResponseBody = Utf8Decoder().convert(response.bodyBytes);
 
     csv.CsvToListConverter converter= const csv.CsvToListConverter(
         eol: '\r\n', fieldDelimiter: ','

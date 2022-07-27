@@ -19,7 +19,8 @@
     "filterTitleRarity": "Rarity",
     "filterTitleType": "Type",
     "filterTitleManaValue": "Mana Value",
-    "filterTitleSet": "Set",
+    "filterTitleSet": "Sets",
+    "filterTitleAlchemySet": "Alchemy Sets",
 
     "rarityCommon": "Common",
     "rarityUncommon": "Uncommon",
@@ -48,6 +49,19 @@
     "setStx": "Strixhaven",
     "setKhm": "Kaldheim",
     "setZnr": "Zendikar Rising",
+    "setM21": "Core Set 2021",
+    "setIko": "Ikoria: Lair of Behemoths",
+    "setThb": "Theros: Beyond Death",
+    "setEld": "Throne of Eldraine",
+    "setM20":"Core Set 2020",
+    "setWar":"War of the Spark",
+    "setRna":"Ravnica Allegiance",
+    "setGrn":"Guilds of Ravnica",
+    "setM19":"Core Set 2019",
+    "setDom":"Dominaria",
+    "setRix":"Rivals of Ixalan",
+    "setXln":"Ixalan",
+
     "setYMid": "Alchemy: Innistrad",
     "setYNeo": "Alchemy: Kamigawa",
     "setYSnc": "Alchemy: New Capena",
@@ -61,16 +75,17 @@
     "menuEditCardImage": "Edit Image",
     "donate": "Support",
 
-    "japanese": "Japanesee",
+    "japanese": "日本語",
     "english": "English",
 
 
     "msgCopyDone": "An image was copied!",
 
 
-    "howToUse": "<<How to use>>",
+    "howToUse": "How to use",
     "step1Title": "Step1.",
     "step1Content": "Enter queries and search cards.",
+    "step1_5Content": "You can use 'Advanced Search' from this icon on the search box.",
     "step2Title": "Step2.",
     "step2Content": "Tap searched cards to add them to the canvas view (right side).",
     "step3Title": "Step3.",

@@ -88,7 +88,7 @@ class _FlippableImageState extends State<FlippableImage> with SingleTickerProvid
             child:back);
       }
     }else {
-      img  = widget.frontSide;
+      img  = FittedBox(child:widget.frontSide, fit: BoxFit.fill,);
     }
 
     return SizedBox(

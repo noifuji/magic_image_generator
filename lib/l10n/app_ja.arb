@@ -19,6 +19,7 @@
   "filterTitleType": "カードタイプ",
   "filterTitleManaValue": "マナコスト",
   "filterTitleSet": "カードセット",
+  "filterTitleAlchemySet": "アルケミー",
 
   "rarityCommon": "コモン",
   "rarityUncommon": "アンコモン",
@@ -47,6 +48,19 @@
   "setStx": "ストリクスヘイヴン 魔法学院",
   "setKhm": "カルドハイム",
   "setZnr": "ゼンディカーの夜明け",
+  "setM21": "基本セット2021",
+  "setIko": "イコリア 巨獣の棲処",
+  "setThb": "テーロス還魂記",
+  "setEld": "エルドレインの王権",
+  "setM20":"基本セット2020",
+  "setWar":"灯争大戦",
+  "setRna":"ラヴニカの献身",
+  "setGrn":"ラヴニカのギルド",
+  "setM19":"基本セット2019",
+  "setDom":"ドミナリア",
+  "setRix":"イクサランの相克",
+  "setXln":"イクサラン",
+
   "setYMid": "アルケミー: イニストラード",
   "setYNeo": "アルケミー: 神河",
   "setYSnc": "アルケミー: ニューカペナ",
@@ -62,15 +76,16 @@
 
 
   "japanese": "日本語",
-  "english": "英語",
+  "english": "English",
 
   "msgCopyDone": "画像がコピーされたよ!",
 
-  "howToUse": "<<使い方>>",
+  "howToUse": "使い方",
   "step1Title": "Step1.",
   "step1Content": "検索ボックスからカードを検索しましょう.",
+  "step1_5Content": "検索ボックスのこのアイコンをクリックすると、フィルタ機能が使えるよ",
   "step2Title": "Step2.",
-  "step2Content": "表示されたカードをタップして, キャンバス(画面右)にどんどん追加しましょう.",
+  "step2Content": "表示されたカードをタップして, キャンバス(画面右)に追加しましょう.",
   "step3Title": "Step3.",
   "step3Content": "コピーまたはダウンロードボタンをタップして, 画像データを取得できます!",
 

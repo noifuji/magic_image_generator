@@ -242,8 +242,11 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
 
         List<List<ui.Image>> images = await getImages(
             Provider.of<CanvasViewModel>(context, listen: false).selectedCards, Localizations.localeOf(context));
+
+
         ImageMatrixPainter p = ImageMatrixPainter(matrix: images, imageWidth: constants.rawCardImageWidth, imageHeight: constants.rawCardImageHeight);
 
+        print("_generateRawImage");
         ui.Image? image = await _generateRawImage(
             p,
             images.fold<int>(0, (p, e) => e.length>p? e.length: p) * constants.rawCardImageWidth,
@@ -288,27 +291,69 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
   }
 
   Future<List<List<ui.Image>>> getImages(List<List<CardInfoHeader>> cards, Locale locale) {
-    return Future.wait(cards.map((row) => Future.wait(row.map((card) async {
+    return Future.wait(cards.map((row) => Future.wait(row.map((card)  {
       if(card.isTransform) {
         if(card.isFront) {
-          return await _fetchImage(card.firstFace.imageUrlLocale(locale));
+          return  _fetchImage(card.firstFace.imageUrlLocale(locale));
+          //return await _fetchImage(card.firstFace.imageUrlLocale(locale));
         } else {
-          return await _fetchImage(card.secondFace!.imageUrlLocale(locale));
+          return  _fetchImage(card.secondFace!.imageUrlLocale(locale));
+          //return await _fetchImage(card.secondFace!.imageUrlLocale(locale));
         }
       } else {
-        ui.Image img = await  _fetchImage(card.firstFace.imageUrlLocale(locale));
-        return img;
+        return _fetchImage(card.firstFace.imageUrlLocale(locale));
+        //ui.Image img = await  _fetchImage(card.firstFace.imageUrlLocale(locale));
+        //return img;
       }
     }).toList())).toList());
   }
 
   Future<ui.Image> _fetchImage(String path) async {
     var completer = Completer<ImageInfo>();
-    var img = NetworkImage(path);
+    var img = NetworkImage(path, scale: 2.0);
     img.resolve(const ImageConfiguration()).addListener(ImageStreamListener((info, _) {
       completer.complete(info);
     }));
     ImageInfo imageInfo = await completer.future;
+
+    /*
+    if(imageInfo.image.width != constants.rawCardImageWidth) {
+      print("imageInfo.image.toByteData");
+      ByteData? byteData = await imageInfo.image.toByteData(format: ui.ImageByteFormat.png);
+      print("IMG.Image.fromBytes");
+      IMG.Image image = IMG.Image.fromBytes(imageInfo.image.width, imageInfo.image.height, byteData!.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+      print("${image.numberOfChannels }, ${image.width}, ${image.height}");
+      print("IMG.copyResize");
+      //IMG.Image resized = IMG.copyResize(image, width: constants.rawCardImageWidth.toInt(), height: constants.rawCardImageHeight.toInt());
+      //print("${resized.numberOfChannels }, ${resized.width}, ${resized.height}");
+
+      print("resized.getBytes");
+      Uint8List resizedBytes = image.getBytes();
+      
+      ui.Codec codec = await ui.instantiateImageCodec(resizedBytes, allowUpscaling: true);
+      ui.FrameInfo fi = await codec.getNextFrame();
+      return fi.image;
+
+      final Completer<ui.Image> completer = Completer();
+      print("ui.decodeImageFromPixels");
+      ui.decodeImageFromList(
+          resizedBytes,
+          //constants.rawCardImageWidth.toInt(),
+          //constants.rawCardImageHeight.toInt(),
+          //PixelFormat.rgba8888,
+              (ui.Image img) {
+        print("ui.decodeImageFromList callback");
+        return completer.complete(img);
+      });
+
+      print("completer.future");
+      ui.Image result = await completer.future;
+
+      print("return result");
+      return result;
+
+    }*/
+
     return imageInfo.image;
   }
 

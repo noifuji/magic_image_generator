@@ -7,6 +7,7 @@ import 'package:magic_image_generator/model/search_result.dart';
 import 'package:magic_image_generator/view/sort_drop_down.dart';
 
 import '../assets/constants.dart' as constants;
+import '../assets/search_filter.dart';
 import '../assets/util.dart';
 import '../domain/analyze_filter_usecase.dart';
 import '../domain/analyze_query_usecase.dart';
@@ -141,12 +142,4 @@ class SearchViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-}
-
-enum SearchFilter{
-  colorWhite,colorBlue,colorBlack,colorRed,colorGreen,colorColorless,colorMulti,
-  rarityCommon,rarityUncommon,rarityRare,rarityMythic,
-  typeCreature,typePlaneswalker,typeInstant,typeSorcery,typeEnchantment,typeArtifact,typeLand,
-  manaValue0,manaValue1,manaValue2,manaValue3,manaValue4,manaValue5,manaValue6,manaValue7AndMore,
-  setSnc,setNeo,setVow,setMid,setAfr,setStx,setKhm,setZnr,setYMid,setYNeo,setYSnc,setHbg
 }

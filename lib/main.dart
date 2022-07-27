@@ -69,18 +69,18 @@ import 'firebase_options.dart';
  * ・カード移動時のエフェクト->OK
  * ・o:oがおそい -> ok
  * ・コンタクト&寄付 -> ok
+ * ・アリーナっぽい検索画面->ok
+ * ・エラーメッセージでない
  *
  * ・テキスト検索でオペレーターをつかえない
  * ・大量に画像いれると余白がマイナスになる。
  * ・キャンバスで右端移動できない
  * ・CanvasScreen汚すぎ
- * ・エラーメッセージでない
  *
  *　・画像データ読み込み中になんか出す
  * ・スマホのときは検索ボックス下へ(検索ボックス位置オプションをsearchScreeenにつける。)
  * ・クエリ入力補助(プルダウンで選択できる　o:xxx オラクル　c:xxx 色指定など)
  * ・画像データ履歴保持
- * ・アリーナっぽい検索画面->ok
  * ・シェア機能
  */
 
@@ -116,13 +116,8 @@ class _MyAppState extends State<MyApp> {
     String? languageCode = prefs.getString("languageCode");
     if (languageCode == null) {
       Locale locale;
-      if (WidgetsBinding.instance != null) {
-        final List<Locale> systemLocales =
-            WidgetsBinding.instance!.window.locales;
-        locale = systemLocales.first;
-      } else {
-        locale = AppLocalizations.supportedLocales.first;
-      }
+      final List<Locale> systemLocales = WidgetsBinding.instance.window.locales;
+      locale = systemLocales.first;
 
       prefs.setString("languageCode", locale.languageCode);
     }
@@ -194,9 +189,8 @@ class _MyAppState extends State<MyApp> {
                               brightness: Brightness.dark,
                               fontFamily: "NotoSansJP-Regular"),
                           darkTheme: ThemeData(
-                            brightness: Brightness.dark,
-                              fontFamily: "NotoSansJP-Regular"
-                          ),
+                              brightness: Brightness.dark,
+                              fontFamily: "NotoSansJP-Regular"),
                           themeMode: ThemeMode.dark,
                           home:
                               const MyHomePage(title: 'Magic Image Generator'),
