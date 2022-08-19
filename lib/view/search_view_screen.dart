@@ -38,6 +38,7 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
   @override
   Widget build(BuildContext context) {
     Util.printTimeStamp("SearchViewScreen build");
+
     SearchResult searchResult = Provider.of<SearchViewModel>(context).searchResult;
     List<CardInfoHeader> cards = searchResult.cards;
 
@@ -82,30 +83,36 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
             Expanded(
                 flex: 1,
                 child: Container(
-                    margin: const EdgeInsets.only(
-                      top: 10.0,
-                    ),
-                    child: Provider.of<SearchViewModel>(context).searchResult.cards.isEmpty?
-                    _createTutorialCard(context) :
-                      GridView.count(
-                      controller: ScrollController(),
-                      crossAxisCount: widget.responsiveColumns~/2,
-                      crossAxisSpacing: widget.responsiveGutterWidth,
-                      childAspectRatio: constants.cardAspectRatio,
-                      children: List.generate(cards.length, (index) {
-                        return GestureDetector(
-                            onTap: () => Provider.of<CanvasViewModel>(context, listen: false).addSelectedCards(0, cards[index].copyWith()),
-                            child: Container(
-                              margin: const EdgeInsets.only(
-                                  top: 3.0,
-                                  bottom: 3.0,
-                                  left: 3.0,
-                                  right: 3.0),
-                              child: SearchCard(card:cards[index], scale: 1.0)
-                            ));
-                      }),
-                    )))
+                    margin: const EdgeInsets.only(top: 10.0,),
+                    child: _createSearchContent(context, cards)))
           ]);
+  }
+
+  Widget _createSearchContent(BuildContext context, List<CardInfoHeader> cards) {
+    if(Provider.of<SearchViewModel>(context).isSearching) {
+      return const Center(child:CircularProgressIndicator());
+    } else if(Provider.of<SearchViewModel>(context).searchResult.cards.isEmpty) {
+      return _createTutorialCard(context);
+    } else {
+      return GridView.count(
+        controller: ScrollController(),
+        crossAxisCount: widget.responsiveColumns~/2,
+        crossAxisSpacing: widget.responsiveGutterWidth,
+        childAspectRatio: constants.cardAspectRatio,
+        children: List.generate(cards.length, (index) {
+          return GestureDetector(
+              onTap: () => Provider.of<CanvasViewModel>(context, listen: false).addSelectedCards(0, cards[index].copyWith()),
+              child: Container(
+                  margin: const EdgeInsets.only(
+                      top: 3.0,
+                      bottom: 3.0,
+                      left: 3.0,
+                      right: 3.0),
+                  child: SearchCard(card:cards[index], scale: 1.0)
+              ));
+        }),
+      );
+    }
   }
 
   Widget _createTutorialCard(BuildContext context) {

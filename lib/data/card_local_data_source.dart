@@ -195,6 +195,8 @@ class CardLocalDataSource {
         "start _isar.cards.buildQuery(filter: FilterGroup.and(stack)).findAll()");
     var results =
         await _isar.cards.buildQuery(filter: FilterGroup.and(stack)).findAll();
+    Util.printTimeStamp(
+        "end _isar.cards.buildQuery(filter: FilterGroup.and(stack)).findAll()");
 
     List<Card> cards = [];
 
@@ -220,16 +222,22 @@ class CardLocalDataSource {
     final List<Card> result = [];
 
     //第一面のみ、片面または、両面がヒットしたカードの第一面
+    Util.printTimeStamp("start 第一面のみ、片面または、両面がヒットしたカードの第一面");
     final frontFaces = cards.where((element) => !element.isBackFace).toList();
 
     //第二面のみがヒットしたカード
+    Util.printTimeStamp("start 第二面のみがヒットしたカード");
     final backFacesWithoutFrontSide = cards
         .where((element) => element.isBackFace)
-        .where((element) => !frontFaces.map((e) => e.backFaceMultiverseId).where((e) => e!=null).contains(element.multiverseId))
+        .where((element) => !frontFaces
+            .map((e) => e.backFaceMultiverseId)
+            .where((e) => e != null)
+            .contains(element.multiverseId))
         .toList();
 
     if (backFacesWithoutFrontSide.isNotEmpty) {
       //第二面がヒットしたカードの第一面を取得
+      Util.printTimeStamp("start 第二面がヒットしたカードの第一面を取得");
       final frontFacesOfBackFacesWithoutFrontSide = await _isar.cards
           .filter()
           .repeat(backFacesWithoutFrontSide.map((e) => e.multiverseId).toList(),
@@ -238,29 +246,35 @@ class CardLocalDataSource {
           .findAll();
 
       //第一面と第二面を紐付けて、リザルトに追加
+      Util.printTimeStamp("start 第一面と第二面を紐付けて、リザルトに追加");
       result.addAll(frontFacesOfBackFacesWithoutFrontSide.map((e) {
-        if(e.backFaceMultiverseId != null && e.backFaceMultiverseId != "") {
-          e.backFace = backFacesWithoutFrontSide.firstWhere((ele) => ele.multiverseId == e.backFaceMultiverseId);
+        if (e.backFaceMultiverseId != null && e.backFaceMultiverseId != "") {
+          e.backFace = backFacesWithoutFrontSide
+              .firstWhere((ele) => ele.multiverseId == e.backFaceMultiverseId);
         }
         return e;
       }).toList());
     }
 
     //第二面のある札には、第二面の情報をつけておく。
+    Util.printTimeStamp("start 第二面のある札には、第二面の情報をつけておく。");
     List<String> frontFacesWithBackSide = frontFaces
         .where((e) =>
             e.backFaceMultiverseId != null && e.backFaceMultiverseId != "")
         .map((e) => e.backFaceMultiverseId!)
         .toList();
 
-    List<Card> backFaces = await _isar.cards
-        .filter()
-        .repeat(frontFacesWithBackSide,
-            (q, String id) => q.multiverseIdEqualTo(id).or())
-        .buildInternal()
-        .findAll();
+    List<Card> backFaces = [];
+    if (frontFacesWithBackSide.isNotEmpty) {
+      backFaces = await _isar.cards
+          .filter()
+          .repeat(frontFacesWithBackSide,
+              (q, String id) => q.multiverseIdEqualTo(id).or())
+          .buildInternal()
+          .findAll();
+    }
 
-     result.addAll(frontFaces.map((e) {
+    result.addAll(frontFaces.map((e) {
       if (e.backFaceMultiverseId != null && e.backFaceMultiverseId != "") {
         e.backFace = backFaces.firstWhere(
             (element) => element.multiverseId == e.backFaceMultiverseId);

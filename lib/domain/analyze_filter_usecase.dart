@@ -55,7 +55,7 @@ class AnalyzeFilterUseCase {
       if(filterState[key]!) {
         if(key == SearchFilter.manaValue7AndMore) {
           query.add(constants.seachFilterKeywordMap[key]! + ">=" + valueMap[key]!);
-        } else if(constants.seachFilterKeywordMap[key]! == "set") {
+        } else if(["set", "cmc", "r"].contains(constants.seachFilterKeywordMap[key]!)) {
           query.add(constants.seachFilterKeywordMap[key]! + "=" + valueMap[key]!);
         }else {
           query.add(constants.seachFilterKeywordMap[key]! + ":" + valueMap[key]!);

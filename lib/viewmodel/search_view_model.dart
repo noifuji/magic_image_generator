@@ -26,6 +26,8 @@ class SearchViewModel extends ChangeNotifier {
   SortKey get sortKey => _sortKey;
   SortOrder get order => _sortOrder;
 
+  bool isSearching = false;
+
 
   SearchViewModel(this._repository) {
     for(var v in SearchFilter.values) {
@@ -113,6 +115,8 @@ class SearchViewModel extends ChangeNotifier {
 
 
   Future<void> _search(String query, Locale locale) async {
+    isSearching = true;
+    notifyListeners();
 
     if (constants.buildType == "production") {
       await FirebaseAnalytics.instance.logEvent(
@@ -128,7 +132,16 @@ class SearchViewModel extends ChangeNotifier {
       var conditions = analyzer.call(query);
 
       //リポジトリから結果の取り出し
+      var dateTime1 = DateTime.now();
+      if (kDebugMode) {
+        Util.printTimeStamp("Query Start");
+      }
       List<CardInfoHeader> results = await _repository.get(conditions, locale);
+      var dateTime2 = DateTime.now();
+      if (kDebugMode) {
+        Util.printTimeStamp("Query End");
+        print("Time : ${dateTime2.difference(dateTime1)}");
+      }
       _searchResult = SearchResult(cards: results, isSuccess: true);
       sortSearchResults(locale);
     } catch(e) {
@@ -139,6 +152,7 @@ class SearchViewModel extends ChangeNotifier {
     }
 
     //リザルトを更新
+    isSearching = false;
     notifyListeners();
   }
 

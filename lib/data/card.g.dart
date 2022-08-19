@@ -15,7 +15,7 @@ extension GetCardCollection on Isar {
 const CardSchema = CollectionSchema(
   name: 'Card',
   schema:
-      '{"name":"Card","idName":"id","properties":[{"name":"artist","type":"String"},{"name":"backFaceMultiverseId","type":"String"},{"name":"cmc","type":"Long"},{"name":"colorIdentity","type":"String"},{"name":"colors","type":"Long"},{"name":"flavor","type":"String"},{"name":"flavorJp","type":"String"},{"name":"imageUrl","type":"String"},{"name":"imageUrlJp","type":"String"},{"name":"isBackFace","type":"Bool"},{"name":"layout","type":"String"},{"name":"legalityAlchemy","type":"Bool"},{"name":"legalityBrawl","type":"Bool"},{"name":"legalityCommander","type":"Bool"},{"name":"legalityDuel","type":"Bool"},{"name":"legalityExplorer","type":"Bool"},{"name":"legalityFuture","type":"Bool"},{"name":"legalityGladiator","type":"Bool"},{"name":"legalityHistoric","type":"Bool"},{"name":"legalityHistoricbrawl","type":"Bool"},{"name":"legalityLegacy","type":"Bool"},{"name":"legalityModern","type":"Bool"},{"name":"legalityPioneer","type":"Bool"},{"name":"legalityStandard","type":"Bool"},{"name":"legalityVintage","type":"Bool"},{"name":"loyalty","type":"String"},{"name":"loyaltyValue","type":"Long"},{"name":"manaCost","type":"String"},{"name":"multiverseId","type":"String"},{"name":"multiverseIdJp","type":"String"},{"name":"name","type":"String"},{"name":"nameJp","type":"String"},{"name":"nameJpYomi","type":"String"},{"name":"power","type":"String"},{"name":"powerValue","type":"Long"},{"name":"rarity","type":"String"},{"name":"rarityValue","type":"Long"},{"name":"set","type":"String"},{"name":"text","type":"String"},{"name":"textJp","type":"String"},{"name":"toughness","type":"String"},{"name":"toughnessValue","type":"Long"},{"name":"type","type":"String"},{"name":"typeJp","type":"String"}],"indexes":[],"links":[]}',
+      '{"name":"Card","idName":"id","properties":[{"name":"artist","type":"String"},{"name":"backFaceMultiverseId","type":"String"},{"name":"cmc","type":"Long"},{"name":"colorIdentity","type":"String"},{"name":"colors","type":"Long"},{"name":"flavor","type":"String"},{"name":"flavorJp","type":"String"},{"name":"imageUrl","type":"String"},{"name":"imageUrlJp","type":"String"},{"name":"isBackFace","type":"Bool"},{"name":"layout","type":"String"},{"name":"legalityAlchemy","type":"Bool"},{"name":"legalityBrawl","type":"Bool"},{"name":"legalityCommander","type":"Bool"},{"name":"legalityDuel","type":"Bool"},{"name":"legalityExplorer","type":"Bool"},{"name":"legalityFuture","type":"Bool"},{"name":"legalityGladiator","type":"Bool"},{"name":"legalityHistoric","type":"Bool"},{"name":"legalityHistoricbrawl","type":"Bool"},{"name":"legalityLegacy","type":"Bool"},{"name":"legalityModern","type":"Bool"},{"name":"legalityPioneer","type":"Bool"},{"name":"legalityStandard","type":"Bool"},{"name":"legalityVintage","type":"Bool"},{"name":"loyalty","type":"String"},{"name":"loyaltyValue","type":"Long"},{"name":"manaCost","type":"String"},{"name":"multiverseId","type":"String"},{"name":"multiverseIdJp","type":"String"},{"name":"name","type":"String"},{"name":"nameJp","type":"String"},{"name":"nameJpYomi","type":"String"},{"name":"power","type":"String"},{"name":"powerValue","type":"Long"},{"name":"rarity","type":"String"},{"name":"rarityValue","type":"Long"},{"name":"set","type":"String"},{"name":"text","type":"String"},{"name":"textJp","type":"String"},{"name":"toughness","type":"String"},{"name":"toughnessValue","type":"Long"},{"name":"type","type":"String"},{"name":"typeJp","type":"String"}],"indexes":[{"name":"cmc","unique":false,"properties":[{"name":"cmc","type":"Value","caseSensitive":false}]},{"name":"rarity","unique":false,"properties":[{"name":"rarity","type":"Hash","caseSensitive":true}]},{"name":"set","unique":false,"properties":[{"name":"set","type":"Hash","caseSensitive":true}]}],"links":[]}',
   idName: 'id',
   propertyIds: {
     'artist': 0,
@@ -64,8 +64,18 @@ const CardSchema = CollectionSchema(
     'typeJp': 43
   },
   listProperties: {},
-  indexIds: {},
-  indexValueTypes: {},
+  indexIds: {'cmc': 0, 'rarity': 1, 'set': 2},
+  indexValueTypes: {
+    'cmc': [
+      IndexValueType.long,
+    ],
+    'rarity': [
+      IndexValueType.stringHash,
+    ],
+    'set': [
+      IndexValueType.stringHash,
+    ]
+  },
   linkIds: {},
   backlinkLinkNames: {},
   getId: _cardGetId,
@@ -658,6 +668,19 @@ extension CardQueryWhereSort on QueryBuilder<Card, Card, QWhere> {
   QueryBuilder<Card, Card, QAfterWhere> anyId() {
     return addWhereClauseInternal(const IdWhereClause.any());
   }
+
+  QueryBuilder<Card, Card, QAfterWhere> anyCmc() {
+    return addWhereClauseInternal(const IndexWhereClause.any(indexName: 'cmc'));
+  }
+
+  QueryBuilder<Card, Card, QAfterWhere> anyRarity() {
+    return addWhereClauseInternal(
+        const IndexWhereClause.any(indexName: 'rarity'));
+  }
+
+  QueryBuilder<Card, Card, QAfterWhere> anySet() {
+    return addWhereClauseInternal(const IndexWhereClause.any(indexName: 'set'));
+  }
 }
 
 extension CardQueryWhere on QueryBuilder<Card, Card, QWhereClause> {
@@ -712,6 +735,136 @@ extension CardQueryWhere on QueryBuilder<Card, Card, QWhereClause> {
       upper: upperId,
       includeUpper: includeUpper,
     ));
+  }
+
+  QueryBuilder<Card, Card, QAfterWhereClause> cmcEqualTo(int cmc) {
+    return addWhereClauseInternal(IndexWhereClause.equalTo(
+      indexName: 'cmc',
+      value: [cmc],
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterWhereClause> cmcNotEqualTo(int cmc) {
+    if (whereSortInternal == Sort.asc) {
+      return addWhereClauseInternal(IndexWhereClause.lessThan(
+        indexName: 'cmc',
+        upper: [cmc],
+        includeUpper: false,
+      )).addWhereClauseInternal(IndexWhereClause.greaterThan(
+        indexName: 'cmc',
+        lower: [cmc],
+        includeLower: false,
+      ));
+    } else {
+      return addWhereClauseInternal(IndexWhereClause.greaterThan(
+        indexName: 'cmc',
+        lower: [cmc],
+        includeLower: false,
+      )).addWhereClauseInternal(IndexWhereClause.lessThan(
+        indexName: 'cmc',
+        upper: [cmc],
+        includeUpper: false,
+      ));
+    }
+  }
+
+  QueryBuilder<Card, Card, QAfterWhereClause> cmcGreaterThan(
+    int cmc, {
+    bool include = false,
+  }) {
+    return addWhereClauseInternal(IndexWhereClause.greaterThan(
+      indexName: 'cmc',
+      lower: [cmc],
+      includeLower: include,
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterWhereClause> cmcLessThan(
+    int cmc, {
+    bool include = false,
+  }) {
+    return addWhereClauseInternal(IndexWhereClause.lessThan(
+      indexName: 'cmc',
+      upper: [cmc],
+      includeUpper: include,
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterWhereClause> cmcBetween(
+    int lowerCmc,
+    int upperCmc, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addWhereClauseInternal(IndexWhereClause.between(
+      indexName: 'cmc',
+      lower: [lowerCmc],
+      includeLower: includeLower,
+      upper: [upperCmc],
+      includeUpper: includeUpper,
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterWhereClause> rarityEqualTo(String rarity) {
+    return addWhereClauseInternal(IndexWhereClause.equalTo(
+      indexName: 'rarity',
+      value: [rarity],
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterWhereClause> rarityNotEqualTo(String rarity) {
+    if (whereSortInternal == Sort.asc) {
+      return addWhereClauseInternal(IndexWhereClause.lessThan(
+        indexName: 'rarity',
+        upper: [rarity],
+        includeUpper: false,
+      )).addWhereClauseInternal(IndexWhereClause.greaterThan(
+        indexName: 'rarity',
+        lower: [rarity],
+        includeLower: false,
+      ));
+    } else {
+      return addWhereClauseInternal(IndexWhereClause.greaterThan(
+        indexName: 'rarity',
+        lower: [rarity],
+        includeLower: false,
+      )).addWhereClauseInternal(IndexWhereClause.lessThan(
+        indexName: 'rarity',
+        upper: [rarity],
+        includeUpper: false,
+      ));
+    }
+  }
+
+  QueryBuilder<Card, Card, QAfterWhereClause> setEqualTo(String set) {
+    return addWhereClauseInternal(IndexWhereClause.equalTo(
+      indexName: 'set',
+      value: [set],
+    ));
+  }
+
+  QueryBuilder<Card, Card, QAfterWhereClause> setNotEqualTo(String set) {
+    if (whereSortInternal == Sort.asc) {
+      return addWhereClauseInternal(IndexWhereClause.lessThan(
+        indexName: 'set',
+        upper: [set],
+        includeUpper: false,
+      )).addWhereClauseInternal(IndexWhereClause.greaterThan(
+        indexName: 'set',
+        lower: [set],
+        includeLower: false,
+      ));
+    } else {
+      return addWhereClauseInternal(IndexWhereClause.greaterThan(
+        indexName: 'set',
+        lower: [set],
+        includeLower: false,
+      )).addWhereClauseInternal(IndexWhereClause.lessThan(
+        indexName: 'set',
+        upper: [set],
+        includeUpper: false,
+      ));
+    }
   }
 }
 

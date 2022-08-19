@@ -13,11 +13,14 @@ class Card {
   late String layout;
   late String name;
   late String manaCost;
+  @Index()
   late int cmc;
   String? colorIdentity;
   late String type;
+  @Index(type: IndexType.hash)
   late String rarity;
   late int rarityValue;
+  @Index(type: IndexType.hash)
   late String set;
   late String text;
   String? power;

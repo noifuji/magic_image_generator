@@ -49,6 +49,12 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                         border: InputBorder.none),
                     autofocus: false,
                     onSubmitted: (value) async {
+                      if(Provider.of<SearchViewModel>(context, listen: false).isSearching) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(AppLocalizations.of(context)!.exceptionCode310),
+                        ));
+                        return;
+                      }
 
                       await Provider.of<SearchViewModel>(context, listen: false)
                           .search(value, Localizations.localeOf(context));
@@ -75,6 +81,13 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                   child: IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: () async {
+                  if(Provider.of<SearchViewModel>(context, listen: false).isSearching) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(AppLocalizations.of(context)!.exceptionCode310),
+                    ));
+                    return;
+                  }
+
                   await Provider.of<SearchViewModel>(context, listen: false)
                       .search(
                           myController.text, Localizations.localeOf(context));

@@ -27,8 +27,13 @@ class AdvancedSearchScreen extends StatelessWidget {
     SearchFilter.setSnc,SearchFilter.setNeo,SearchFilter.setVow,SearchFilter.setMid,
     SearchFilter.setAfr,SearchFilter.setStx,SearchFilter.setKhm,SearchFilter.setZnr,
     SearchFilter.setM21,SearchFilter.setIko,SearchFilter.setThb,SearchFilter.setEld,
-    SearchFilter.setM20, SearchFilter.setWar, SearchFilter.setRna, SearchFilter.setGrn,
-    SearchFilter.setM19, SearchFilter.setDom, SearchFilter.setRix, SearchFilter.setXln,
+    SearchFilter.setM20,SearchFilter.setWar, SearchFilter.setRna, SearchFilter.setGrn,
+    SearchFilter.setM19,SearchFilter.setDom, SearchFilter.setRix, SearchFilter.setXln,
+    SearchFilter.setHou,SearchFilter.setAkh, SearchFilter.setAer, SearchFilter.setKld,
+    SearchFilter.setEmn,SearchFilter.setSoi, SearchFilter.setOgw, SearchFilter.setBfz,
+    SearchFilter.setOri,SearchFilter.setDtk, SearchFilter.setFrf, SearchFilter.setKtk,
+    SearchFilter.setM15,SearchFilter.setJou, SearchFilter.setBng, SearchFilter.setThs,
+    SearchFilter.setM14,SearchFilter.setDgm, SearchFilter.setGtc, SearchFilter.setRtr,
   ];
 
   final List<SearchFilter> _alchemyCardSets = [
@@ -197,6 +202,13 @@ class AdvancedSearchScreen extends StatelessWidget {
                               height: responsive.rowHeight * 0.6,
                               child:TextButton(
                                   onPressed: () async {
+                                    if(Provider.of<SearchViewModel>(context, listen: false).isSearching) {
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                        content: Text(AppLocalizations.of(context)!.exceptionCode310),
+                                      ));
+                                      return;
+                                    }
+
                                     Navigator.pop(context);
                                     await Provider.of<SearchViewModel>(context, listen: false).searchFromAdvanced(Localizations.localeOf(context));
                                   },
@@ -442,6 +454,65 @@ class AdvancedSearchScreen extends StatelessWidget {
       return AppLocalizations.of(context)!.setRix;
     }   else if(f == SearchFilter.setXln) {
       return AppLocalizations.of(context)!.setXln;
+    }   else if(f == SearchFilter.setHou) {
+      return AppLocalizations.of(context)!.setHou;
+    }
+    else if(f == SearchFilter.setEmn) {
+      return AppLocalizations.of(context)!.setEmn;
+    }
+    else if(f == SearchFilter.setOri) {
+      return AppLocalizations.of(context)!.setOri;
+    }
+    else if(f == SearchFilter.setM15) {
+      return AppLocalizations.of(context)!.setM15;
+    }
+    else if(f == SearchFilter.setM14) {
+      return AppLocalizations.of(context)!.setM14;
+    }
+    else if(f == SearchFilter.setAkh) {
+      return AppLocalizations.of(context)!.setAkh;
+    }
+    else if(f == SearchFilter.setSoi) {
+      return AppLocalizations.of(context)!.setSoi;
+    }
+    else if(f == SearchFilter.setDtk) {
+      return AppLocalizations.of(context)!.setDtk;
+    }
+    else if(f == SearchFilter.setJou) {
+      return AppLocalizations.of(context)!.setJou;
+    }
+    else if(f == SearchFilter.setDgm) {
+      return AppLocalizations.of(context)!.setDgm;
+    }
+    else if(f == SearchFilter.setAer) {
+      return AppLocalizations.of(context)!.setAer;
+    }
+    else if(f == SearchFilter.setOgw) {
+      return AppLocalizations.of(context)!.setOgw;
+    }
+    else if(f == SearchFilter.setFrf) {
+      return AppLocalizations.of(context)!.setFrf;
+    }
+    else if(f == SearchFilter.setBng) {
+      return AppLocalizations.of(context)!.setBng;
+    }
+    else if(f == SearchFilter.setGtc) {
+      return AppLocalizations.of(context)!.setGtc;
+    }
+    else if(f == SearchFilter.setKld) {
+      return AppLocalizations.of(context)!.setKld;
+    }
+    else if(f == SearchFilter.setBfz) {
+      return AppLocalizations.of(context)!.setBfz;
+    }
+    else if(f == SearchFilter.setKtk) {
+      return AppLocalizations.of(context)!.setKtk;
+    }
+    else if(f == SearchFilter.setThs) {
+      return AppLocalizations.of(context)!.setThs;
+    }
+    else if(f == SearchFilter.setRtr) {
+      return AppLocalizations.of(context)!.setRtr;
     }   else if(f == SearchFilter.setYMid) {
       return AppLocalizations.of(context)!.setYMid;
     } else if(f == SearchFilter.setYNeo) {

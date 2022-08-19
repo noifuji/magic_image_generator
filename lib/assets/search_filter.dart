@@ -8,6 +8,11 @@ enum SearchFilter{
   setM21,setIko,setThb,setEld,
   setM20,setWar,setRna,setGrn,
   setM19,setDom,setRix,setXln,
+  setHou,setAkh,setAer,setKld,
+  setEmn,setSoi,setOgw,setBfz,
+  setOri,setDtk,setFrf,setKtk,
+  setM15,setJou,setBng,setThs,
+  setM14,setDgm,setGtc,setRtr,
 
   setYMid,setYNeo,setYSnc,setHbg
 }

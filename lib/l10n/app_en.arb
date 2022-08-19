@@ -62,6 +62,31 @@
     "setRix":"Rivals of Ixalan",
     "setXln":"Ixalan",
 
+    "setHou":"Hour of Devastation",
+    "setAkh":"Amonkhet",
+    "setAer":"Aether Revolt",
+    "setKld":"Kaladesh",
+
+    "setEmn":"Eldritch Moon",
+    "setSoi":"Shadows over Innistrad",
+    "setOgw":"Oath of the Gatewatch",
+    "setBfz":"Battle for Zendikar",
+
+    "setOri":"Magic Origins",
+    "setDtk":"Dragons of Tarkir",
+    "setFrf":"Fate Reforged",
+    "setKtk":"Khans of Tarkir",
+
+    "setM15":"Core Set 2015",
+    "setJou":"Journey into Nyx",
+    "setBng":"Born of the Gods",
+    "setThs":"Theros",
+
+    "setM14":"Core Set 2014",
+    "setDgm":"Dragon's Maze",
+    "setGtc":"Gatecrash",
+    "setRtr":"Return to Ravnica",
+
     "setYMid": "Alchemy: Innistrad",
     "setYNeo": "Alchemy: Kamigawa",
     "setYSnc": "Alchemy: New Capena",
@@ -95,6 +120,7 @@
     "exceptionCode100": "Failed to search. Confirm your query.",
     "exceptionCode200": "Failed to Copy. Please try download.",
     "exceptionCode210": "Failed to Download.",
+    "exceptionCode310": "Please wait. Searching is already started.",
 
     "kofi": "Buy Me a Coffee"
 }
