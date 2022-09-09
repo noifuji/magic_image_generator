@@ -6,5 +6,5 @@ import '../model/card_info_header.dart';
 
 abstract class CardRepository {
   Future<List<CardInfoHeader>> get(List<SearchQuerySymbol> query, Locale locale);
-  Future<void> init();
+  Future<void> init({required Function(double value) onProgress});
 }

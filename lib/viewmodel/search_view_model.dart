@@ -118,7 +118,7 @@ class SearchViewModel extends ChangeNotifier {
     isSearching = true;
     notifyListeners();
 
-    if (constants.buildType == "production") {
+    if (Util.getCurrentEnvironment() == constants.Environment.production) {
       await FirebaseAnalytics.instance.logEvent(
         name: "submit_query",
         parameters: {

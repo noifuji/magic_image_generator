@@ -98,7 +98,7 @@
              loading.textContent = "Initializing app engine...";
              return engineInitializer.initializeEngine();
            }).then(function(appRunner) {
-             loading.textContent = "Running app...";
+             loading.textContent = "";
              return appRunner.runApp();
            });
          });

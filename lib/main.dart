@@ -15,6 +15,7 @@ import 'package:magic_image_generator/view/donate_screen.dart';
 import 'package:magic_image_generator/view/widgets/language_drop_down_list.dart';
 import 'package:magic_image_generator/view/search_view_screen.dart';
 import 'package:magic_image_generator/view/widgets/kofi_button.dart';
+import 'package:magic_image_generator/view/widgets/progress_bar.dart';
 import 'package:magic_image_generator/viewmodel/app_settings_view_model.dart';
 import 'package:magic_image_generator/viewmodel/canvas_view_model.dart';
 import 'package:magic_image_generator/viewmodel/search_view_model.dart';
@@ -89,10 +90,13 @@ final key = GlobalKey<CanvasViewScreenState>();
 Future<void> main() async {
   configureApp();
 
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  if(Util.getCurrentEnvironment() == constants.Environment.production) {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+
 
   runApp(MyApp());
 }
@@ -106,13 +110,26 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late ProgressController _progressController;
   late SharedPreferences prefs;
+  late Future<CardRepository> _initAppFuture;
   SearchViewModel? _searchViewModel;
   CanvasViewModel? _canvasViewModel;
   AppSettingsViewModel? _appSettingsViewModel;
 
+  @override
+  void initState() {
+    super.initState();
+    _progressController = ProgressController();
+    _initAppFuture = _initApp();
+  }
+
   Future<CardRepository> _initApp() async {
+    Util.printTimeStamp("_MyAppState _initApp");
     prefs = await SharedPreferences.getInstance();
+
+    _progressController.setProgress(0.1);
+
     String? languageCode = prefs.getString("languageCode");
     if (languageCode == null) {
       Locale locale;
@@ -129,11 +146,15 @@ class _MyAppState extends State<MyApp> {
       );
     }
 
+    _progressController.setProgress(0.5);
+
     CardLocalDataSource localDataSource = CardLocalDataSource(isar);
     CardRemoteDataSource remoteDataSource =
         CardRemoteDataSource(CardFetchCsvApi());
     CardRepository repo = CardRepositoryImpl(localDataSource, remoteDataSource);
-    await repo.init();
+    await repo.init(onProgress: (value) => _progressController.setProgress(0.5+0.5*value));
+
+    _progressController.setProgress(1.0);
 
     return Future<CardRepository>.value(repo);
   }
@@ -142,11 +163,27 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     Util.printTimeStamp("_MyAppState build");
     return FutureBuilder<CardRepository>(
-        future: _initApp(),
+        future: _initAppFuture,
         builder: (context, dataSnapshot) {
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
             Util.printTimeStamp("_MyHomePageState build waiting");
-            return const MaterialApp(home: Center());
+            return MaterialApp(
+                title: 'Magic Image Generator',
+                theme: ThemeData(
+                    brightness: Brightness.dark,
+                    fontFamily: "NotoSansJP-Regular"),
+                darkTheme: ThemeData(
+                    brightness: Brightness.dark,
+                    fontFamily: "NotoSansJP-Regular"),
+                themeMode: ThemeMode.dark,
+                home: Row(children:[
+                  const Expanded(flex:1, child:SizedBox.shrink()),
+                  Expanded(flex:1, child:
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                      children:[ProgressBar(controller: _progressController,)])),
+                  const Expanded(flex:1, child:SizedBox.shrink()),
+            ]));
           } else if (dataSnapshot.error != null) {
             if (kDebugMode) {
               print(dataSnapshot.error);
@@ -269,7 +306,7 @@ class _MyHomePageState extends State<MyHomePage> {
               FloatingActionButton(
                 heroTag: "copy",
                 onPressed: () async {
-                  if (constants.buildType == "production") {
+                  if (Util.getCurrentEnvironment() == constants.Environment.production) {
                     await FirebaseAnalytics.instance
                         .logEvent(name: "click_copy_button");
                   }
@@ -282,7 +319,7 @@ class _MyHomePageState extends State<MyHomePage> {
               FloatingActionButton(
                 heroTag: "download",
                 onPressed: () async {
-                  if (constants.buildType == "production") {
+                  if (Util.getCurrentEnvironment() == constants.Environment.production) {
                     await FirebaseAnalytics.instance
                         .logEvent(name: "click_download_button");
                   }
@@ -329,7 +366,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     FloatingActionButton(
                       heroTag: "copy",
                       onPressed: () async {
-                        if (constants.buildType == "production") {
+                        if (Util.getCurrentEnvironment() == constants.Environment.production) {
                           await FirebaseAnalytics.instance
                               .logEvent(name: "click_copy_button");
                         }
@@ -344,7 +381,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     FloatingActionButton(
                       heroTag: "download",
                       onPressed: () async {
-                        if (constants.buildType == "production") {
+                        if (Util.getCurrentEnvironment() == constants.Environment.production) {
                           await FirebaseAnalytics.instance
                               .logEvent(name: "click_download_button");
                         }

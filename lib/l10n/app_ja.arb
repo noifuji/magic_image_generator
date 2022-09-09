@@ -40,6 +40,9 @@
   "manaValue5": "5",
   "manaValue6": "6",
   "manaValue7AndMore": "7+",
+
+  "setDmu": "団結のドミナリア",
+
   "setSnc": "ニューカペナの街角",
   "setNeo": "神河 輝ける世界",
   "setVow": "イニストラード 真紅の契り",
@@ -108,6 +111,8 @@
   "english": "English",
 
   "msgCopyDone": "画像がコピーされたよ!",
+
+  "includedSets": "「ラヴニカへの回帰」以降のセットが検索できるよ。",
 
   "howToUse": "使い方",
   "step1Title": "Step1.",

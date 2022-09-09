@@ -24,6 +24,7 @@ class AdvancedSearchScreen extends StatelessWidget {
   constants.seachFilterKeywordMap.keys.toList().where((x) => constants.seachFilterKeywordMap[x]=="c").toList();
 
   final List<SearchFilter> _cardSets = [
+    SearchFilter.setDmu,
     SearchFilter.setSnc,SearchFilter.setNeo,SearchFilter.setVow,SearchFilter.setMid,
     SearchFilter.setAfr,SearchFilter.setStx,SearchFilter.setKhm,SearchFilter.setZnr,
     SearchFilter.setM21,SearchFilter.setIko,SearchFilter.setThb,SearchFilter.setEld,
@@ -414,6 +415,8 @@ class AdvancedSearchScreen extends StatelessWidget {
       return AppLocalizations.of(context)!.manaValue6;
     } else if(f == SearchFilter.manaValue7AndMore) {
       return AppLocalizations.of(context)!.manaValue7AndMore;
+    } else if(f == SearchFilter.setDmu) {
+      return AppLocalizations.of(context)!.setDmu;
     } else if(f == SearchFilter.setAfr) {
       return AppLocalizations.of(context)!.setAfr;
     } else if(f == SearchFilter.setKhm) {

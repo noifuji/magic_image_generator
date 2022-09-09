@@ -288,9 +288,7 @@ class CardLocalDataSource {
 
   Future<void> insertAll(List<Card> cards) async {
     await _isar.writeTxn((isar) async {
-      for (var card in cards) {
-        await isar.cards.put(card);
-      }
+      await isar.cards.putAll(cards);
     });
   }
 

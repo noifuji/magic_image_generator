@@ -26,7 +26,7 @@ void main() {
       await isar.cards.clear();
     });
     _repo = CardRepositoryImpl(CardLocalDataSource(_isar), CardRemoteDataSource(CardFetchCsvApi()));
-    await _repo.init();
+    await _repo.init(onProgress: (value)=>{});
   });
 
   test('Double quoted query', () async {

@@ -41,6 +41,8 @@
     "manaValue5": "5",
     "manaValue6": "6",
     "manaValue7AndMore": "7+",
+
+    "setDmu": "Dominaria United",
     "setSnc": "Streets of New Capena",
     "setNeo": "Kamigawa: Neon Dynasty",
     "setVow": "Innistrad: Crimson Vow",
@@ -106,6 +108,8 @@
 
     "msgCopyDone": "An image was copied!",
 
+
+    "includedSets": "From 'Return to Ravnica' to the latest are available.",
 
     "howToUse": "How to use",
     "step1Title": "Step1.",

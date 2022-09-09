@@ -16,9 +16,11 @@ class CardRepositoryImpl implements CardRepository {
 
   CardRepositoryImpl(this._localDataSource, this._remoteDataSource);
 
-  Future<void> init() async {
+  Future<void> init({required Function(double value) onProgress}) async {
     CardMasterVersion _vRemote = await _remoteDataSource.getVersion();
+    onProgress(0.1);
     CardMasterVersion? _vLocal = await _localDataSource.getVersion();
+    onProgress(0.2);
 
     if (_vLocal != null && _vLocal.version >= _vRemote.version) {
       return;
@@ -26,9 +28,14 @@ class CardRepositoryImpl implements CardRepository {
 
     Util.printTimeStamp("CardRepositoryImpl _remoteDataSource.getAll()");
     List<Card> cards = await _remoteDataSource.getAll();
-    Util.printTimeStamp("CardRepositoryImpl _localDataSource.insertAll(cards)");
+    onProgress(0.5);
+    Util.printTimeStamp("CardRepositoryImpl _localDataSource.clearAll()");
     await _localDataSource.clearAll();
+    onProgress(0.6);
+    Util.printTimeStamp("CardRepositoryImpl _localDataSource.insertAll(cards)");
     await _localDataSource.insertAll(cards);
+    onProgress(0.7);
+    Util.printTimeStamp("CardRepositoryImpl _localDataSource.insertVersion(_vRemote)");
     await _localDataSource.insertVersion(_vRemote);
   }
 
