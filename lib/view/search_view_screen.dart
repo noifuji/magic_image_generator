@@ -8,9 +8,9 @@ import 'package:magic_image_generator/view/search_card.dart';
 import 'package:magic_image_generator/view/sort_drop_down.dart';
 import 'package:provider/provider.dart';
 
-import '../assets/constants.dart' as constants;
-import '../assets/mig_exception.dart';
-import '../assets/util.dart';
+import '../common/constants.dart' as constants;
+import '../common/mig_exception.dart';
+import '../common/util.dart';
 import '../model/card_info_header.dart';
 import '../model/search_result.dart';
 import '../viewmodel/canvas_view_model.dart';
@@ -140,12 +140,6 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
                         child: ListTile(
                           leading: Text(AppLocalizations.of(context)!.step1Title),
                           title: Text(AppLocalizations.of(context)!.step1Content),
-                        )),
-                    Container(
-                        margin:const EdgeInsets.only(top:5),
-                        child: ListTile(
-                          leading: const Icon(Icons.tune),
-                          title: Text(AppLocalizations.of(context)!.step1_5Content),
                         )),
                     Container(
                         margin:const EdgeInsets.only(top:5),

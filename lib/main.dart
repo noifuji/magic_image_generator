@@ -22,10 +22,10 @@ import 'package:magic_image_generator/viewmodel/search_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import './assets/configure_nonweb.dart'
-    if (dart.library.html) './assets/configure_web.dart';
-import './assets/constants.dart' as constants;
-import 'assets/util.dart';
+import './common/configure_nonweb.dart'
+    if (dart.library.html) './common/configure_web.dart';
+import './common/constants.dart' as constants;
+import 'common/util.dart';
 import 'data/card.dart';
 import 'data/card_fetch_csv_api.dart';
 import 'data/card_local_data_source.dart';
@@ -168,7 +168,14 @@ class _MyAppState extends State<MyApp> {
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
             Util.printTimeStamp("_MyHomePageState build waiting");
             return MaterialApp(
-                title: 'Magic Image Generator',
+                onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: AppLocalizations.supportedLocales,
                 theme: ThemeData(
                     brightness: Brightness.dark,
                     fontFamily: "NotoSansJP-Regular"),
@@ -209,7 +216,7 @@ class _MyAppState extends State<MyApp> {
                           FocusManager.instance.primaryFocus?.unfocus();
                         },
                         child: MaterialApp(
-                          title: 'Magic Image Generator',
+                          onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
                           locale: AppLocalizations.supportedLocales.firstWhere(
                               (element) =>
                                   element.languageCode ==
@@ -230,7 +237,7 @@ class _MyAppState extends State<MyApp> {
                               fontFamily: "NotoSansJP-Regular"),
                           themeMode: ThemeMode.dark,
                           home:
-                              const MyHomePage(title: 'Magic Image Generator'),
+                              const MyHomePage(),
                         ))));
           }
         });
@@ -238,8 +245,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();

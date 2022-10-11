@@ -6,7 +6,7 @@ import 'package:magic_image_generator/view/widgets/overlay_flippable_image.dart'
 import 'package:magic_image_generator/viewmodel/search_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
-import '../assets/constants.dart' as constants;
+import '../common/constants.dart' as constants;
 import '../viewmodel/canvas_view_model.dart';
 
 class SearchCard extends StatefulWidget {

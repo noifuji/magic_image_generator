@@ -1,14 +1,15 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:magic_image_generator/assets/mig_exception.dart';
+import 'package:magic_image_generator/common/mig_exception.dart';
 import 'package:magic_image_generator/domain/card_repository.dart';
 import 'package:magic_image_generator/model/search_result.dart';
 import 'package:magic_image_generator/view/sort_drop_down.dart';
 
-import '../assets/constants.dart' as constants;
-import '../assets/search_filter.dart';
-import '../assets/util.dart';
+import '../common/constants.dart' as constants;
+import '../common/search_filter.dart';
+import '../common/search_filter_factory.dart';
+import '../common/util.dart';
 import '../domain/analyze_filter_usecase.dart';
 import '../domain/analyze_query_usecase.dart';
 import '../model/card_info_header.dart';
@@ -41,26 +42,26 @@ class SearchViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> search(String query, Locale locale) async {
+  Future<void> search(String query, Locale locale, List<SearchFilterData> filterDataList) async {
     Util.printTimeStamp("start search(String query, Locale locale)");
 
     //クエリの分析
     this.query = query;
 
     if(_hasFilter()) {
-      query = query + " " + AnalyzeFilterUseCase().call(searchFilters, locale);
+      query = query + " " + AnalyzeFilterUseCase().call(searchFilters, filterDataList);
       print(query);
     }
 
     await _search(query, locale);
   }
 
-  Future<void> searchFromAdvanced(Locale locale) async {
+  Future<void> searchFromAdvanced(Locale locale, List<SearchFilterData> filterDataList) async {
     if(!_hasFilter()) {
       return;
     }
 
-    String query = AnalyzeFilterUseCase().call(searchFilters, locale);
+    String query = AnalyzeFilterUseCase().call(searchFilters, filterDataList);
     await _search(this.query + " " + query, locale);
   }
 

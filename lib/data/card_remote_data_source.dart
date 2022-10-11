@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:magic_image_generator/data/card_fetch_csv_api.dart';
 import 'package:magic_image_generator/data/card_master_version.dart';
 
-import '../assets/constants.dart' as constants;
+import '../common/constants.dart' as constants;
 import 'card.dart';
 
 class CardRemoteDataSource {

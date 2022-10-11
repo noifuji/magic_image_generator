@@ -10,7 +10,7 @@ import 'package:magic_image_generator/domain/search_keyword_type.dart';
 import 'package:magic_image_generator/domain/search_operator.dart';
 import 'package:magic_image_generator/domain/search_operator_type.dart';
 
-import '../assets/util.dart';
+import '../common/util.dart';
 import '../domain/color_type.dart';
 import '../domain/search_query_symbol.dart';
 import 'card.dart';

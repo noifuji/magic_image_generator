@@ -5,8 +5,8 @@ import 'package:csv/csv.dart' as csv;
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:magic_image_generator/data/card_master_version.dart';
-import '../assets/constants.dart' as constants;
-import '../assets/util.dart';
+import '../common/constants.dart' as constants;
+import '../common/util.dart';
 
 class CardFetchCsvApi {
   Future<List<List<dynamic>>> fetchCardCsv() async {

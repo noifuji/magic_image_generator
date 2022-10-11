@@ -4,24 +4,41 @@ import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:magic_image_generator/common/search_filter_factory.dart';
 import 'package:magic_image_generator/viewmodel/search_view_model.dart';
 import 'package:provider/provider.dart';
 
-import '../assets/constants.dart' as constants;
-import '../assets/search_filter.dart';
+import '../common/constants.dart' as constants;
+import '../common/search_filter.dart';
 
 class AdvancedSearchScreen extends StatelessWidget {
-  final List<SearchFilter> _rarities =
-  constants.seachFilterKeywordMap.keys.toList().where((x) => constants.seachFilterKeywordMap[x]=="r").toList();
+  final List<SearchFilter> _rarities = [
+    SearchFilter.rarityCommon,
+    SearchFilter.rarityUncommon,
+    SearchFilter.rarityRare,
+    SearchFilter.rarityMythic];
 
-  final List<SearchFilter> _cardTypes =
-  constants.seachFilterKeywordMap.keys.toList().where((x) => constants.seachFilterKeywordMap[x]=="t").toList();
+  final List<SearchFilter> _cardTypes = [
+    SearchFilter.typeCreature,
+    SearchFilter.typePlaneswalker,
+    SearchFilter.typeInstant,
+    SearchFilter.typeSorcery,
+    SearchFilter.typeEnchantment,
+    SearchFilter.typeArtifact,
+    SearchFilter.typeLand,
+  ];
 
-  final List<SearchFilter> _costValues =
-  constants.seachFilterKeywordMap.keys.toList().where((x) => constants.seachFilterKeywordMap[x]=="cmc").toList();
+  final List<SearchFilter> _costValues = [
+    SearchFilter.manaValue0, SearchFilter.manaValue1, SearchFilter.manaValue2,
+    SearchFilter.manaValue3, SearchFilter.manaValue4, SearchFilter.manaValue5,
+    SearchFilter.manaValue6, SearchFilter.manaValue7AndMore
+  ];
 
-  final List<SearchFilter> _colors =
-  constants.seachFilterKeywordMap.keys.toList().where((x) => constants.seachFilterKeywordMap[x]=="c").toList();
+  final List<SearchFilter> _colors = [
+    SearchFilter.colorWhite, SearchFilter.colorBlue, SearchFilter.colorBlack,
+    SearchFilter.colorRed, SearchFilter.colorGreen, SearchFilter.colorColorless,
+    SearchFilter.colorMulti
+  ];
 
   final List<SearchFilter> _cardSets = [
     SearchFilter.setDmu,
@@ -38,7 +55,8 @@ class AdvancedSearchScreen extends StatelessWidget {
   ];
 
   final List<SearchFilter> _alchemyCardSets = [
-    SearchFilter.setYMid,SearchFilter.setYNeo,SearchFilter.setYSnc,SearchFilter.setHbg,];
+    SearchFilter.setYdmu,
+    SearchFilter.setHbg,SearchFilter.setYSnc,SearchFilter.setYNeo,SearchFilter.setYMid];
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +229,8 @@ class AdvancedSearchScreen extends StatelessWidget {
                                     }
 
                                     Navigator.pop(context);
-                                    await Provider.of<SearchViewModel>(context, listen: false).searchFromAdvanced(Localizations.localeOf(context));
+                                    List<SearchFilterData> filerDataList = SearchFilter.values.map((e) => SearchFilterFactory.createSearchFilter(context, e)).toList();
+                                    await Provider.of<SearchViewModel>(context, listen: false).searchFromAdvanced(Localizations.localeOf(context),filerDataList);
                                   },
                                   style: TextButton.styleFrom(backgroundColor: Colors.orange),
                                   child: Text(AppLocalizations.of(context)!.searchButton,
@@ -298,7 +317,7 @@ class AdvancedSearchScreen extends StatelessWidget {
                 backgroundColor: Colors.white70,
                 side: const BorderSide(color: Colors.black),
               ),
-            child: Text(_getFilterText(context, _costValues[i]),
+            child: Text(SearchFilterFactory.createSearchFilter(context, _costValues[i]).name,
                 style: TextStyle(color: Colors.black, fontSize: min(w,res.rowHeight) * 0.75 * 0.5)),)
           )));
     }
@@ -371,162 +390,9 @@ class AdvancedSearchScreen extends StatelessWidget {
         },
         style:isOn? TextButton.styleFrom(backgroundColor: Colors.orange.withAlpha(10), splashFactory: NoSplash.splashFactory):
         TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
-        child: Text(_getFilterText(context, filter),
+        child: Text(SearchFilterFactory.createSearchFilter(context, filter).name,
           style: TextStyle(color: isOn? Colors.white.withAlpha(255) : Colors.white.withAlpha(150),
           fontSize: h*0.75*0.3),)))],);
-  }
-
-  String _getFilterText(BuildContext context, SearchFilter f) {
-    if(f == SearchFilter.rarityCommon) {
-      return AppLocalizations.of(context)!.rarityCommon;
-    } else if(f == SearchFilter.rarityUncommon) {
-      return AppLocalizations.of(context)!.rarityUncommon;
-    } else if(f == SearchFilter.rarityRare) {
-      return AppLocalizations.of(context)!.rarityRare;
-    } else if(f == SearchFilter.rarityMythic) {
-      return AppLocalizations.of(context)!.rarityMythic;
-    } else if(f == SearchFilter.typeCreature) {
-      return AppLocalizations.of(context)!.typeCreature;
-    } else if(f == SearchFilter.typePlaneswalker) {
-      return AppLocalizations.of(context)!.typePlaneswalker;
-    } else if(f == SearchFilter.typeInstant) {
-      return AppLocalizations.of(context)!.typeInstant;
-    } else if(f == SearchFilter.typeSorcery) {
-      return AppLocalizations.of(context)!.typeSorcery;
-    } else if(f == SearchFilter.typeEnchantment) {
-      return AppLocalizations.of(context)!.typeEnchantment;
-    } else if(f == SearchFilter.typeArtifact) {
-      return AppLocalizations.of(context)!.typeArtifact;
-    } else if(f == SearchFilter.typeLand) {
-      return AppLocalizations.of(context)!.typeLand;
-    } else if(f == SearchFilter.manaValue0) {
-      return AppLocalizations.of(context)!.manaValue0;
-    } else if(f == SearchFilter.manaValue1) {
-      return AppLocalizations.of(context)!.manaValue1;
-    } else if(f == SearchFilter.manaValue2) {
-      return AppLocalizations.of(context)!.manaValue2;
-    } else if(f == SearchFilter.manaValue3) {
-      return AppLocalizations.of(context)!.manaValue3;
-    } else if(f == SearchFilter.manaValue4) {
-      return AppLocalizations.of(context)!.manaValue4;
-    } else if(f == SearchFilter.manaValue5) {
-      return AppLocalizations.of(context)!.manaValue5;
-    } else if(f == SearchFilter.manaValue6) {
-      return AppLocalizations.of(context)!.manaValue6;
-    } else if(f == SearchFilter.manaValue7AndMore) {
-      return AppLocalizations.of(context)!.manaValue7AndMore;
-    } else if(f == SearchFilter.setDmu) {
-      return AppLocalizations.of(context)!.setDmu;
-    } else if(f == SearchFilter.setAfr) {
-      return AppLocalizations.of(context)!.setAfr;
-    } else if(f == SearchFilter.setKhm) {
-      return AppLocalizations.of(context)!.setKhm;
-    } else if(f == SearchFilter.setMid) {
-      return AppLocalizations.of(context)!.setMid;
-    } else if(f == SearchFilter.setNeo) {
-      return AppLocalizations.of(context)!.setNeo;
-    } else if(f == SearchFilter.setSnc) {
-      return AppLocalizations.of(context)!.setSnc;
-    } else if(f == SearchFilter.setStx) {
-      return AppLocalizations.of(context)!.setStx;
-    } else if(f == SearchFilter.setVow) {
-      return AppLocalizations.of(context)!.setVow;
-    } else if(f == SearchFilter.setZnr) {
-      return AppLocalizations.of(context)!.setZnr;
-    } else if(f == SearchFilter.setM21) {
-      return AppLocalizations.of(context)!.setM21;
-    }  else if(f == SearchFilter.setIko) {
-      return AppLocalizations.of(context)!.setIko;
-    }  else if(f == SearchFilter.setThb) {
-      return AppLocalizations.of(context)!.setThb;
-    }  else if(f == SearchFilter.setEld) {
-      return AppLocalizations.of(context)!.setEld;
-    }  else if(f == SearchFilter.setM20) {
-      return AppLocalizations.of(context)!.setM20;
-    }   else if(f == SearchFilter.setWar) {
-      return AppLocalizations.of(context)!.setWar;
-    }   else if(f == SearchFilter.setRna) {
-      return AppLocalizations.of(context)!.setRna;
-    }   else if(f == SearchFilter.setGrn) {
-      return AppLocalizations.of(context)!.setGrn;
-    }   else if(f == SearchFilter.setM19) {
-      return AppLocalizations.of(context)!.setM19;
-    }   else if(f == SearchFilter.setDom) {
-      return AppLocalizations.of(context)!.setDom;
-    }   else if(f == SearchFilter.setRix) {
-      return AppLocalizations.of(context)!.setRix;
-    }   else if(f == SearchFilter.setXln) {
-      return AppLocalizations.of(context)!.setXln;
-    }   else if(f == SearchFilter.setHou) {
-      return AppLocalizations.of(context)!.setHou;
-    }
-    else if(f == SearchFilter.setEmn) {
-      return AppLocalizations.of(context)!.setEmn;
-    }
-    else if(f == SearchFilter.setOri) {
-      return AppLocalizations.of(context)!.setOri;
-    }
-    else if(f == SearchFilter.setM15) {
-      return AppLocalizations.of(context)!.setM15;
-    }
-    else if(f == SearchFilter.setM14) {
-      return AppLocalizations.of(context)!.setM14;
-    }
-    else if(f == SearchFilter.setAkh) {
-      return AppLocalizations.of(context)!.setAkh;
-    }
-    else if(f == SearchFilter.setSoi) {
-      return AppLocalizations.of(context)!.setSoi;
-    }
-    else if(f == SearchFilter.setDtk) {
-      return AppLocalizations.of(context)!.setDtk;
-    }
-    else if(f == SearchFilter.setJou) {
-      return AppLocalizations.of(context)!.setJou;
-    }
-    else if(f == SearchFilter.setDgm) {
-      return AppLocalizations.of(context)!.setDgm;
-    }
-    else if(f == SearchFilter.setAer) {
-      return AppLocalizations.of(context)!.setAer;
-    }
-    else if(f == SearchFilter.setOgw) {
-      return AppLocalizations.of(context)!.setOgw;
-    }
-    else if(f == SearchFilter.setFrf) {
-      return AppLocalizations.of(context)!.setFrf;
-    }
-    else if(f == SearchFilter.setBng) {
-      return AppLocalizations.of(context)!.setBng;
-    }
-    else if(f == SearchFilter.setGtc) {
-      return AppLocalizations.of(context)!.setGtc;
-    }
-    else if(f == SearchFilter.setKld) {
-      return AppLocalizations.of(context)!.setKld;
-    }
-    else if(f == SearchFilter.setBfz) {
-      return AppLocalizations.of(context)!.setBfz;
-    }
-    else if(f == SearchFilter.setKtk) {
-      return AppLocalizations.of(context)!.setKtk;
-    }
-    else if(f == SearchFilter.setThs) {
-      return AppLocalizations.of(context)!.setThs;
-    }
-    else if(f == SearchFilter.setRtr) {
-      return AppLocalizations.of(context)!.setRtr;
-    }   else if(f == SearchFilter.setYMid) {
-      return AppLocalizations.of(context)!.setYMid;
-    } else if(f == SearchFilter.setYNeo) {
-      return AppLocalizations.of(context)!.setYNeo;
-    } else if(f == SearchFilter.setYSnc) {
-      return AppLocalizations.of(context)!.setYSnc;
-    } else if(f == SearchFilter.setHbg) {
-      return AppLocalizations.of(context)!.setHbg;
-    }
-
-    return "";
   }
 }
 

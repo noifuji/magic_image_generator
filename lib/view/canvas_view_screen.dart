@@ -19,7 +19,7 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:image/image.dart' as IMG;
 
-import '../assets/constants.dart' as constants;
+import '../common/constants.dart' as constants;
 import '../model/card_info_header.dart';
 
 class CanvasViewScreen extends StatefulWidget {

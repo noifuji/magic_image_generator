@@ -5,6 +5,7 @@
     "copy": "Copy",
     "download": "Download",
     "sort": "sort by",
+    "advancedSearchButton": "Advanced",
 
     "name": "Name",
     "cmc": "Mana Value",
@@ -26,6 +27,7 @@
     "rarityUncommon": "Uncommon",
     "rarityRare": "Rare",
     "rarityMythic": "Mythic",
+
     "typeCreature": "Creature",
     "typePlaneswalker": "Planeswalker",
     "typeInstant": "Instant",
@@ -33,6 +35,16 @@
     "typeEnchantment": "Enchantment",
     "typeArtifact": "Artifact",
     "typeLand": "Land",
+
+    "searchKeyTypeCreature": "creature",
+    "searchKeyTypePlaneswalker": "planeswalker",
+    "searchKeyTypeInstant": "instant",
+    "searchKeyTypeSorcery": "sorcery",
+    "searchKeyTypeEnchantment": "enchantment",
+    "searchKeyTypeArtifact": "artifact",
+    "searchKeyTypeLand": "land",
+
+
     "manaValue0": "0",
     "manaValue1": "1",
     "manaValue2": "2",
@@ -93,6 +105,7 @@
     "setYNeo": "Alchemy: Kamigawa",
     "setYSnc": "Alchemy: New Capena",
     "setHbg": "Alchemy Horizons: Baldur's Gate",
+    "setYdmu": "Alchemy: Dominaria United",
 
     "resetButton": "Reset",
     "searchButton": "OK",

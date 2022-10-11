@@ -1,28 +1,24 @@
 import 'package:flutter/material.dart';
 
-import '../assets/search_filter.dart';
-import '../assets/constants.dart' as constants;
+import '../common/search_filter.dart';
+import '../common/constants.dart' as constants;
+import '../common/search_filter_factory.dart';
 
 class AnalyzeFilterUseCase {
 
 
-  String call(Map<SearchFilter, bool> filterState, Locale locale) {
+  String call(Map<SearchFilter, bool> filterState,  List<SearchFilterData> filterDataList) {
     List<String> query = [];
 
-    query.add(_createQueryFromFilter(filterState,locale,
-        constants.seachFilterKeywordMap.keys.toList().where((x) => constants.seachFilterKeywordMap[x]=="c").toList()));
+    query.add(_createQueryFromFilter(filterState,filterDataList.where((e) => e.filterType==SearchFilterType.color).toList()));
 
-    query.add(_createQueryFromFilter(filterState, locale,
-        constants.seachFilterKeywordMap.keys.toList().where((x) => constants.seachFilterKeywordMap[x]=="r").toList()));
+    query.add(_createQueryFromFilter(filterState,filterDataList.where((e) => e.filterType==SearchFilterType.rarity).toList()));
 
-    query.add(_createQueryFromFilter(filterState, locale,
-        constants.seachFilterKeywordMap.keys.toList().where((x) => constants.seachFilterKeywordMap[x]=="t").toList()));
+    query.add(_createQueryFromFilter(filterState,filterDataList.where((e) => e.filterType==SearchFilterType.type).toList()));
 
-    query.add(_createQueryFromFilter(filterState, locale,
-        constants.seachFilterKeywordMap.keys.toList().where((x) => constants.seachFilterKeywordMap[x]=="cmc").toList()));
+    query.add(_createQueryFromFilter(filterState,filterDataList.where((e) => e.filterType==SearchFilterType.cmc).toList()));
 
-    query.add(_createQueryFromFilter(filterState, locale,
-        constants.seachFilterKeywordMap.keys.toList().where((x) => constants.seachFilterKeywordMap[x]=="set").toList()));
+    query.add(_createQueryFromFilter(filterState,filterDataList.where((e) => e.filterType==SearchFilterType.set).toList()));
 
     String result = "";
 
@@ -41,25 +37,18 @@ class AnalyzeFilterUseCase {
     return result;
   }
 
-  String _createQueryFromFilter(Map<SearchFilter, bool> filterState, Locale locale, List<SearchFilter> filters) {
+  String _createQueryFromFilter(Map<SearchFilter, bool> filterState, List<SearchFilterData> filterDataList) {
     List<String> query = [];
-    Map<SearchFilter, String> valueMap;
 
-    if(locale.languageCode == constants.languageCodeJa) {
-      valueMap = constants.searchFilterValueMapJa;
-    } else {
-      valueMap = constants.searchFilterValueMap;
-    }
-
-    for(var key in filters) {
-      if(filterState[key]!) {
-        if(key == SearchFilter.manaValue7AndMore) {
-          query.add(constants.seachFilterKeywordMap[key]! + ">=" + valueMap[key]!);
-        } else if(["set", "cmc", "r"].contains(constants.seachFilterKeywordMap[key]!)) {
-          query.add(constants.seachFilterKeywordMap[key]! + "=" + valueMap[key]!);
-        }else {
-          query.add(constants.seachFilterKeywordMap[key]! + ":" + valueMap[key]!);
+    for(var filterData in filterDataList) {
+      if(filterState[filterData.filter]!) {
+        String relationalOperator = ":";
+        if(filterData.filter == SearchFilter.manaValue7AndMore) {
+          relationalOperator = ">=";
+        } else if(["set", "cmc", "r"].contains(filterData.searchKey)) {
+          relationalOperator = "=";
         }
+        query.add(filterData.searchKey + relationalOperator + filterData.searchValue);
       }
     }
 
@@ -70,7 +59,7 @@ class AnalyzeFilterUseCase {
     String operator = "or";
     //色条件はorだが、多色がtrueの場合は、andとする。
     //白、青の場合は、白または青を含むものをフィルタするが、白、青、多色の場合は白かつ青を含むものをフィルタする。
-    if(filterState[SearchFilter.colorMulti]! && constants.seachFilterKeywordMap[filters[0]] == "c") {
+    if(filterState[SearchFilter.colorMulti]! && filterDataList[0].searchKey == "c") {
       operator = "and";
     }
 

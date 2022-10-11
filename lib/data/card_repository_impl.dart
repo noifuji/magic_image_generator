@@ -4,7 +4,7 @@ import 'package:magic_image_generator/data/card_local_data_source.dart';
 import 'package:magic_image_generator/data/card_master_version.dart';
 import 'package:magic_image_generator/domain/search_query_symbol.dart';
 
-import '../assets/util.dart';
+import '../common/util.dart';
 import '../domain/card_repository.dart';
 import '../model/card_info_header.dart';
 import 'card.dart';

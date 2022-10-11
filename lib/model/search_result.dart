@@ -1,4 +1,4 @@
-import 'package:magic_image_generator/assets/mig_exception.dart';
+import 'package:magic_image_generator/common/mig_exception.dart';
 
 import 'card_info_header.dart';
 

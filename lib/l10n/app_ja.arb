@@ -5,6 +5,7 @@
   "copy": "コピー",
   "download": "ダウンロード",
   "sort": "ソート",
+  "advancedSearchButton": "詳細検索",
 
   "name": "名前",
   "cmc": "マナ総量",
@@ -25,6 +26,7 @@
   "rarityUncommon": "アンコモン",
   "rarityRare": "レア",
   "rarityMythic": "神話レア",
+
   "typeCreature": "クリーチャー",
   "typePlaneswalker": "プレインズウォーカー",
   "typeInstant": "インスタント",
@@ -32,6 +34,16 @@
   "typeEnchantment": "エンチャント",
   "typeArtifact": "アーティファクト",
   "typeLand": "土地",
+
+  "searchKeyTypeCreature": "クリーチャー",
+  "searchKeyTypePlaneswalker": "プレインズウォーカー",
+  "searchKeyTypeInstant": "インスタント",
+  "searchKeyTypeSorcery": "ソーサリー",
+  "searchKeyTypeEnchantment": "エンチャント",
+  "searchKeyTypeArtifact": "アーティファクト",
+  "searchKeyTypeLand": "土地",
+
+
   "manaValue0": "0",
   "manaValue1": "1",
   "manaValue2": "2",
@@ -97,6 +109,7 @@
   "setYNeo": "アルケミー: 神河",
   "setYSnc": "アルケミー: ニューカペナ",
   "setHbg": "アルケミーホライゾン: バルダーズ・ゲート",
+  "setYdmu": "アルケミー: 団結のドミナリア",
 
   "resetButton": "リセット",
   "searchButton": "OK",

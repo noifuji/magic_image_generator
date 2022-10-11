@@ -1,11 +1,11 @@
 {
-    "name": "magic_image_generator",
-    "short_name": "magic_image_generator",
+    "name": "Magic Image Generator",
+    "short_name": "mig",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Let's generate card images and share with your community!",
+    "description": "A convenient tool to create Magic the Gathering card images in only 3 steps. Search cards, pick up cards and push download button. Generate card images and share with your community!",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

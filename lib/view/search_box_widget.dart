@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:magic_image_generator/view/advanced_search_screen.dart';
 import 'package:provider/provider.dart';
-import '../assets/constants.dart' as constants;
+import '../common/constants.dart' as constants;
 
+import '../common/search_filter.dart';
+import '../common/search_filter_factory.dart';
 import '../viewmodel/search_view_model.dart';
 
 class SearchBoxWidget extends StatefulWidget {
@@ -56,8 +58,9 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                         return;
                       }
 
+                      List<SearchFilterData> filerDataList = SearchFilter.values.map((e) => SearchFilterFactory.createSearchFilter(context, e)).toList();
                       await Provider.of<SearchViewModel>(context, listen: false)
-                          .search(value, Localizations.localeOf(context));
+                          .search(value, Localizations.localeOf(context), filerDataList);
                     },
                     onChanged: (value) {
                       Provider.of<SearchViewModel>(context, listen: false)
@@ -88,9 +91,10 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                     return;
                   }
 
+                  List<SearchFilterData> filerDataList = SearchFilter.values.map((e) => SearchFilterFactory.createSearchFilter(context, e)).toList();
                   await Provider.of<SearchViewModel>(context, listen: false)
                       .search(
-                          myController.text, Localizations.localeOf(context));
+                          myController.text, Localizations.localeOf(context), filerDataList);
                 },
               ))),
           Expanded(
@@ -99,8 +103,12 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                   margin: const EdgeInsets.only(
                     right: 10,
                   ),
-                  child: IconButton(
-                    icon: const Icon(Icons.tune),
+                  child: TextButton(
+                    child: Text(AppLocalizations.of(context)!.advancedSearchButton, style:const TextStyle(color:Colors.white,), ),
+                    style:ElevatedButton.styleFrom(
+                      primary: Colors.white24,
+                      onPrimary: Colors.white,
+                    ),
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(

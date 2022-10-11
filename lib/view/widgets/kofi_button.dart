@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:js' as js;
-import "../../assets/constants.dart" as constants;
+import "../../common/constants.dart" as constants;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class KofiButton extends StatelessWidget {
