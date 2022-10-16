@@ -74,8 +74,6 @@ class SearchFilterFactory {
     else if(sf == SearchFilter.setDmu) {
       return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.setDmu, searchValue: "dmu", searchKey: "set", filterType: SearchFilterType.set);
     }else if(sf == SearchFilter.setSnc) {
-      return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.setSnc, searchValue: "dmu", searchKey: "set", filterType: SearchFilterType.set);
-    }else if(sf == SearchFilter.setSnc) {
       return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.setSnc, searchValue: "snc", searchKey: "set", filterType: SearchFilterType.set);
     }else if(sf == SearchFilter.setNeo) {
       return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.setNeo, searchValue: "neo", searchKey: "set", filterType: SearchFilterType.set);
