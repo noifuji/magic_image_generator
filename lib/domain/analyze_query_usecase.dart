@@ -8,7 +8,7 @@ import 'package:magic_image_generator/domain/search_query_symbol.dart';
 class AnalyzeQueryUseCase {
 
   List<SearchQuerySymbol> call(String query) {
-    List<String> split = p_lex(query);
+    List<String> split = p_lex(replaceDoubleBytesSpace(query));
     List<String> doubleQuoteChecked = checkDoubleQuote(split);
     List<String> operatorsChecked = checkOperators(doubleQuoteChecked);
     List<List<String>> symbolStringArray = checkSpace(operatorsChecked);
@@ -22,6 +22,9 @@ class AnalyzeQueryUseCase {
     return symbolArray;
   }
 
+  String replaceDoubleBytesSpace(String str) {
+    return str.replaceAll("　", " ");
+  }
 
   List<String> p_lex(String str) {
     RegExp regExp = new RegExp(r'[:()<>=\-\\"\s]');

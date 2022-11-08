@@ -12,7 +12,7 @@ class CardInfoHeader {
   CardInfo? get secondFace => cardFaces[1];
 
   CardInfoHeader(CardInfo card) {
-    isTransform = (card.layout == "transform" || card.layout == "modal_dfc");
+    isTransform = (card.layout == "transform" || card.layout == "modal_dfc" || card.layout == "meld");
     cardFaces.add(card);
   }
 

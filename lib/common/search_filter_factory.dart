@@ -71,6 +71,9 @@ class SearchFilterFactory {
     }
 
     /****Sets****/
+    else if(sf == SearchFilter.setBro) {
+      return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.setBro, searchValue: "bro", searchKey: "set", filterType: SearchFilterType.set);
+    }
     else if(sf == SearchFilter.setDmu) {
       return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.setDmu, searchValue: "dmu", searchKey: "set", filterType: SearchFilterType.set);
     }else if(sf == SearchFilter.setSnc) {

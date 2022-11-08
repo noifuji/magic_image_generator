@@ -46,7 +46,7 @@ void main() {
     expect(result[0] is SearchCondition, true);
     expect((result[0] as SearchCondition).keyword, SearchKeywordType.oracle);
     expect((result[0] as SearchCondition).relationalOperatorType, RelationalOperatorType.contains);
-    expect((result[0] as SearchCondition).value, "Go");
+    expect((result[0] as SearchCondition).value, "go");
   });
 
   test('AnalyzeQueryUseCase throws Exception when query has unclosed double quotes.', () async {
@@ -65,5 +65,23 @@ void main() {
     var query = 'legal:standard hello r<=u c:r ((o:"you may" and o:next) or o:draw (t:insta or t:sorce) or t:crea';
     var analyzer = AnalyzeQueryUseCase();
     expect(() => analyzer.call(query), throwsA(TypeMatcher<Exception>()));
+  });
+
+  test('AnalyzeQueryUseCase replace double-bytes space.', () async {
+    var query = 'a　b';
+    var analyzer = AnalyzeQueryUseCase();
+    var result = analyzer.call(query);
+    expect(result[0] is SearchCondition, true);
+    expect((result[0] as SearchCondition).value, "a");
+    expect((result[1] as SearchCondition).value, "b");
+  });
+
+  test('AnalyzeQueryUseCase replace double-bytes space.', () async {
+    var query = 'a　b';
+    var analyzer = AnalyzeQueryUseCase();
+    var result = analyzer.call(query);
+    expect(result[0] is SearchCondition, true);
+    expect((result[0] as SearchCondition).value, "a");
+    expect((result[1] as SearchCondition).value, "b");
   });
 }

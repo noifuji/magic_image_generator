@@ -29,9 +29,9 @@ class CanvasViewScreen extends StatefulWidget {
 
   const CanvasViewScreen(
       {Key? key,
-        required this.responsiveColumns,
-        required this.responsiveColumnWidth,
-        required this.responsiveGutterWidth})
+      required this.responsiveColumns,
+      required this.responsiveColumnWidth,
+      required this.responsiveGutterWidth})
       : super(key: key);
 
   @override
@@ -44,168 +44,145 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     List<List<CardInfoHeader>> selectedCardMatrix =
         Provider.of<CanvasViewModel>(context).selectedCards;
 
-    int selectedCardRowLengthMax = selectedCardMatrix.fold<int>(
-        0, (p, e) => p = p < e.length ? e.length : p);
+    int selectedCardRowLengthMax =
+        selectedCardMatrix.fold<int>(0, (p, e) => p = p < e.length ? e.length : p);
 
-    return LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              _canvasViewZoomRatio = min(
-                  constraints.maxWidth /
-                      ((selectedCardRowLengthMax) *
-                          constants.rawCardImageWidth + 5),
-                  (constraints.maxHeight) /
-                      ((selectedCardMatrix.length + 1) *
-                          constants.rawCardImageHeight));
+    return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+      _canvasViewZoomRatio = min(
+          constraints.maxWidth / ((selectedCardRowLengthMax) * constants.rawCardImageWidth + 5),
+          (constraints.maxHeight) /
+              ((selectedCardMatrix.length + 1) * constants.rawCardImageHeight));
 
-              if (_canvasViewZoomRatio > 1.0) {
-                _canvasViewZoomRatio = 1.0;
-              }
-
-              List<Widget> draggableImageMatrix = [];
-
-              draggableImageMatrix = selectedCardMatrix.map((row) {
-                int rowIndex = selectedCardMatrix.indexWhere((e) => e == row);
-
-                List<Widget> cardWidgets = row.map((card) {
-                  int colIndex = row.indexWhere((e) =>
-                  e.displayId == card.displayId);
-
-                  return DragTarget<Map<String, int>>(
-                      builder: (BuildContext context,
-                          List<dynamic> accepted,
-                          List<dynamic> rejected,) {
-                        return CanvasCard(
-                          key: ValueKey(card.displayId),
-                          card: card,
-                          scale: _canvasViewZoomRatio,
-                        );
-                      },
-                      onAccept: (data) =>
-                          Provider.of<CanvasViewModel>(context, listen: false)
-                              .moveCard(
-                              data, {"row": rowIndex, "col": colIndex}),
-                      onWillAccept: (data) =>
-                      data is Map<String, int> &&
-                          data.keys.contains("row") &&
-                          data.keys.contains("col"));
-                }).toList();
-
-                cardWidgets.add(DragTarget<Map<String, int>>(
-                  builder: (BuildContext context,
-                      List<dynamic> accepted,
-                      List<dynamic> rejected,) {
-                    return SizedBox(
-                      //横方向の余白
-                      width: (selectedCardRowLengthMax - row.length) *
-                          constants.rawCardImageWidth *
-                          _canvasViewZoomRatio,
-                      height: constants.rawCardImageHeight *
-                          _canvasViewZoomRatio,
-                    );
-                  },
-                  onAccept: (from) =>
-                      Provider.of<CanvasViewModel>(context, listen: false)
-                          .moveCard(from, {"row": rowIndex, "col": row.length}),
-                  onWillAccept: (data) =>
-                  data != null && data["row"] != null && data["col"] != null,
-                ));
-
-                return Row(children: cardWidgets);
-              }).toList();
-
-              return Row(children: [
-                SizedBox(
-                    width: selectedCardRowLengthMax *
-                        constants.rawCardImageWidth *
-                        _canvasViewZoomRatio,
-                    child: SingleChildScrollView(
-                        child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: constants.rawCardImageHeight *
-                                    _canvasViewZoomRatio *
-                                    selectedCardMatrix.length,
-                                child: RepaintBoundary(
-                                    key: _globalKey,
-                                    child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: draggableImageMatrix))),
-                              DragTarget<Map<String, int>>(
-                                builder: (BuildContext context,
-                                    List<dynamic> accepted,
-                                    List<dynamic> rejected,) {
-                                  return SizedBox(
-                                    //縦方向の余白
-                                    width: selectedCardRowLengthMax *
-                                        constants.rawCardImageWidth *
-                                        _canvasViewZoomRatio,
-                                    height: constraints.maxHeight -
-                                        constants.rawCardImageHeight *
-                                            _canvasViewZoomRatio *
-                                            selectedCardMatrix.length,
-                                  );
-                                },
-                                onAccept: (from) =>
-                                    Provider.of<CanvasViewModel>(context,
-                                        listen: false)
-                                        .moveCard(
-                                        from, {
-                                      "row": selectedCardMatrix.length,
-                                      "col": 0
-                                    }),
-                                onWillAccept: (data) =>
-                                data != null &&
-                                    data["row"] != null &&
-                                    data["col"] != null,
-                              )
-                            ]))),
-                SizedBox(
-                  //横方向の余白
-                  width: constraints.maxWidth -
-                      selectedCardRowLengthMax *
-                          constants.rawCardImageWidth *
-                          _canvasViewZoomRatio,
-                )
-              ]);
-            });
+      if (_canvasViewZoomRatio > 1.0) {
+        _canvasViewZoomRatio = 1.0;
       }
 
+      List<Widget> draggableImageMatrix = [];
 
+      draggableImageMatrix = selectedCardMatrix.map((row) {
+        int rowIndex = selectedCardMatrix.indexWhere((e) => e == row);
+
+        List<Widget> cardWidgets = row.map((card) {
+          int colIndex = row.indexWhere((e) => e.displayId == card.displayId);
+
+          return DragTarget<Map<String, int>>(
+              builder: (
+                BuildContext context,
+                List<dynamic> accepted,
+                List<dynamic> rejected,
+              ) {
+                return CanvasCard(
+                  key: ValueKey(card.displayId),
+                  card: card,
+                  scale: _canvasViewZoomRatio,
+                );
+              },
+              onAccept: (data) => Provider.of<CanvasViewModel>(context, listen: false)
+                  .moveCard(data, {"row": rowIndex, "col": colIndex}),
+              onWillAccept: (data) =>
+                  data is Map<String, int> &&
+                  data.keys.contains("row") &&
+                  data.keys.contains("col"));
+        }).toList();
+
+        cardWidgets.add(DragTarget<Map<String, int>>(
+          builder: (
+            BuildContext context,
+            List<dynamic> accepted,
+            List<dynamic> rejected,
+          ) {
+            return SizedBox(
+              //横方向の余白
+              width: (selectedCardRowLengthMax - row.length) *
+                  constants.rawCardImageWidth *
+                  _canvasViewZoomRatio,
+              height: constants.rawCardImageHeight * _canvasViewZoomRatio,
+            );
+          },
+          onAccept: (from) => Provider.of<CanvasViewModel>(context, listen: false)
+              .moveCard(from, {"row": rowIndex, "col": row.length}),
+          onWillAccept: (data) => data != null && data["row"] != null && data["col"] != null,
+        ));
+
+        return Row(children: cardWidgets);
+      }).toList();
+
+      return Row(children: [
+        SizedBox(
+            width: selectedCardRowLengthMax * constants.rawCardImageWidth * _canvasViewZoomRatio,
+            child: SingleChildScrollView(
+                child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                  SizedBox(
+                      height: constants.rawCardImageHeight *
+                          _canvasViewZoomRatio *
+                          selectedCardMatrix.length,
+                      child: RepaintBoundary(
+                          key: _globalKey,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: draggableImageMatrix))),
+                  DragTarget<Map<String, int>>(
+                    builder: (
+                      BuildContext context,
+                      List<dynamic> accepted,
+                      List<dynamic> rejected,
+                    ) {
+                      return SizedBox(
+                        //縦方向の余白
+                        width: selectedCardRowLengthMax *
+                            constants.rawCardImageWidth *
+                            _canvasViewZoomRatio,
+                        height: constraints.maxHeight -
+                            constants.rawCardImageHeight *
+                                _canvasViewZoomRatio *
+                                selectedCardMatrix.length,
+                      );
+                    },
+                    onAccept: (from) => Provider.of<CanvasViewModel>(context, listen: false)
+                        .moveCard(from, {"row": selectedCardMatrix.length, "col": 0}),
+                    onWillAccept: (data) =>
+                        data != null && data["row"] != null && data["col"] != null,
+                  )
+                ]))),
+        SizedBox(
+          //横方向の余白
+          width: constraints.maxWidth -
+              selectedCardRowLengthMax * constants.rawCardImageWidth * _canvasViewZoomRatio,
+        )
+      ]);
+    });
+  }
 
   Future<void> copyImageToClipBoard(BuildContext context) async {
     Future(() async {
       try {
-/*        RenderRepaintBoundary? boundary = _globalKey.currentContext
-            ?.findRenderObject() as RenderRepaintBoundary?;
-        if (boundary == null) {
-          return;
-        }
-
-        ui.Image image =
-        await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);*/
 
         List<List<ui.Image>> images = await getImages(
-            Provider.of<CanvasViewModel>(context, listen: false).selectedCards, Localizations.localeOf(context));
-        ImageMatrixPainter p = ImageMatrixPainter(matrix: images, imageWidth: constants.rawCardImageWidth, imageHeight: constants.rawCardImageHeight);
+            Provider.of<CanvasViewModel>(context, listen: false).selectedCards,
+            Localizations.localeOf(context));
+        ImageMatrixPainter p = ImageMatrixPainter(
+            matrix: images,
+            imageWidth: constants.rawCardImageWidth,
+            imageHeight: constants.rawCardImageHeight);
 
         ui.Image? image = await _generateRawImage(
             p,
-            images.fold<int>(0, (p, e) => e.length>p? e.length: p) * constants.rawCardImageWidth,
+            images.fold<int>(0, (p, e) => e.length > p ? e.length : p) *
+                constants.rawCardImageWidth,
             images.length * constants.rawCardImageHeight);
 
-        ByteData? byteData =
-        await image.toByteData(format: ui.ImageByteFormat.png);
+        ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
 
         if (byteData != null) {
           int zeroCount = 0;
-          for(var i = 0; i < byteData.lengthInBytes; i++) {
-            if(byteData.getInt8(i) == 0) {
+          for (var i = 0; i < byteData.lengthInBytes; i++) {
+            if (byteData.getInt8(i) == 0) {
               zeroCount++;
             }
           }
@@ -231,29 +208,47 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
   Future<void> downloadImage(BuildContext context) async {
     Future(() async {
       try {
-/*        RenderRepaintBoundary? boundary = _globalKey.currentContext
-            ?.findRenderObject() as RenderRepaintBoundary?;
-        if (boundary == null) {
-          return;
-        }
-
-        ui.Image image =
-        await boundary.toImage(pixelRatio: 1 / _canvasViewZoomRatio);*/
 
         List<List<ui.Image>> images = await getImages(
-            Provider.of<CanvasViewModel>(context, listen: false).selectedCards, Localizations.localeOf(context));
+            Provider.of<CanvasViewModel>(context, listen: false).selectedCards,
+            Localizations.localeOf(context));
 
+        for (var row = 0; row < images.length; row++) {
+          for (var col = 0; col < images[row].length; col++) {
+            if (images[row][col].width > constants.rawCardImageWidth) {
+              ByteData? bytes = await images[row][col].toByteData(format: ui.ImageByteFormat.png);
 
-        ImageMatrixPainter p = ImageMatrixPainter(matrix: images, imageWidth: constants.rawCardImageWidth, imageHeight: constants.rawCardImageHeight);
+              if (bytes == null) {continue;}
+
+              ByteBuffer buffer = bytes.buffer;
+              Uint8List unit8List = buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+              IMG.Image? baseSizeImage = IMG.decodeImage(unit8List);
+
+              if (baseSizeImage == null) {continue;}
+
+              IMG.Image resizeImage = IMG.copyResize(baseSizeImage, height: constants.rawCardImageHeight.floor(), width: constants.rawCardImageWidth.floor());
+              ui.Codec codec =
+                  await instantiateImageCodec(IMG.encodePng(resizeImage) as Uint8List);
+              ui.Image i = (await codec.getNextFrame()).image;
+              images[row][col] = i;
+              print("sssss");
+            }
+          }
+        }
+
+        ImageMatrixPainter p = ImageMatrixPainter(
+            matrix: images,
+            imageWidth: constants.rawCardImageWidth,
+            imageHeight: constants.rawCardImageHeight);
 
         print("_generateRawImage");
         ui.Image? image = await _generateRawImage(
             p,
-            images.fold<int>(0, (p, e) => e.length>p? e.length: p) * constants.rawCardImageWidth,
+            images.fold<int>(0, (p, e) => e.length > p ? e.length : p) *
+                constants.rawCardImageWidth,
             images.length * constants.rawCardImageHeight);
 
-        ByteData? byteData =
-        await image.toByteData(format: ui.ImageByteFormat.png);
+        ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
         if (byteData != null) {
           Uint8List pngBytes = byteData.buffer.asUint8List();
           await _download(pngBytes);
@@ -291,21 +286,23 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
   }
 
   Future<List<List<ui.Image>>> getImages(List<List<CardInfoHeader>> cards, Locale locale) {
-    return Future.wait(cards.map((row) => Future.wait(row.map((card)  {
-      if(card.isTransform) {
-        if(card.isFront) {
-          return  _fetchImage(card.firstFace.imageUrlLocale(locale));
-          //return await _fetchImage(card.firstFace.imageUrlLocale(locale));
-        } else {
-          return  _fetchImage(card.secondFace!.imageUrlLocale(locale));
-          //return await _fetchImage(card.secondFace!.imageUrlLocale(locale));
-        }
-      } else {
-        return _fetchImage(card.firstFace.imageUrlLocale(locale));
-        //ui.Image img = await  _fetchImage(card.firstFace.imageUrlLocale(locale));
-        //return img;
-      }
-    }).toList())).toList());
+    return Future.wait(cards
+        .map((row) => Future.wait(row.map((card) {
+              if (card.isTransform) {
+                if (card.isFront) {
+                  return _fetchImage(card.firstFace.imageUrlLocale(locale));
+                  //return await _fetchImage(card.firstFace.imageUrlLocale(locale));
+                } else {
+                  return _fetchImage(card.secondFace!.imageUrlLocale(locale));
+                  //return await _fetchImage(card.secondFace!.imageUrlLocale(locale));
+                }
+              } else {
+                return _fetchImage(card.firstFace.imageUrlLocale(locale));
+                //ui.Image img = await  _fetchImage(card.firstFace.imageUrlLocale(locale));
+                //return img;
+              }
+            }).toList()))
+        .toList());
   }
 
   Future<ui.Image> _fetchImage(String path) async {
@@ -329,7 +326,7 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
 
       print("resized.getBytes");
       Uint8List resizedBytes = image.getBytes();
-      
+
       ui.Codec codec = await ui.instantiateImageCodec(resizedBytes, allowUpscaling: true);
       ui.FrameInfo fi = await codec.getNextFrame();
       return fi.image;
@@ -364,21 +361,21 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
 
     return await picture.toImage(width.toInt(), height.toInt());
   }
-
 }
 
 class ImageMatrixPainter extends CustomPainter {
   final List<List<ui.Image>> matrix;
   final double imageWidth;
   final double imageHeight;
+
   ImageMatrixPainter({required this.matrix, required this.imageWidth, required this.imageHeight});
 
   @override
-  void paint(Canvas canvas, Size size) {
+  Future<void> paint(Canvas canvas, Size size) async {
     final paint = Paint();
 
-    for(var row = 0; row < matrix.length; row++) {
-      for(var col = 0; col < matrix[row].length; col++) {
+    for (var row = 0; row < matrix.length; row++) {
+      for (var col = 0; col < matrix[row].length; col++) {
         canvas.drawImage(matrix[row][col], Offset(col * imageWidth, row * imageHeight), paint);
       }
     }
