@@ -71,6 +71,9 @@ class SearchFilterFactory {
     }
 
     /****Sets****/
+    else if(sf == SearchFilter.setBrr) {
+      return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.setBrr, searchValue: "brr", searchKey: "set", filterType: SearchFilterType.set);
+    }
     else if(sf == SearchFilter.setBro) {
       return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.setBro, searchValue: "bro", searchKey: "set", filterType: SearchFilterType.set);
     }
