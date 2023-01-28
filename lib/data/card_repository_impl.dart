@@ -45,7 +45,7 @@ class CardRepositoryImpl implements CardRepository {
     List<Card> cards = await _localDataSource.get(query, locale);
     return Future<List<CardInfoHeader>>.value(cards.map((e) {
       CardInfoHeader cih = CardInfoHeader(e.convert());
-      if (cih.isTransform) {
+      if (cih.isTransform && e.backFace != null) {
         cih.cardFaces.add(e.backFace!.convert());
       }
       return cih;

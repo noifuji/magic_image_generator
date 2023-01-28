@@ -145,10 +145,11 @@ class SearchViewModel extends ChangeNotifier {
       }
       _searchResult = SearchResult(cards: results, isSuccess: true);
       sortSearchResults(locale);
-    } catch(e) {
+    } catch(e, stackTrace) {
       _searchResult = SearchResult(cards: [], isSuccess: false, exception: MIGException(100));
       if (kDebugMode) {
         print(e);
+        print(stackTrace);
       }
     }
 

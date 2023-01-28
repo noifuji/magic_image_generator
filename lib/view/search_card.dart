@@ -41,7 +41,7 @@ class _SearchCardState extends State<SearchCard> {
     List<Widget> overlays = [];
 
 
-    if(widget.card.isTransform) {
+    if(widget.card.isTransform && widget.card.cardFaces.length > 1) {
       overlays.add(_createFlipButton());
 
       if (widget.card.isFront) {
