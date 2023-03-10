@@ -20,6 +20,7 @@ import 'card.dart';
 ConditionによってIsarでのクエリが異なる。
 各キーワード毎に変換メソッドを作成する。
  */
+
 class CardLocalDataSource {
   static final conditionMap = {
     RelationalOperatorType.contains: ConditionType.contains,

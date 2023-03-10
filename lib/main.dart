@@ -142,7 +142,7 @@ class _MyAppState extends State<MyApp> {
     var isar = Isar.getInstance();
     if (isar == null || !isar.isOpen) {
       isar = await Isar.open(
-        schemas: [CardSchema, CardMasterVersionSchema],
+        schemas:[CardSchema, CardMasterVersionSchema],
       );
     }
 
