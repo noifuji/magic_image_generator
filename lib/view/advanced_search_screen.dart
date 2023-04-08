@@ -26,6 +26,7 @@ class AdvancedSearchScreen extends StatelessWidget {
     SearchFilter.typeEnchantment,
     SearchFilter.typeArtifact,
     SearchFilter.typeLand,
+    SearchFilter.typeBattle,
   ];
 
   final List<SearchFilter> _costValues = [
@@ -41,7 +42,7 @@ class AdvancedSearchScreen extends StatelessWidget {
   ];
 
   final List<SearchFilter> _cardSets = [
-    SearchFilter.setOne,SearchFilter.setBro,SearchFilter.setDmu,
+    SearchFilter.setMom,SearchFilter.setOne,SearchFilter.setBro,SearchFilter.setDmu,
     SearchFilter.setSnc,SearchFilter.setNeo,SearchFilter.setVow,SearchFilter.setMid,
     SearchFilter.setAfr,SearchFilter.setStx,SearchFilter.setKhm,SearchFilter.setZnr,
     SearchFilter.setM21,SearchFilter.setIko,SearchFilter.setThb,SearchFilter.setEld,

@@ -34,6 +34,7 @@
   "typeEnchantment": "エンチャント",
   "typeArtifact": "アーティファクト",
   "typeLand": "土地",
+  "typeBattle": "バトル",
 
   "searchKeyTypeCreature": "クリーチャー",
   "searchKeyTypePlaneswalker": "プレインズウォーカー",
@@ -42,6 +43,7 @@
   "searchKeyTypeEnchantment": "エンチャント",
   "searchKeyTypeArtifact": "アーティファクト",
   "searchKeyTypeLand": "土地",
+  "searchKeyTypeBattle": "バトル",
 
 
   "manaValue0": "0",
@@ -53,6 +55,7 @@
   "manaValue6": "6",
   "manaValue7AndMore": "7+",
 
+  "setMom": "機械兵団の進軍",
   "setOne": "ファイレクシア:完全なる統一",
   "setBrr": "旧枠アーティファクト",
   "setBro": "兄弟戦争",

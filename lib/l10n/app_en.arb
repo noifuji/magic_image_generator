@@ -35,6 +35,7 @@
     "typeEnchantment": "Enchantment",
     "typeArtifact": "Artifact",
     "typeLand": "Land",
+    "typeBattle": "Battle",
 
     "searchKeyTypeCreature": "creature",
     "searchKeyTypePlaneswalker": "planeswalker",
@@ -43,6 +44,7 @@
     "searchKeyTypeEnchantment": "enchantment",
     "searchKeyTypeArtifact": "artifact",
     "searchKeyTypeLand": "land",
+    "searchKeyTypeBattle": "battle",
 
 
     "manaValue0": "0",
@@ -54,6 +56,7 @@
     "manaValue6": "6",
     "manaValue7AndMore": "7+",
 
+    "setMom": "March of the Machine",
     "setOne": "Phyrexia: All Will Be One",
     "setBrr": "Retro Artifacts",
     "setBro": "The Brothers' War",

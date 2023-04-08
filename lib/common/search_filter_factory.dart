@@ -49,6 +49,8 @@ class SearchFilterFactory {
       return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.typePlaneswalker, searchValue: AppLocalizations.of(context)!.searchKeyTypePlaneswalker, searchKey: "t", filterType: SearchFilterType.type);
     } else if(sf == SearchFilter.typeSorcery) {
       return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.typeSorcery, searchValue: AppLocalizations.of(context)!.searchKeyTypeSorcery, searchKey: "t", filterType: SearchFilterType.type);
+    } else if(sf == SearchFilter.typeBattle) {
+      return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.typeBattle, searchValue: AppLocalizations.of(context)!.searchKeyTypeBattle, searchKey: "t", filterType: SearchFilterType.type);
     }
 
     /****Cmcs****/
@@ -71,6 +73,9 @@ class SearchFilterFactory {
     }
 
     /****Sets****/
+    else if(sf == SearchFilter.setMom) {
+      return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.setMom, searchValue: "mom", searchKey: "set", filterType: SearchFilterType.set);
+    }
     else if(sf == SearchFilter.setOne) {
       return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.setOne, searchValue: "one", searchKey: "set", filterType: SearchFilterType.set);
     }
