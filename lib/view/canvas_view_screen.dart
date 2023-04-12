@@ -249,16 +249,16 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
       if (card.isTransform) {
         if (card.isFront) {
           ui.Image img = await _fetchImage(card.firstFace.imageUrlLocale(locale));
-          ui.Image? rotated = await rotate(img, card.rotationAngle);
+          ui.Image? rotated = card.rotationAngle == 0 ? img : await rotate(img, card.rotationAngle);
           return card.copyWith(cardFaces: [card.cardFaces[0].copyWith(image: rotated), card.cardFaces[1]]);
         } else {
           ui.Image img = await _fetchImage(card.secondFace!.imageUrlLocale(locale));
-          ui.Image? rotated = await rotate(img, card.rotationAngle);
+          ui.Image? rotated = card.rotationAngle == 0 ? img : await rotate(img, card.rotationAngle);
           return card.copyWith(cardFaces: [card.cardFaces[0], card.cardFaces[1].copyWith(image: rotated), ]);
         }
       } else {
         ui.Image img = await _fetchImage(card.firstFace.imageUrlLocale(locale));
-        ui.Image? rotated = await rotate(img, card.rotationAngle);
+        ui.Image? rotated = card.rotationAngle == 0 ? img : await rotate(img, card.rotationAngle);
         return card.copyWith(cardFaces: [card.cardFaces[0].copyWith(image: rotated), ]);
       }
     }).toList()))
@@ -316,8 +316,6 @@ class ImageMatrixPainter extends CustomPainter {
 
     for (var row = 0; row < matrix.length; row++) {
       for (var col = 0; col < matrix[row].length; col++) {
-        double width = matrix[row][col].imageSize.width;
-        double height = matrix[row][col].imageSize.height;
 
         ui.Image? image = matrix[row][col].isTransform && !matrix[row][col].isFront ? matrix[row][col].cardFaces[1].image : matrix[row][col].cardFaces[0].image;
         //ui.Codec codec = await instantiateImageCodec(kTransparentImage);
