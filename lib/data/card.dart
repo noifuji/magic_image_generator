@@ -64,7 +64,7 @@ class Card {
         imageUrlJp: imageUrlJp,
         layout: layout,
         cmc: cmc,
-    );
+        isFront: !isBackFace);
 
     return ci;
   }

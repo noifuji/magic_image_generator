@@ -1,53 +1,56 @@
-import 'dart:ui';
+import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
-import 'package:uuid/uuid.dart';
 
-class CardInfo{
-  late String multiverseId;
-  late String name;
-  late String nameJpYomi;
-  late String _imageUrl;
-  late String _imageUrlJp;
-  late String layout;
-  late int cmc;
-  bool isFront = true;
-
+class CardInfo {
+  final String multiverseId;
+  final String name;
+  final String nameJpYomi;
+  final String imageUrl;
+  final String imageUrlJp;
+  final String layout;
+  final int cmc;
+  final bool isFront;
+  final ui.Image? image;
 
   String imageUrlLocale(Locale locale) {
-    if(locale.languageCode == "en") {
-      return _imageUrl;
-    } else if(locale.languageCode == "ja") {
-      return _imageUrlJp;
+    if (locale.languageCode == "en") {
+      return imageUrl;
+    } else if (locale.languageCode == "ja") {
+      return imageUrlJp;
     } else {
       throw Exception();
     }
   }
 
-  CardInfo({
-    required this.multiverseId,
-    required this.name,
-    required this.nameJpYomi,
-    required String imageUrl,
-    required String imageUrlJp,
-    required this.layout,
-    required this.cmc,
-  }) {
-    _imageUrl = imageUrl;
-    _imageUrlJp = imageUrlJp;
-  }
+  CardInfo(
+      {required this.multiverseId,
+      required this.name,
+      required this.nameJpYomi,
+      required this.imageUrl,
+      required this.imageUrlJp,
+      required this.layout,
+      required this.cmc,
+      required this.isFront,
+      this.image});
 
-  CardInfo copyWith() {
-    CardInfo card =CardInfo(
-      multiverseId: multiverseId,
-      name: name,
-      nameJpYomi: nameJpYomi,
-      imageUrl: _imageUrl,
-      imageUrlJp: _imageUrlJp,
-      layout: layout,
-      cmc: cmc,
-    );
-
-    return card;
-  }
+  CardInfo copyWith(
+      {String? multiverseId,
+      String? name,
+      String? nameJpYomi,
+      String? imageUrl,
+      String? imageUrlJp,
+      String? layout,
+      int? cmc,
+      bool? isFront,
+      ui.Image? image}) =>CardInfo(
+        multiverseId: multiverseId ?? this.multiverseId,
+        name: name ?? this.name,
+        nameJpYomi: nameJpYomi ?? this.nameJpYomi,
+        imageUrl: imageUrl ?? this.imageUrl,
+        imageUrlJp: imageUrlJp ?? this.imageUrlJp,
+        layout: layout ?? this.layout,
+        cmc: cmc ?? this.cmc,
+        isFront: isFront ?? this.isFront,
+        image: image);
 }

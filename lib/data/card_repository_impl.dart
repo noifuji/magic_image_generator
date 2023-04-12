@@ -3,12 +3,14 @@ import 'dart:ui';
 import 'package:magic_image_generator/data/card_local_data_source.dart';
 import 'package:magic_image_generator/data/card_master_version.dart';
 import 'package:magic_image_generator/domain/search_query_symbol.dart';
+import 'package:uuid/uuid.dart';
 
 import '../common/util.dart';
 import '../domain/card_repository.dart';
 import '../model/card_info_header.dart';
 import 'card.dart';
 import 'card_remote_data_source.dart';
+import '../common/constants.dart' as constants;
 
 class CardRepositoryImpl implements CardRepository {
   final CardLocalDataSource _localDataSource;
@@ -40,14 +42,24 @@ class CardRepositoryImpl implements CardRepository {
   }
 
   @override
-  Future<List<CardInfoHeader>> get(
-      List<SearchQuerySymbol> query, Locale locale) async {
+  Future<List<CardInfoHeader>> get(List<SearchQuerySymbol> query, Locale locale) async {
     List<Card> cards = await _localDataSource.get(query, locale);
     return Future<List<CardInfoHeader>>.value(cards.map((e) {
-      CardInfoHeader cih = CardInfoHeader(e.convert());
-      if (cih.isTransform && e.backFace != null) {
-        cih.cardFaces.add(e.backFace!.convert());
+      var front = e.convert();
+      var isTransform = (front.layout == "transform" || front.layout == "modal_dfc" || front.layout == "meld");
+      var cardFaces = [front];
+      if (isTransform && e.backFace != null) {
+        cardFaces.add(e.backFace!.convert());
       }
+
+      CardInfoHeader cih = CardInfoHeader(
+          displayId: const Uuid().v1(),
+          cardFaces: cardFaces,
+          isTransform: isTransform,
+          isFront: true,
+          imageSize: const Size(constants.rawCardImageWidth, constants.rawCardImageHeight),
+          rotationAngle: 0);
+
       return cih;
     }).toList());
   }

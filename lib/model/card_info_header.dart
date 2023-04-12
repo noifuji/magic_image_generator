@@ -1,27 +1,31 @@
-import 'package:uuid/uuid.dart';
+import 'package:flutter/material.dart';
 
 import 'card_info.dart';
 
 class CardInfoHeader {
-  String displayId = const Uuid().v1();
-  late bool isTransform;
-  List<CardInfo> cardFaces = [];
-  bool isFront = true;
+  final String displayId;
+  final List<CardInfo> cardFaces;
+  final bool isTransform;
+  final bool isFront;
+  final Size imageSize;
+  final double rotationAngle;
 
   CardInfo get firstFace => cardFaces.first;
   CardInfo? get secondFace => cardFaces[1];
 
-  CardInfoHeader(CardInfo card) {
-    isTransform = (card.layout == "transform" || card.layout == "modal_dfc" || card.layout == "meld");
-    cardFaces.add(card);
-  }
+  CardInfoHeader(
+      {required this.displayId,
+      required this.cardFaces,
+      required this.isTransform,
+      required this.isFront,
+      required this.imageSize,
+      required this.rotationAngle});
 
-  CardInfoHeader copyWith() {
-    var cih = CardInfoHeader(cardFaces.first);
-    if(cih.isTransform) {
-      cih.cardFaces.addAll(cardFaces.sublist(1));
-    }
-
-    return cih;
-  }
+  CardInfoHeader copyWith({String? displayId, List<CardInfo>? cardFaces, bool? isTransform, bool? isFront, Size? imageSize, double? rotationAngle}) => CardInfoHeader(
+      displayId: displayId ?? this.displayId,
+      cardFaces: cardFaces ?? this.cardFaces,
+      isTransform: isTransform ?? this.isTransform,
+      isFront: isFront ?? this.isFront,
+      imageSize: imageSize ?? this.imageSize,
+      rotationAngle: rotationAngle ?? this.rotationAngle);
 }

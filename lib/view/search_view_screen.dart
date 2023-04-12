@@ -7,6 +7,7 @@ import 'package:magic_image_generator/view/search_box_widget.dart';
 import 'package:magic_image_generator/view/search_card.dart';
 import 'package:magic_image_generator/view/sort_drop_down.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../common/constants.dart' as constants;
 import '../common/mig_exception.dart';
@@ -101,7 +102,7 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
         childAspectRatio: constants.cardAspectRatio,
         children: List.generate(cards.length, (index) {
           return GestureDetector(
-              onTap: () => Provider.of<CanvasViewModel>(context, listen: false).addSelectedCards(0, cards[index].copyWith()),
+              onTap: () => Provider.of<CanvasViewModel>(context, listen: false).addSelectedCards(0, cards[index].copyWith(displayId: const Uuid().v1())),
               child: Container(
                   margin: const EdgeInsets.only(
                       top: 3.0,

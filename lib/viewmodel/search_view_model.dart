@@ -38,7 +38,7 @@ class SearchViewModel extends ChangeNotifier {
 
   void flip(CardInfoHeader card) {
     int index = _searchResult.cards.indexWhere((element) => element.displayId == card.displayId);
-    _searchResult.cards[index].isFront = !_searchResult.cards[index].isFront;
+    _searchResult.cards[index] = _searchResult.cards[index].copyWith(isFront: !_searchResult.cards[index].isFront);
     notifyListeners();
   }
 

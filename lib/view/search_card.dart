@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:magic_image_generator/model/card_info_header.dart';
+import 'package:magic_image_generator/view/widgets/flippable_image.dart';
 import 'package:magic_image_generator/view/widgets/overlay_flippable_image.dart';
 import 'package:magic_image_generator/viewmodel/search_view_model.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,7 @@ class SearchCard extends StatefulWidget {
   SearchCard({
     Key? key,
     required this.card,
-    required this.scale
+    required this.scale,
   }) : super(key: key);
 
   @override
@@ -24,13 +25,13 @@ class SearchCard extends StatefulWidget {
 }
 
 class _SearchCardState extends State<SearchCard> {
-  late OverlayFlippableImageController _ofiController;
+  late final FlippableImageController _fiController;
 
 
   @override
   void initState() {
     super.initState();
-    _ofiController = OverlayFlippableImageController();
+    _fiController = FlippableImageController();
 
   }
 
@@ -66,13 +67,14 @@ class _SearchCardState extends State<SearchCard> {
           //backgroundBlendMode: BlendMode.srcATop,
         ),
         child:OverlayFlippableImage(
-          width: constants.rawCardImageWidth * widget.scale,
+          width: widget.card.imageSize.width,
+          height: widget.card.imageSize.height,
+          rotationAngle: widget.card.rotationAngle,
           frontSide: frontImage,
-          controller: _ofiController,
+          controller: _fiController,
           backSide: backImage,
-          onFlipped: () =>
-              Provider.of<SearchViewModel>(context, listen: false).flip(widget.card),
           overlays: overlays,
+          onFlipped: ()=> Provider.of<CanvasViewModel>(context, listen: false).flip(widget.card),
         ));
   }
 
@@ -96,7 +98,7 @@ class _SearchCardState extends State<SearchCard> {
                   size: 20.0 * widget.scale,
                 ),
                 color: Theme.of(context).colorScheme.onPrimary,
-                onPressed: () => _ofiController.flip()),
+                onPressed: () => _fiController.flip()),
           ),
         ));
   }

@@ -1,4 +1,4 @@
-
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -9,6 +9,11 @@ import '../model/card_info_header.dart';
 
 class CanvasViewModel extends ChangeNotifier {
   List<List<CardInfoHeader>> _selectedCards = [];
+
+  set selectedCards(List<List<CardInfoHeader>> value) {
+    _selectedCards = value;
+  }
+
   List<List<CardInfoHeader>> get selectedCards => _selectedCards;
 
   void setSelectedCards(List<List<CardInfoHeader>> cards) {
@@ -43,7 +48,18 @@ class CanvasViewModel extends ChangeNotifier {
     int rowIndex = selectedCards.indexWhere((row) => row.where((c) => c.displayId == card.displayId).toList().isNotEmpty);
     int colIndex = selectedCards[rowIndex].indexWhere((c) => c.displayId == card.displayId);
 
-    _selectedCards[rowIndex][colIndex].isFront = !_selectedCards[rowIndex][colIndex].isFront;
+    _selectedCards[rowIndex][colIndex] = _selectedCards[rowIndex][colIndex].copyWith(isFront: !_selectedCards[rowIndex][colIndex].isFront);
+    notifyListeners();
+  }
+
+  void rotate90cw(CardInfoHeader card) {
+    int rowIndex = selectedCards.indexWhere((row) => row.where((c) => c.displayId == card.displayId).toList().isNotEmpty);
+    int colIndex = selectedCards[rowIndex].indexWhere((c) => c.displayId == card.displayId);
+
+    var angle = _selectedCards[rowIndex][colIndex].rotationAngle;
+    angle = (angle + pi/2) % (2 * pi);
+    var size =  _selectedCards[rowIndex][colIndex].imageSize;
+    _selectedCards[rowIndex][colIndex] = _selectedCards[rowIndex][colIndex].copyWith(rotationAngle: angle, imageSize: size.flipped);
     notifyListeners();
   }
 
@@ -153,5 +169,19 @@ class CanvasViewModel extends ChangeNotifier {
     _selectedCards = _selectedCards
         .where((element) => element.isNotEmpty)
         .toList();
+  }
+
+  double getRowWidth(int row) {
+    if(row < 0 || row >= _selectedCards.length) {
+      return 0;
+    }
+    return _selectedCards[row].fold<double>(0, (previousValue, element) => previousValue + element.imageSize.width);
+  }
+
+  double getRowHeight(int row) {
+    if(row < 0 || row >= _selectedCards.length) {
+      return 0;
+    }
+    return _selectedCards[row].fold<double>(0, (previous, e) => previous = (previous < e.imageSize.height ? e.imageSize.height : previous));
   }
 }
