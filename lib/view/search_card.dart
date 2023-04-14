@@ -1,20 +1,16 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:magic_image_generator/model/card_info_header.dart';
 import 'package:magic_image_generator/view/widgets/flippable_image.dart';
 import 'package:magic_image_generator/view/widgets/overlay_flippable_image.dart';
-import 'package:magic_image_generator/viewmodel/search_view_model.dart';
 import 'package:provider/provider.dart';
-import 'package:transparent_image/transparent_image.dart';
-import '../common/constants.dart' as constants;
+
 import '../viewmodel/canvas_view_model.dart';
 
 class SearchCard extends StatefulWidget {
-  late CardInfoHeader card;
-  late double scale;
+  final CardInfoHeader card;
+  final double scale;
 
-  SearchCard({
+  const SearchCard({
     Key? key,
     required this.card,
     required this.scale,

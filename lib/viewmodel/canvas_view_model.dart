@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:magic_image_generator/domain/generate_card_image_usecase.dart';
 
 import 'dart:ui' as ui;
@@ -171,17 +170,29 @@ class CanvasViewModel extends ChangeNotifier {
         .toList();
   }
 
-  double getRowWidth(int row) {
+  double getMatrixRowWidth(int row) {
     if(row < 0 || row >= _selectedCards.length) {
       return 0;
     }
     return _selectedCards[row].fold<double>(0, (previousValue, element) => previousValue + element.imageSize.width);
   }
 
-  double getRowHeight(int row) {
+  double getMatrixRowHeight(int row) {
     if(row < 0 || row >= _selectedCards.length) {
       return 0;
     }
     return _selectedCards[row].fold<double>(0, (previous, e) => previous = (previous < e.imageSize.height ? e.imageSize.height : previous));
+  }
+
+  double getMatrixWidth() {
+    var rows = _selectedCards.asMap().entries.map((e) => getMatrixRowWidth(e.key)).toList();
+    if(rows.isEmpty) {
+      return 0;
+    }
+    return rows.fold(0, max);
+  }
+
+  double getMatrixHeight() {
+    return _selectedCards.asMap().entries.fold(0, (previousValue, element) => previousValue + getMatrixRowHeight(element.key));
   }
 }

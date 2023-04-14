@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../common/constants.dart' as constants;
+import '../common/util.dart';
 import '../model/card_info_header.dart';
 
 class CanvasViewScreen extends StatefulWidget {
@@ -45,17 +46,13 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
     List<List<CardInfoHeader>> selectedCardMatrix =
         Provider.of<CanvasViewModel>(context).selectedCards;
 
-    double matrixWidthMax = selectedCardMatrix.map((e) => e.fold<double>(0, (previousValue, element) => previousValue + element.imageSize.width))
-    .fold<double>(0, (previousValue, element) => previousValue = previousValue < element ? element : previousValue);
-
-    double matrixHeightMax = selectedCardMatrix.map((element) => element.fold<double>(0, (previous, e) => previous = (previous < e.imageSize.height ? e.imageSize.height : previous)))
-    .fold<double>(0, (previousValue, element) => previousValue = previousValue + element);
+    double matrixWidth = Provider.of<CanvasViewModel>(context).getMatrixWidth();
+    double matrixHeight = Provider.of<CanvasViewModel>(context).getMatrixHeight();
 
     return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
       _canvasViewZoomRatio = min(
-          constraints.maxWidth / (matrixWidthMax + 5),
-          (constraints.maxHeight) /
-              ((selectedCardMatrix.length + 1) * constants.rawCardImageHeight));
+          constraints.maxWidth / (matrixWidth + 5),
+          (constraints.maxHeight) / (matrixHeight + constants.rawCardImageHeight));
 
       if (_canvasViewZoomRatio > 1.0) {
         _canvasViewZoomRatio = 1.0;
@@ -97,8 +94,8 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
           ) {
             return SizedBox(
               //横方向の余白
-              width: (matrixWidthMax - Provider.of<CanvasViewModel>(context, listen: false).getRowWidth(rowIndex))* _canvasViewZoomRatio,
-              height: Provider.of<CanvasViewModel>(context, listen: false).getRowHeight(rowIndex) * _canvasViewZoomRatio,
+              width: (matrixWidth - Provider.of<CanvasViewModel>(context, listen: false).getMatrixRowWidth(rowIndex))* _canvasViewZoomRatio,
+              height: Provider.of<CanvasViewModel>(context, listen: false).getMatrixRowHeight(rowIndex) * _canvasViewZoomRatio,
             );
           },
           onAccept: (from) => Provider.of<CanvasViewModel>(context, listen: false)
@@ -111,14 +108,14 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
 
       return Row(children: [
         SizedBox(
-            width: matrixWidthMax* _canvasViewZoomRatio,
+            width: matrixWidth* _canvasViewZoomRatio,
             child: SingleChildScrollView(
                 child: Column(
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                   SizedBox(
-                      height: matrixHeightMax * _canvasViewZoomRatio,
+                      height: matrixHeight * _canvasViewZoomRatio,
                       child: RepaintBoundary(
                           key: _globalKey,
                           child: Column(
@@ -132,8 +129,8 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
                     ) {
                       return SizedBox(
                         //縦方向の余白
-                        width: matrixWidthMax * _canvasViewZoomRatio,
-                        height: constraints.maxHeight - matrixHeightMax * _canvasViewZoomRatio,
+                        width: matrixWidth * _canvasViewZoomRatio,
+                        height: constraints.maxHeight - matrixHeight * _canvasViewZoomRatio,
                       );
                     },
                     onAccept: (from) => Provider.of<CanvasViewModel>(context, listen: false)
@@ -144,19 +141,33 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
                 ]))),
         SizedBox(
           //横方向の余白
-          width: constraints.maxWidth - matrixWidthMax * _canvasViewZoomRatio,
+          width: constraints.maxWidth - matrixWidth * _canvasViewZoomRatio,
         )
       ]);
     });
   }
 
-  Future<ui.Image> createImage() async {
-    var selectedCardMatrix = Provider.of<CanvasViewModel>(context, listen: false).selectedCards;
-    double matrixWidthMax = selectedCardMatrix.map((e) => e.fold<double>(0, (previousValue, element) => previousValue + element.imageSize.width))
-        .fold<double>(0, (previousValue, element) => previousValue = previousValue < element ? element : previousValue);
+  /*
+  *
+  * UI ボタンおす
+  * LO 各画像データを取得して配列にいれる　getImages, fetchImage, rotate
+  * LO 1枚の画像につなぐ _generateRawImage
+  * LO コピーまたはダウンロード処理 copy, download
+  * UI エラーメッセージ
+  *
+  * VM copyImageToClipBoard
+  * VM downloadImage
+  * DO fetchImages
+  * DO mergeImages
+  * DO copy
+  * DO download
+  *
+  * */
 
-    double matrixHeightMax = selectedCardMatrix.map((element) => element.fold<double>(0, (previous, e) => previous = (previous < e.imageSize.height ? e.imageSize.height : previous)))
-        .fold<double>(0, (previousValue, element) => previousValue = previousValue + element);
+  Future<ui.Image> createImage() async {
+    double matrixWidthMax = Provider.of<CanvasViewModel>(context, listen: false).getMatrixWidth();
+    double matrixHeightMax = Provider.of<CanvasViewModel>(context, listen: false).getMatrixHeight();
+
     await getImages(Localizations.localeOf(context));
     ImageMatrixPainter p = ImageMatrixPainter(matrix: Provider.of<CanvasViewModel>(context, listen: false).selectedCards,);
 
@@ -230,7 +241,7 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
 
       // set the name of the file we want the image to get
       // downloaded to
-      a.download = Uuid().v1() + '.png';
+      a.download = '${const Uuid().v1()}.png';
 
       // and we click the AnchorElement which downloads the image
       a.click();
