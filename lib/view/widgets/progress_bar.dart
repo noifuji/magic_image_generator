@@ -1,45 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:magic_image_generator/common/util.dart';
 
 class ProgressBar extends StatefulWidget {
-  final ProgressController controller;
+  final ProgressBarController controller;
 
-  ProgressBar({required this.controller});
+  const ProgressBar({Key? key, required this.controller}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => ProgressBarState();
-
 }
 
 class ProgressBarState extends State<ProgressBar> {
-  double _progress = 0;
-
-  void setProgress(double value) {
-    setState(() {
-      _progress = value;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    widget.controller.state = this;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Column(children:[
-      Text("Loading Data......${(_progress*100).round()}%",
-        style: const TextStyle(color: Colors.white,fontSize: 20,decoration: TextDecoration.none),),
-      LinearProgressIndicator(
-      value: _progress,
-      semanticsLabel: 'progress',
-    )]);
+    return ValueListenableBuilder(
+        valueListenable: widget.controller,
+        builder: (BuildContext context, double progress, Widget? child) {
+          Util.printTimeStamp("progress updated = $progress");
+          return TweenAnimationBuilder<double>(
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeIn,
+            tween: Tween<double>(
+              begin: 0,
+              end: progress,
+            ),
+            builder: (context, value, _) {
+              Util.printTimeStamp("animation value = $value");
+              return Column(children: [
+                Text(
+                  "Loading Data......${(value * 100).round()}%",
+                  style: const TextStyle(color: Colors.white, fontSize: 20, decoration: TextDecoration.none),
+                ),
+                LinearProgressIndicator(
+                  value: value,
+                  semanticsLabel: 'progress',
+                  minHeight: 15,
+                )
+              ]);
+            },
+          );
+        });
   }
-
 }
 
-class ProgressController {
-  ProgressBarState? state;
-
-  void setProgress(double value) => state?.setProgress(value);
+class ProgressBarController extends ValueNotifier<double> {
+  ProgressBarController(double value) : super(value);
 }

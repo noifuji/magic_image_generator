@@ -5,8 +5,6 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:isar/isar.dart';
@@ -107,7 +105,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late ProgressController _progressController;
+  late ProgressBarController _progressController;
   late SharedPreferences prefs;
   late Future<CardRepository> _initAppFuture;
   SearchViewModel? _searchViewModel;
@@ -117,7 +115,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _progressController = ProgressController();
+    _progressController = ProgressBarController(0);
     _initAppFuture = _initApp();
   }
 
@@ -125,7 +123,7 @@ class _MyAppState extends State<MyApp> {
     Util.printTimeStamp("_MyAppState _initApp");
     prefs = await SharedPreferences.getInstance();
 
-    _progressController.setProgress(0.1);
+    _progressController.value = 0.1;
 
     String? languageCode = prefs.getString("languageCode");
     if (languageCode == null) {
@@ -143,14 +141,14 @@ class _MyAppState extends State<MyApp> {
       );
     }
 
-    _progressController.setProgress(0.5);
+    _progressController.value = 0.5;
 
     CardLocalDataSource localDataSource = CardLocalDataSource(isar);
     CardRemoteDataSource remoteDataSource = CardRemoteDataSource(CardFetchCsvApi());
     CardRepository repo = CardRepositoryImpl(localDataSource, remoteDataSource);
-    await repo.init(onProgress: (value) => _progressController.setProgress(0.5 + 0.5 * value));
+    await repo.init(onProgress: (value) => _progressController.value =  (0.5 + 0.5 * value));
 
-    _progressController.setProgress(1.0);
+    _progressController.value = 1.0;
 
     return Future<CardRepository>.value(repo);
   }
