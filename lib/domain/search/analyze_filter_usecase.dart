@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../common/search_filter.dart';
-import '../common/constants.dart' as constants;
-import '../common/search_filter_factory.dart';
+import '../../common/search_filter.dart';
+import '../../common/constants.dart' as constants;
+import '../../common/search_filter_factory.dart';
 
 class AnalyzeFilterUseCase {
 

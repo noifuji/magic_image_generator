@@ -3,16 +3,16 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
 import 'package:magic_image_generator/data/card_master_version.dart';
-import 'package:magic_image_generator/domain/rarity_type.dart';
-import 'package:magic_image_generator/domain/relational_operator_type.dart';
-import 'package:magic_image_generator/domain/search_condition.dart';
-import 'package:magic_image_generator/domain/search_keyword_type.dart';
-import 'package:magic_image_generator/domain/search_operator.dart';
-import 'package:magic_image_generator/domain/search_operator_type.dart';
+import 'package:magic_image_generator/domain/search/rarity_type.dart';
+import 'package:magic_image_generator/domain/search/relational_operator_type.dart';
+import 'package:magic_image_generator/domain/search/search_condition.dart';
+import 'package:magic_image_generator/domain/search/search_keyword_type.dart';
+import 'package:magic_image_generator/domain/search/search_operator.dart';
+import 'package:magic_image_generator/domain/search/search_operator_type.dart';
 
 import '../common/util.dart';
-import '../domain/color_type.dart';
-import '../domain/search_query_symbol.dart';
+import '../domain/search/color_type.dart';
+import '../domain/search/search_query_symbol.dart';
 import 'card.dart';
 
 /*

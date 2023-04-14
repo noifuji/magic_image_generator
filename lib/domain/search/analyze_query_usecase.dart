@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:magic_image_generator/domain/search_condition.dart';
-import 'package:magic_image_generator/domain/search_condition_mapper.dart';
-import 'package:magic_image_generator/domain/search_operator.dart';
-import 'package:magic_image_generator/domain/search_operator_type.dart';
-import 'package:magic_image_generator/domain/search_query_symbol.dart';
+import 'package:magic_image_generator/domain/search/search_condition.dart';
+import 'package:magic_image_generator/domain/search/search_condition_mapper.dart';
+import 'package:magic_image_generator/domain/search/search_operator.dart';
+import 'package:magic_image_generator/domain/search/search_operator_type.dart';
+import 'package:magic_image_generator/domain/search/search_query_symbol.dart';
 
 class AnalyzeQueryUseCase {
 

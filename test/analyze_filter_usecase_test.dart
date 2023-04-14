@@ -5,18 +5,13 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:magic_image_generator/common/search_filter.dart';
 import 'package:magic_image_generator/common/search_filter_factory.dart';
-import 'package:magic_image_generator/domain/analyze_filter_usecase.dart';
-import 'package:magic_image_generator/domain/analyze_query_usecase.dart';
-import 'package:magic_image_generator/domain/relational_operator_type.dart';
-import 'package:magic_image_generator/domain/search_condition.dart';
-import 'package:magic_image_generator/domain/search_keyword_type.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:magic_image_generator/domain/search/analyze_filter_usecase.dart';
 
 
 class LocalizationsInj extends StatelessWidget {

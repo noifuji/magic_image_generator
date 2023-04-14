@@ -10,8 +10,8 @@ import '../common/constants.dart' as constants;
 import '../common/search_filter.dart';
 import '../common/search_filter_factory.dart';
 import '../common/util.dart';
-import '../domain/analyze_filter_usecase.dart';
-import '../domain/analyze_query_usecase.dart';
+import '../domain/search/analyze_filter_usecase.dart';
+import '../domain/search/analyze_query_usecase.dart';
 import '../model/card_info_header.dart';
 
 class SearchViewModel extends ChangeNotifier {

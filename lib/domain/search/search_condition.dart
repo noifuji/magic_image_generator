@@ -1,6 +1,6 @@
-import 'package:magic_image_generator/domain/relational_operator_type.dart';
-import 'package:magic_image_generator/domain/search_keyword_type.dart';
-import 'package:magic_image_generator/domain/search_query_symbol.dart';
+import 'package:magic_image_generator/domain/search/relational_operator_type.dart';
+import 'package:magic_image_generator/domain/search/search_keyword_type.dart';
+import 'package:magic_image_generator/domain/search/search_query_symbol.dart';
 
 class SearchCondition implements SearchQuerySymbol {
   static final Map<String, RelationalOperatorType> relationalOperatorMap = {

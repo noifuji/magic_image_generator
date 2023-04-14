@@ -1,9 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
-import 'package:magic_image_generator/domain/generate_card_image_usecase.dart';
+import 'package:magic_image_generator/domain/canvas/download_image_web_usecase.dart';
+import 'package:magic_image_generator/domain/canvas/fetch_card_images_usecase.dart';
+import 'package:magic_image_generator/domain/canvas/merge_card_images_usecase.dart';
 
 import 'dart:ui' as ui;
+import '../domain/canvas/copy_image_to_clipboard_web_usecase.dart';
 import '../model/card_info_header.dart';
 
 class CanvasViewModel extends ChangeNotifier {
@@ -157,13 +160,6 @@ class CanvasViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<ui.Image> generateSelectedCardImage(Locale locale, double cardWidth, double cardHeight, ui.Image img) {
-    var generator  = GenerateCardImageUseCase();
-
-    return generator.call(_selectedCards, cardWidth, cardHeight, locale, img);
-
-  }
-
   void _removeEmptyRow() {
     _selectedCards = _selectedCards
         .where((element) => element.isNotEmpty)
@@ -194,5 +190,43 @@ class CanvasViewModel extends ChangeNotifier {
 
   double getMatrixHeight() {
     return _selectedCards.asMap().entries.fold(0, (previousValue, element) => previousValue + getMatrixRowHeight(element.key));
+  }
+
+  Future<void> copyImageToClipBoard(Locale locale, {Function? callback, Function()? error}) async {
+    var fetch  = FetchCardImagesUsecase();
+    var merge  = MergeCardImageUseCase();
+    var copy = CopyImageToClipboardWebUsecase();
+
+    try {
+      selectedCards = await fetch.call(selectedCards, locale);
+      ui.Image image = await merge.call(selectedCards, getMatrixWidth(), getMatrixHeight());
+      await copy.call(image);
+      if(callback != null) {
+        callback();
+      }
+    } catch(e) {
+      if(error != null) {
+        error();
+      }
+    }
+  }
+
+  Future<void> downloadImage(Locale locale, {Function? callback, Function? error}) async {
+    var fetch  = FetchCardImagesUsecase();
+    var merge  = MergeCardImageUseCase();
+    var download = DownloadImageWebUsecase();
+
+    try {
+      selectedCards = await fetch.call(selectedCards, locale);
+      ui.Image image = await merge.call(selectedCards, getMatrixWidth(), getMatrixHeight());
+      await download.call(image);
+      if(callback != null) {
+        callback();
+      }
+    } catch(e) {
+      if(error != null) {
+        error();
+      }
+    }
   }
 }

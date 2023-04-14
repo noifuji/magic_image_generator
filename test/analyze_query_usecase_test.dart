@@ -6,10 +6,10 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:magic_image_generator/domain/analyze_query_usecase.dart';
-import 'package:magic_image_generator/domain/relational_operator_type.dart';
-import 'package:magic_image_generator/domain/search_condition.dart';
-import 'package:magic_image_generator/domain/search_keyword_type.dart';
+import 'package:magic_image_generator/domain/search/analyze_query_usecase.dart';
+import 'package:magic_image_generator/domain/search/relational_operator_type.dart';
+import 'package:magic_image_generator/domain/search/search_condition.dart';
+import 'package:magic_image_generator/domain/search/search_keyword_type.dart';
 
 
 void main() {

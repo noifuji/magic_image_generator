@@ -8,7 +8,7 @@ import 'package:magic_image_generator/data/card_fetch_csv_api.dart';
 import 'package:magic_image_generator/data/card_local_data_source.dart';
 import 'package:magic_image_generator/data/card_remote_data_source.dart';
 import 'package:magic_image_generator/data/card_repository_impl.dart';
-import 'package:magic_image_generator/domain/analyze_query_usecase.dart';
+import 'package:magic_image_generator/domain/search/analyze_query_usecase.dart';
 import 'package:magic_image_generator/domain/card_repository.dart';
 import 'package:magic_image_generator/model/card_info.dart';
 import 'package:magic_image_generator/model/card_info_header.dart';

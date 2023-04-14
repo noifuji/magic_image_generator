@@ -1,8 +1,8 @@
-import 'package:magic_image_generator/domain/color_type.dart';
-import 'package:magic_image_generator/domain/rarity_type.dart';
-import 'package:magic_image_generator/domain/relational_operator_type.dart';
-import 'package:magic_image_generator/domain/search_condition.dart';
-import 'package:magic_image_generator/domain/search_keyword_type.dart';
+import 'package:magic_image_generator/domain/search/color_type.dart';
+import 'package:magic_image_generator/domain/search/rarity_type.dart';
+import 'package:magic_image_generator/domain/search/relational_operator_type.dart';
+import 'package:magic_image_generator/domain/search/search_condition.dart';
+import 'package:magic_image_generator/domain/search/search_keyword_type.dart';
 
 class SearchConditionMapper {
   static final Map<String, RelationalOperatorType> relationalOperatorMap = {

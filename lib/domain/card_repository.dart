@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:magic_image_generator/domain/search_query_symbol.dart';
+import 'package:magic_image_generator/domain/search/search_query_symbol.dart';
 
 import '../model/card_info_header.dart';
 
