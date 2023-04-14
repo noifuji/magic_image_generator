@@ -5,6 +5,7 @@ import 'package:magic_image_generator/view/widgets/overlay_flippable_image.dart'
 import 'package:provider/provider.dart';
 
 import '../viewmodel/canvas_view_model.dart';
+import '../viewmodel/search_view_model.dart';
 
 class SearchCard extends StatefulWidget {
   final CardInfoHeader card;
@@ -70,7 +71,7 @@ class _SearchCardState extends State<SearchCard> {
           controller: _fiController,
           backSide: backImage,
           overlays: overlays,
-          onFlipped: ()=> Provider.of<CanvasViewModel>(context, listen: false).flip(widget.card),
+          onFlipped: ()=> Provider.of<SearchViewModel>(context, listen: false).flip(widget.card),
         ));
   }
 

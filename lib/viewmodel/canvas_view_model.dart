@@ -12,10 +12,6 @@ import '../model/card_info_header.dart';
 class CanvasViewModel extends ChangeNotifier {
   List<List<CardInfoHeader>> _selectedCards = [];
 
-  set selectedCards(List<List<CardInfoHeader>> value) {
-    _selectedCards = value;
-  }
-
   List<List<CardInfoHeader>> get selectedCards => _selectedCards;
 
   void setSelectedCards(List<List<CardInfoHeader>> cards) {
@@ -198,8 +194,8 @@ class CanvasViewModel extends ChangeNotifier {
     var copy = CopyImageToClipboardWebUsecase();
 
     try {
-      selectedCards = await fetch.call(selectedCards, locale);
-      ui.Image image = await merge.call(selectedCards, getMatrixWidth(), getMatrixHeight());
+      _selectedCards = await fetch.call(_selectedCards, locale);
+      ui.Image image = await merge.call(_selectedCards, getMatrixWidth(), getMatrixHeight());
       await copy.call(image);
       if(callback != null) {
         callback();
@@ -217,8 +213,8 @@ class CanvasViewModel extends ChangeNotifier {
     var download = DownloadImageWebUsecase();
 
     try {
-      selectedCards = await fetch.call(selectedCards, locale);
-      ui.Image image = await merge.call(selectedCards, getMatrixWidth(), getMatrixHeight());
+      _selectedCards = await fetch.call(_selectedCards, locale);
+      ui.Image image = await merge.call(_selectedCards, getMatrixWidth(), getMatrixHeight());
       await download.call(image);
       if(callback != null) {
         callback();
