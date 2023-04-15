@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:magic_image_generator/viewmodel/app_settings_view_model.dart';
+import 'package:magic_image_generator/viewmodel/app_language.dart';
 import 'package:provider/provider.dart';
 
 class LanguageDropDownList extends StatelessWidget {
+  const LanguageDropDownList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(children:[
       const Icon(Icons.language),
       DropdownButton<String>(
-      value: Provider.of<AppSettingsViewModel>(context).getLanguageCode(),
+      value: Provider.of<AppLanguage>(context).appLocale.languageCode,
       elevation: 16,
       //style: TextStyle(color: Theme.of(context).colorScheme.primary),
       underline: Container(
@@ -22,7 +23,7 @@ class LanguageDropDownList extends StatelessWidget {
         if(newValue == null) {
           return;
         }
-        Provider.of<AppSettingsViewModel>(context, listen: false).saveLanguageCode(newValue);
+        Provider.of<AppLanguage>(context, listen: false).changeLanguage(Locale.fromSubtags(languageCode: newValue));
       },
       items: AppLocalizations.supportedLocales
           .map<DropdownMenuItem<String>>((Locale value) {

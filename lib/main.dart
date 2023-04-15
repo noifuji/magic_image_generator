@@ -14,11 +14,10 @@ import 'package:magic_image_generator/view/widgets/language_drop_down_list.dart'
 import 'package:magic_image_generator/view/search_view_screen.dart';
 import 'package:magic_image_generator/view/widgets/kofi_button.dart';
 import 'package:magic_image_generator/view/widgets/progress_bar.dart';
-import 'package:magic_image_generator/viewmodel/app_settings_view_model.dart';
+import 'package:magic_image_generator/viewmodel/app_language.dart';
 import 'package:magic_image_generator/viewmodel/canvas_view_model.dart';
 import 'package:magic_image_generator/viewmodel/search_view_model.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import './common/configure_nonweb.dart' if (dart.library.html) './common/configure_web.dart';
 import './common/constants.dart' as constants;
@@ -106,11 +105,10 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late ProgressBarController _progressController;
-  late SharedPreferences prefs;
   late Future<CardRepository> _initAppFuture;
-  SearchViewModel? _searchViewModel;
-  CanvasViewModel? _canvasViewModel;
-  AppSettingsViewModel? _appSettingsViewModel;
+  late final SearchViewModel _searchViewModel;
+  late final CanvasViewModel _canvasViewModel;
+  final AppLanguage _appLanguage = AppLanguage();
 
   @override
   void initState() {
@@ -121,18 +119,9 @@ class _MyAppState extends State<MyApp> {
 
   Future<CardRepository> _initApp() async {
     Util.printTimeStamp("_MyAppState _initApp");
-    prefs = await SharedPreferences.getInstance();
+    await _appLanguage.loadLocale();
 
     _progressController.value = 0.1;
-
-    String? languageCode = prefs.getString("languageCode");
-    if (languageCode == null) {
-      Locale locale;
-      final List<Locale> systemLocales = WidgetsBinding.instance.window.locales;
-      locale = systemLocales.first;
-
-      prefs.setString("languageCode", locale.languageCode);
-    }
 
     var isar = Isar.getInstance();
     if (isar == null || !isar.isOpen) {
@@ -146,7 +135,10 @@ class _MyAppState extends State<MyApp> {
     CardLocalDataSource localDataSource = CardLocalDataSource(isar);
     CardRemoteDataSource remoteDataSource = CardRemoteDataSource(CardFetchCsvApi());
     CardRepository repo = CardRepositoryImpl(localDataSource, remoteDataSource);
-    await repo.init(onProgress: (value) => _progressController.value =  (0.5 + 0.5 * value));
+    await repo.init(onProgress: (value) => _progressController.value = (0.5 + 0.5 * value));
+
+    _searchViewModel = SearchViewModel(repo);
+    _canvasViewModel = CanvasViewModel();
 
     _progressController.value = 1.0;
 
@@ -190,15 +182,11 @@ class _MyAppState extends State<MyApp> {
             }
             return const MaterialApp(home: Center(child: Text("error")));
           } else {
-            _searchViewModel = _searchViewModel ?? SearchViewModel(dataSnapshot.data!);
-            _canvasViewModel = _canvasViewModel ?? CanvasViewModel();
-            _appSettingsViewModel = _appSettingsViewModel ?? AppSettingsViewModel(prefs);
-
             return MultiProvider(
                 providers: [
                   ChangeNotifierProvider.value(value: _searchViewModel),
                   ChangeNotifierProvider.value(value: _canvasViewModel),
-                  ChangeNotifierProvider.value(value: _appSettingsViewModel),
+                  ChangeNotifierProvider.value(value: _appLanguage),
                 ],
                 child: Builder(
                     builder: (context) => GestureDetector(
@@ -208,8 +196,7 @@ class _MyAppState extends State<MyApp> {
                         },
                         child: MaterialApp(
                           onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
-                          locale: AppLocalizations.supportedLocales
-                              .firstWhere((element) => element.languageCode == Provider.of<AppSettingsViewModel>(context).getLanguageCode()),
+                          locale: Provider.of<AppLanguage>(context).appLocale,
                           localizationsDelegates: const [
                             AppLocalizations.delegate,
                             GlobalMaterialLocalizations.delegate,
