@@ -122,7 +122,7 @@ class CardLocalDataSource {
   queryがなくなったら、スタックに残ってるconditionを取り出してisar形式を生成
 
    */
-  Future<List<Card>> get(List<SearchQuerySymbol> query, Locale locale) async {
+  Future<List<Card>> get(List<SearchQuerySymbol> query, Locale locale, {Function(double)? onProgress}) async {
     Util.printTimeStamp("start CardLocalDataSource get");
     var propertyMap = {};
     if (locale.languageCode == "ja") {
@@ -192,12 +192,22 @@ class CardLocalDataSource {
       }
     }
 
+    //クエリの変換が完了
+    if(onProgress != null) {
+      onProgress(0.1);
+    }
+
     Util.printTimeStamp(
         "start _isar.cards.buildQuery(filter: FilterGroup.and(stack)).findAll()");
     var results =
         await _isar.cards.buildQuery(filter: FilterGroup.and(stack)).findAll();
     Util.printTimeStamp(
         "end _isar.cards.buildQuery(filter: FilterGroup.and(stack)).findAll()");
+
+    //クエリの実行が完了
+    if(onProgress != null) {
+      onProgress(0.5);
+    }
 
     List<Card> cards = [];
 
@@ -225,6 +235,10 @@ class CardLocalDataSource {
     //第一面のみ、片面または、両面がヒットしたカードの第一面
     Util.printTimeStamp("start 第一面のみ、片面または、両面がヒットしたカードの第一面");
     final frontFaces = cards.where((element) => !element.isBackFace).toList();
+    if(onProgress != null) {
+      onProgress(0.6);
+    }
+
 
     //第二面のみがヒットしたカード
     Util.printTimeStamp("start 第二面のみがヒットしたカード");
@@ -235,6 +249,9 @@ class CardLocalDataSource {
             .where((e) => e != null)
             .contains(element.multiverseId))
         .toList();
+    if(onProgress != null) {
+      onProgress(0.7);
+    }
 
     if (backFacesWithoutFrontSide.isNotEmpty) {
       //第二面がヒットしたカードの第一面を取得
@@ -245,6 +262,9 @@ class CardLocalDataSource {
               (q, String id) => q.backFaceMultiverseIdEqualTo(id).or())
           .buildInternal()
           .findAll();
+      if(onProgress != null) {
+        onProgress(0.8);
+      }
 
       //第一面と第二面を紐付けて、リザルトに追加
       Util.printTimeStamp("start 第一面と第二面を紐付けて、リザルトに追加");
@@ -255,6 +275,9 @@ class CardLocalDataSource {
         }
         return e;
       }).toList());
+      if(onProgress != null) {
+        onProgress(0.9);
+      }
     }
 
     //第二面のある札には、第二面の情報をつけておく。
@@ -273,6 +296,9 @@ class CardLocalDataSource {
               (q, String id) => q.multiverseIdEqualTo(id).or())
           .buildInternal()
           .findAll();
+    }
+    if(onProgress != null) {
+      onProgress(1.0);
     }
 
     result.addAll(frontFaces.map((e) {

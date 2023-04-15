@@ -42,8 +42,8 @@ class CardRepositoryImpl implements CardRepository {
   }
 
   @override
-  Future<List<CardInfoHeader>> get(List<SearchQuerySymbol> query, Locale locale) async {
-    List<Card> cards = await _localDataSource.get(query, locale);
+  Future<List<CardInfoHeader>> get(List<SearchQuerySymbol> query, Locale locale, {Function(double)? onProgress}) async {
+    List<Card> cards = await _localDataSource.get(query, locale, onProgress: onProgress);
     return Future<List<CardInfoHeader>>.value(cards.map((e) {
       var front = e.convert();
       var isTransform = (front.layout == "transform" || front.layout == "modal_dfc" || front.layout == "meld");

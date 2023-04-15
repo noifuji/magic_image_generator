@@ -15,6 +15,7 @@ import '../common/util.dart';
 import '../domain/search/analyze_filter_usecase.dart';
 import '../domain/search/analyze_query_usecase.dart';
 import '../model/card_info_header.dart';
+import '../view/widgets/progress_bar.dart';
 
 class SearchViewModel extends ChangeNotifier {
   final CardRepository _repository;
@@ -27,13 +28,16 @@ class SearchViewModel extends ChangeNotifier {
   SearchResult get searchResult => _searchResult;
 
   SortKey get sortKey => _sortKey;
+
   SortOrder get order => _sortOrder;
 
   Completer<void>? searchCompleter;
+  late ProgressBarController _searchProgressController;
 
+  ProgressBarController get searchProgressController => _searchProgressController;
 
   SearchViewModel(this._repository) {
-    for(var v in SearchFilter.values) {
+    for (var v in SearchFilter.values) {
       searchFilters[v] = false;
     }
   }
@@ -44,19 +48,20 @@ class SearchViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool isSearching(){
+  bool isSearching() {
     return searchCompleter != null && !searchCompleter!.isCompleted;
   }
 
   void search(Locale locale, List<SearchFilterData> filterDataList, {String? query}) async {
     var completer = Completer<void>();
+    _searchProgressController = ProgressBarController(0);
 
-    if(query != null) {
+    if (query != null) {
       searchBoxText = query;
     }
 
     var queryFromFilter = "";
-    if(_hasFilter()) {
+    if (_hasFilter()) {
       queryFromFilter = AnalyzeFilterUseCase().call(searchFilters, filterDataList);
     }
 
@@ -81,16 +86,15 @@ class SearchViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _sortCardInfoHeader(List<CardInfoHeader> list,SortKey key, SortOrder order, Locale locale) {
-    if(key == SortKey.cmc) {
-      list.sort((a, b) => a.cardFaces[0].cmc.compareTo(b.cardFaces[0].cmc) * (order == SortOrder.asc? 1: -1));
-    } else if(key == SortKey.name) {
-      if(locale.languageCode == "ja") {
-        list.sort((a, b) => a.cardFaces[0].nameJpYomi.compareTo(b.cardFaces[0].nameJpYomi) * (order == SortOrder.asc? 1: -1));
+  void _sortCardInfoHeader(List<CardInfoHeader> list, SortKey key, SortOrder order, Locale locale) {
+    if (key == SortKey.cmc) {
+      list.sort((a, b) => a.cardFaces[0].cmc.compareTo(b.cardFaces[0].cmc) * (order == SortOrder.asc ? 1 : -1));
+    } else if (key == SortKey.name) {
+      if (locale.languageCode == "ja") {
+        list.sort((a, b) => a.cardFaces[0].nameJpYomi.compareTo(b.cardFaces[0].nameJpYomi) * (order == SortOrder.asc ? 1 : -1));
       } else {
-        list.sort((a, b) => a.cardFaces[0].name.compareTo(b.cardFaces[0].name) * (order == SortOrder.asc? 1: -1));
+        list.sort((a, b) => a.cardFaces[0].name.compareTo(b.cardFaces[0].name) * (order == SortOrder.asc ? 1 : -1));
       }
-
     }
   }
 
@@ -100,7 +104,7 @@ class SearchViewModel extends ChangeNotifier {
   }
 
   void resetSearchFilter() {
-    for(var f in SearchFilter.values) {
+    for (var f in SearchFilter.values) {
       searchFilters[f] = false;
     }
     notifyListeners();
@@ -108,42 +112,44 @@ class SearchViewModel extends ChangeNotifier {
 
   bool _hasFilter() {
     bool sum = false;
-    for(var f in SearchFilter.values) {
+    for (var f in SearchFilter.values) {
       sum = sum || searchFilters[f]!;
     }
 
     return sum;
   }
 
-
   Future<void> _search(String query, Locale locale) async {
-    if (Util.getCurrentEnvironment() == constants.Environment.production) {
-      await FirebaseAnalytics.instance.logEvent(
-        name: "submit_query",
-        parameters: {
-          "query": query,
-        },
-      );
-    }
-
     try {
+
+      //クエリログ取得
+      if (Util.getCurrentEnvironment() == constants.Environment.production) {
+        await FirebaseAnalytics.instance.logEvent(
+          name: "submit_query",
+          parameters: {
+            "query": query,
+          },
+        );
+      }
+      _searchProgressController.value = 0.2;
+
+      //クエリ分析
       var analyzer = AnalyzeQueryUseCase();
       var conditions = analyzer.call(query);
+      _searchProgressController.value = 0.4;
 
-      //リポジトリから結果の取り出し
-      var dateTime1 = DateTime.now();
-      if (kDebugMode) {
-        Util.printTimeStamp("Query Start");
-      }
-      List<CardInfoHeader> results = await _repository.get(conditions, locale);
-      var dateTime2 = DateTime.now();
-      if (kDebugMode) {
-        Util.printTimeStamp("Query End");
-        print("Time : ${dateTime2.difference(dateTime1)}");
-      }
+      //クエリ実行
+      List<CardInfoHeader> results = await _repository.get(conditions, locale, onProgress: (value) {
+        _searchProgressController.value = 0.4+value*0.4;
+      });
       _searchResult = SearchResult(cards: results, isSuccess: true);
+      _searchProgressController.value = 0.8;
+
+      //ソート
       sortSearchResults(locale);
-    } catch(e, stackTrace) {
+      _searchProgressController.value = 1.0;
+
+    } catch (e, stackTrace) {
       if (kDebugMode) {
         print(e);
         print(stackTrace);
@@ -151,5 +157,4 @@ class SearchViewModel extends ChangeNotifier {
       throw MIGException(100);
     }
   }
-
 }

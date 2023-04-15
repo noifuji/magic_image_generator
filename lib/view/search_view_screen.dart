@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:magic_image_generator/view/search_box_widget.dart';
 import 'package:magic_image_generator/view/search_card.dart';
 import 'package:magic_image_generator/view/sort_drop_down.dart';
+import 'package:magic_image_generator/view/widgets/progress_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -98,7 +99,12 @@ class _SearchViewScreenState extends State<SearchViewScreen> {
         if (snapshot.connectionState == ConnectionState.none) {
           return _createTutorialCard(context);
         } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          //return const Center(child: CircularProgressIndicator());
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              ProgressBar(controller: Provider.of<SearchViewModel>(context).searchProgressController,),
+            ],);
         } else {
           SearchResult searchResult = Provider.of<SearchViewModel>(context).searchResult;
           List<CardInfoHeader> cards = searchResult.cards;
