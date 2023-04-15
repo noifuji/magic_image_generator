@@ -223,7 +223,7 @@ class AdvancedSearchScreen extends StatelessWidget {
                               height: responsive.rowHeight * 0.6,
                               child:TextButton(
                                   onPressed: () async {
-                                    if(Provider.of<SearchViewModel>(context, listen: false).isSearching) {
+                                    if(Provider.of<SearchViewModel>(context, listen: false).isSearching()) {
                                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                         content: Text(AppLocalizations.of(context)!.exceptionCode310),
                                       ));
@@ -232,7 +232,7 @@ class AdvancedSearchScreen extends StatelessWidget {
 
                                     Navigator.pop(context);
                                     List<SearchFilterData> filerDataList = SearchFilter.values.map((e) => SearchFilterFactory.createSearchFilter(context, e)).toList();
-                                    await Provider.of<SearchViewModel>(context, listen: false).searchFromAdvanced(Localizations.localeOf(context),filerDataList);
+                                    Provider.of<SearchViewModel>(context, listen: false).search(Localizations.localeOf(context),filerDataList);
                                   },
                                   style: TextButton.styleFrom(backgroundColor: Colors.orange),
                                   child: Text(AppLocalizations.of(context)!.searchButton,

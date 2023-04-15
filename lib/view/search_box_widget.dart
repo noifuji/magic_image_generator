@@ -1,24 +1,21 @@
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:magic_image_generator/view/advanced_search_screen.dart';
 import 'package:provider/provider.dart';
-import '../common/constants.dart' as constants;
 
 import '../common/search_filter.dart';
 import '../common/search_filter_factory.dart';
 import '../viewmodel/search_view_model.dart';
 
 class SearchBoxWidget extends StatefulWidget {
-  int responsiveColumns;
-  double responsiveColumnWidth;
-  double responsiveGutterWidth;
+  final int responsiveColumns;
+  final double responsiveColumnWidth;
+  final double responsiveGutterWidth;
 
-  SearchBoxWidget(
-      {required this.responsiveColumns,
+  const SearchBoxWidget(
+      {Key? key, required this.responsiveColumns,
       required this.responsiveColumnWidth,
-      required this.responsiveGutterWidth});
+      required this.responsiveGutterWidth}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _SearchBoxWidgetState();
@@ -29,7 +26,7 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
 
   @override
   Widget build(BuildContext context) {
-    myController.text = Provider.of<SearchViewModel>(context).query;
+    myController.text = Provider.of<SearchViewModel>(context).searchBoxText;
     return Container(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.secondary.withAlpha(50),
@@ -51,7 +48,7 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                         border: InputBorder.none),
                     autofocus: false,
                     onSubmitted: (value) async {
-                      if(Provider.of<SearchViewModel>(context, listen: false).isSearching) {
+                      if(Provider.of<SearchViewModel>(context, listen: false).isSearching()) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(AppLocalizations.of(context)!.exceptionCode310),
                         ));
@@ -59,44 +56,41 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                       }
 
                       List<SearchFilterData> filerDataList = SearchFilter.values.map((e) => SearchFilterFactory.createSearchFilter(context, e)).toList();
-                      await Provider.of<SearchViewModel>(context, listen: false)
-                          .search(value, Localizations.localeOf(context), filerDataList);
+                      Provider.of<SearchViewModel>(context, listen: false)
+                          .search(Localizations.localeOf(context), filerDataList, query:value);
                     },
                     onChanged: (value) {
                       Provider.of<SearchViewModel>(context, listen: false)
-                          .query = value;
+                          .searchBoxText = value;
                     },
                   )))),
           Expanded(
               flex: 0,
-              child: Container(
-                  child: IconButton(
+              child: IconButton(
                 icon: const Icon(Icons.cancel),
                 onPressed: () async {
-                  myController.text = "";
-                  Provider.of<SearchViewModel>(context, listen: false)
-                      .query = "";
+              myController.text = "";
+              Provider.of<SearchViewModel>(context, listen: false)
+                  .searchBoxText = "";
                 },
-              ))),
+              )),
           Expanded(
               flex: 0,
-              child: Container(
-                  child: IconButton(
+              child: IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: () async {
-                  if(Provider.of<SearchViewModel>(context, listen: false).isSearching) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(AppLocalizations.of(context)!.exceptionCode310),
-                    ));
-                    return;
-                  }
+              if(Provider.of<SearchViewModel>(context, listen: false).isSearching()) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(AppLocalizations.of(context)!.exceptionCode310),
+                ));
+                return;
+              }
 
-                  List<SearchFilterData> filerDataList = SearchFilter.values.map((e) => SearchFilterFactory.createSearchFilter(context, e)).toList();
-                  await Provider.of<SearchViewModel>(context, listen: false)
-                      .search(
-                          myController.text, Localizations.localeOf(context), filerDataList);
+              List<SearchFilterData> filerDataList = SearchFilter.values.map((e) => SearchFilterFactory.createSearchFilter(context, e)).toList();
+              Provider.of<SearchViewModel>(context, listen: false)
+                  .search(Localizations.localeOf(context), filerDataList, query: myController.text);
                 },
-              ))),
+              )),
           Expanded(
               flex: 0,
               child: Container(
@@ -104,10 +98,8 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                     right: 10,
                   ),
                   child: TextButton(
-                    child: Text(AppLocalizations.of(context)!.advancedSearchButton, style:const TextStyle(color:Colors.white,), ),
                     style:ElevatedButton.styleFrom(
-                      primary: Colors.white24,
-                      onPrimary: Colors.white,
+                      foregroundColor: Colors.white, backgroundColor: Colors.white24,
                     ),
                     onPressed: () {
                       Navigator.of(context).push(
@@ -118,6 +110,7 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                         ),
                       );
                     },
+                    child: Text(AppLocalizations.of(context)!.advancedSearchButton, style:const TextStyle(color:Colors.white,), ),
                   ))),
         ]));
   }

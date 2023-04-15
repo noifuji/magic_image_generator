@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -19,7 +21,7 @@ class SearchViewModel extends ChangeNotifier {
   SortKey _sortKey = SortKey.cmc;
   SortOrder _sortOrder = SortOrder.asc;
   SearchResult _searchResult = SearchResult(cards: [], isSuccess: false);
-  String query = "";
+  String searchBoxText = "";
   Map<SearchFilter, bool> searchFilters = {};
 
   SearchResult get searchResult => _searchResult;
@@ -27,7 +29,7 @@ class SearchViewModel extends ChangeNotifier {
   SortKey get sortKey => _sortKey;
   SortOrder get order => _sortOrder;
 
-  bool isSearching = false;
+  Completer<void>? searchCompleter;
 
 
   SearchViewModel(this._repository) {
@@ -42,27 +44,26 @@ class SearchViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> search(String query, Locale locale, List<SearchFilterData> filterDataList) async {
-    Util.printTimeStamp("start search(String query, Locale locale)");
-
-    //クエリの分析
-    this.query = query;
-
-    if(_hasFilter()) {
-      query = query + " " + AnalyzeFilterUseCase().call(searchFilters, filterDataList);
-      print(query);
-    }
-
-    await _search(query, locale);
+  bool isSearching(){
+    return searchCompleter != null && !searchCompleter!.isCompleted;
   }
 
-  Future<void> searchFromAdvanced(Locale locale, List<SearchFilterData> filterDataList) async {
-    if(!_hasFilter()) {
-      return;
+  void search(Locale locale, List<SearchFilterData> filterDataList, {String? query}) async {
+    var completer = Completer<void>();
+
+    if(query != null) {
+      searchBoxText = query;
     }
 
-    String query = AnalyzeFilterUseCase().call(searchFilters, filterDataList);
-    await _search(this.query + " " + query, locale);
+    var queryFromFilter = "";
+    if(_hasFilter()) {
+      queryFromFilter = AnalyzeFilterUseCase().call(searchFilters, filterDataList);
+    }
+
+    Future<void> future = _search("$searchBoxText $queryFromFilter", locale);
+    future.then(completer.complete).catchError(completer.completeError);
+    searchCompleter = completer;
+    notifyListeners();
   }
 
   void setSortKey(SortKey sortKey, Locale locale) {
@@ -116,9 +117,6 @@ class SearchViewModel extends ChangeNotifier {
 
 
   Future<void> _search(String query, Locale locale) async {
-    isSearching = true;
-    notifyListeners();
-
     if (Util.getCurrentEnvironment() == constants.Environment.production) {
       await FirebaseAnalytics.instance.logEvent(
         name: "submit_query",
@@ -146,16 +144,12 @@ class SearchViewModel extends ChangeNotifier {
       _searchResult = SearchResult(cards: results, isSuccess: true);
       sortSearchResults(locale);
     } catch(e, stackTrace) {
-      _searchResult = SearchResult(cards: [], isSuccess: false, exception: MIGException(100));
       if (kDebugMode) {
         print(e);
         print(stackTrace);
       }
+      throw MIGException(100);
     }
-
-    //リザルトを更新
-    isSearching = false;
-    notifyListeners();
   }
 
 }
