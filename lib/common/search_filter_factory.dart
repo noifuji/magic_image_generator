@@ -173,6 +173,11 @@ class SearchFilterFactory {
     }
 
     /****Sets Alchemy****/
+    else if(sf == SearchFilter.setYone) {
+      return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.setYone, searchValue: "yone", searchKey: "set", filterType: SearchFilterType.set);
+    } else if(sf == SearchFilter.setYbro) {
+      return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.setYbro, searchValue: "ybro", searchKey: "set", filterType: SearchFilterType.set);
+    }
     else if(sf == SearchFilter.setYdmu) {
       return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.setYdmu, searchValue: "ydmu", searchKey: "set", filterType: SearchFilterType.set);
     }else if(sf == SearchFilter.setHbg) {

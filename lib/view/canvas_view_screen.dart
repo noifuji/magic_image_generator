@@ -80,7 +80,7 @@ class CanvasViewScreenState extends State<CanvasViewScreen> {
           onWillAccept: (data) => data != null && data["row"] != null && data["col"] != null,
         ));
 
-        return Row(children: cardWidgets);
+        return Row(crossAxisAlignment:CrossAxisAlignment.end,children: cardWidgets);
       }).toList();
 
       return Row(children: [

@@ -61,7 +61,7 @@ class ImageMatrixPainter extends CustomPainter {
 
     double targetRowHeight = matrix[targetRow].fold<double>(0, (max, card) => card.imageSize.height > max ? card.imageSize.height : max);
     if (matrix[targetRow][targetCol].imageSize.height < targetRowHeight) {
-      y = y + (targetRowHeight - matrix[targetRow][targetCol].imageSize.height) / 2;
+      y = y + (targetRowHeight - matrix[targetRow][targetCol].imageSize.height);
     }
 
     return Offset(x, y);

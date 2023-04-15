@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:breakpoint/breakpoint.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:magic_image_generator/common/search_filter_factory.dart';
@@ -42,7 +41,7 @@ class AdvancedSearchScreen extends StatelessWidget {
   ];
 
   final List<SearchFilter> _cardSets = [
-    SearchFilter.setMom,SearchFilter.setOne,SearchFilter.setBro,SearchFilter.setDmu,
+    SearchFilter.setMul,SearchFilter.setMom,SearchFilter.setOne,SearchFilter.setBrr,SearchFilter.setBro,SearchFilter.setDmu,
     SearchFilter.setSnc,SearchFilter.setNeo,SearchFilter.setVow,SearchFilter.setMid,
     SearchFilter.setAfr,SearchFilter.setStx,SearchFilter.setKhm,SearchFilter.setZnr,
     SearchFilter.setM21,SearchFilter.setIko,SearchFilter.setThb,SearchFilter.setEld,
@@ -53,11 +52,10 @@ class AdvancedSearchScreen extends StatelessWidget {
     SearchFilter.setOri,SearchFilter.setDtk, SearchFilter.setFrf, SearchFilter.setKtk,
     SearchFilter.setM15,SearchFilter.setJou, SearchFilter.setBng, SearchFilter.setThs,
     SearchFilter.setM14,SearchFilter.setDgm, SearchFilter.setGtc, SearchFilter.setRtr,
-    SearchFilter.setMul,SearchFilter.setBrr,
   ];
 
   final List<SearchFilter> _alchemyCardSets = [
-    SearchFilter.setYdmu,
+    SearchFilter.setYone,SearchFilter.setYbro,SearchFilter.setYdmu,
     SearchFilter.setHbg,SearchFilter.setYSnc,SearchFilter.setYNeo,SearchFilter.setYMid];
 
   @override

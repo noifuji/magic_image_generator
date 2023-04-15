@@ -15,6 +15,6 @@ enum SearchFilter{
   setM15,setJou,setBng,setThs,
   setM14,setDgm,setGtc,setRtr,
 
-  setYdmu,
+  setYone,setYbro,setYdmu,
   setHbg,setYSnc,setYNeo,setYMid,
 }
