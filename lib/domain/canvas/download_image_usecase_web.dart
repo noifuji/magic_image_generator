@@ -5,7 +5,7 @@ import 'dart:html' as html;
 
 import 'package:uuid/uuid.dart';
 
-class DownloadImageWebUsecase {
+class DownloadImageUsecase {
   Future<void> call(ui.Image image) async {
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     if (byteData == null) {

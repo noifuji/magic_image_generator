@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:js' as js;
 import "../../common/constants.dart" as constants;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -44,6 +42,5 @@ class KofiButton extends StatelessWidget {
   }
 
   void onPressed() {
-    js.context.callMethod('open', [constants.kofiUrl]);
   }
 }

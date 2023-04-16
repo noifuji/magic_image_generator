@@ -65,7 +65,7 @@ class _CanvasCardState extends State<CanvasCard> {
         data: {"row": rowIndex, "col": colIndex},
         feedback: SizedBox(
           width: widget.card.imageSize.width * widget.scale,
-          child: RotatedBox(quarterTurns:  widget.card.rotationAngle/(pi/2) as int, child:frontImage),
+          child: RotatedBox(quarterTurns:  (widget.card.rotationAngle/(pi/2)).round(), child:frontImage),
         ),
         childWhenDragging: SizedBox(width: widget.card.imageSize.width * widget.scale,
           height: widget.card.imageSize.height * widget.scale,),

@@ -1,12 +1,13 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
-import 'package:magic_image_generator/domain/canvas/download_image_web_usecase.dart';
 import 'package:magic_image_generator/domain/canvas/fetch_card_images_usecase.dart';
 import 'package:magic_image_generator/domain/canvas/merge_card_images_usecase.dart';
 
 import 'dart:ui' as ui;
-import '../domain/canvas/copy_image_to_clipboard_web_usecase.dart';
+import '../domain/canvas/copy_image_to_clipboard_usecase_nonweb.dart'
+    if (dart.library.html) '../domain/canvas/copy_image_to_clipboard_usecase_web.dart';
+import '../domain/canvas/download_image_usecase_nonweb.dart' if (dart.library.html) '../domain/canvas/download_image_usecase_web.dart';
 import '../model/card_info_header.dart';
 
 class CanvasViewModel extends ChangeNotifier {
@@ -20,11 +21,11 @@ class CanvasViewModel extends ChangeNotifier {
   }
 
   void addSelectedCards(int rowIndex, CardInfoHeader card) {
-    if(rowIndex > _selectedCards.length) {
+    if (rowIndex > _selectedCards.length) {
       throw Exception();
     }
 
-    if(rowIndex == _selectedCards.length ) {
+    if (rowIndex == _selectedCards.length) {
       _selectedCards.add([card]);
     } else {
       _selectedCards[rowIndex].add(card);
@@ -35,7 +36,7 @@ class CanvasViewModel extends ChangeNotifier {
 
   bool isInCanvas(CardInfoHeader card) {
     bool result = false;
-    for(var row in _selectedCards) {
+    for (var row in _selectedCards) {
       result = result || row.where((element) => element.firstFace.name == card.firstFace.name).toList().isNotEmpty;
     }
 
@@ -55,12 +56,11 @@ class CanvasViewModel extends ChangeNotifier {
     int colIndex = selectedCards[rowIndex].indexWhere((c) => c.displayId == card.displayId);
 
     var angle = _selectedCards[rowIndex][colIndex].rotationAngle;
-    angle = (angle + pi/2) % (2 * pi);
-    var size =  _selectedCards[rowIndex][colIndex].imageSize;
+    angle = (angle + pi / 2) % (2 * pi);
+    var size = _selectedCards[rowIndex][colIndex].imageSize;
     _selectedCards[rowIndex][colIndex] = _selectedCards[rowIndex][colIndex].copyWith(rotationAngle: angle, imageSize: size.flipped);
     notifyListeners();
   }
-
 
   void removeCard(CardInfoHeader card) {
     int rowIndex = selectedCards.indexWhere((row) => row.where((c) => c.displayId == card.displayId).toList().isNotEmpty);
@@ -68,23 +68,19 @@ class CanvasViewModel extends ChangeNotifier {
 
     _selectedCards[rowIndex].removeAt(colIndex);
 
-    _selectedCards = _selectedCards
-        .where((element) => element.isNotEmpty)
-        .toList();
+    _selectedCards = _selectedCards.where((element) => element.isNotEmpty).toList();
 
     notifyListeners();
   }
 
-
   void moveCard(Map<String, int> from, Map<String, int> to) {
-
     List<List<CardInfoHeader>> copy = _selectedCards.map((row) => <CardInfoHeader>[]).toList();
 
-    if(!from.containsKey("row") || !from.containsKey("col")) {
+    if (!from.containsKey("row") || !from.containsKey("col")) {
       throw Exception();
     }
 
-    if(!to.containsKey("row") || !to.containsKey("col")) {
+    if (!to.containsKey("row") || !to.containsKey("col")) {
       throw Exception();
     }
 
@@ -92,7 +88,6 @@ class CanvasViewModel extends ChangeNotifier {
     int fromCol = from["col"]!;
     int toRow = to["row"]!;
     int toCol = to["col"]!;
-
 
     if (fromCol < 0 ||
         toCol < 0 ||
@@ -125,15 +120,12 @@ class CanvasViewModel extends ChangeNotifier {
         copy[row].insertAll(0, _selectedCards[row].sublist(fromCol + 1, toCol + 1));
         copy[row].insertAll(0, _selectedCards[row].sublist(0, fromCol));
       }
-
-
-    } else if(toRow == _selectedCards.length) {
+    } else if (toRow == _selectedCards.length) {
       copy.add([]);
       copy[toRow].add(_selectedCards[fromRow][fromCol]);
 
       copy[fromRow].addAll(_selectedCards[fromRow].sublist(0, fromCol));
       copy[fromRow].addAll(_selectedCards[fromRow].sublist(fromCol + 1));
-
     } else {
       copy[toRow].addAll(_selectedCards[toRow].sublist(0, toCol));
       copy[toRow].add(_selectedCards[fromRow][fromCol]);
@@ -141,8 +133,6 @@ class CanvasViewModel extends ChangeNotifier {
 
       copy[fromRow].addAll(_selectedCards[fromRow].sublist(0, fromCol));
       copy[fromRow].addAll(_selectedCards[fromRow].sublist(fromCol + 1));
-
-
     }
 
     for (var i = 0; i < _selectedCards.length; i++) {
@@ -157,20 +147,18 @@ class CanvasViewModel extends ChangeNotifier {
   }
 
   void _removeEmptyRow() {
-    _selectedCards = _selectedCards
-        .where((element) => element.isNotEmpty)
-        .toList();
+    _selectedCards = _selectedCards.where((element) => element.isNotEmpty).toList();
   }
 
   double getMatrixRowWidth(int row) {
-    if(row < 0 || row >= _selectedCards.length) {
+    if (row < 0 || row >= _selectedCards.length) {
       return 0;
     }
     return _selectedCards[row].fold<double>(0, (previousValue, element) => previousValue + element.imageSize.width);
   }
 
   double getMatrixRowHeight(int row) {
-    if(row < 0 || row >= _selectedCards.length) {
+    if (row < 0 || row >= _selectedCards.length) {
       return 0;
     }
     return _selectedCards[row].fold<double>(0, (previous, e) => previous = (previous < e.imageSize.height ? e.imageSize.height : previous));
@@ -178,7 +166,7 @@ class CanvasViewModel extends ChangeNotifier {
 
   double getMatrixWidth() {
     var rows = _selectedCards.asMap().entries.map((e) => getMatrixRowWidth(e.key)).toList();
-    if(rows.isEmpty) {
+    if (rows.isEmpty) {
       return 0;
     }
     return rows.fold(0, max);
@@ -189,38 +177,38 @@ class CanvasViewModel extends ChangeNotifier {
   }
 
   Future<void> copyImageToClipBoard(Locale locale, {Function? callback, Function()? error}) async {
-    var fetch  = FetchCardImagesUsecase();
-    var merge  = MergeCardImageUseCase();
-    var copy = CopyImageToClipboardWebUsecase();
+    var fetch = FetchCardImagesUsecase();
+    var merge = MergeCardImageUseCase();
+    var copy = CopyImageToClipboardUsecase();
 
     try {
       _selectedCards = await fetch.call(_selectedCards, locale);
       ui.Image image = await merge.call(_selectedCards, getMatrixWidth(), getMatrixHeight());
       await copy.call(image);
-      if(callback != null) {
+      if (callback != null) {
         callback();
       }
-    } catch(e) {
-      if(error != null) {
+    } catch (e) {
+      if (error != null) {
         error();
       }
     }
   }
 
   Future<void> downloadImage(Locale locale, {Function? callback, Function? error}) async {
-    var fetch  = FetchCardImagesUsecase();
-    var merge  = MergeCardImageUseCase();
-    var download = DownloadImageWebUsecase();
+    var fetch = FetchCardImagesUsecase();
+    var merge = MergeCardImageUseCase();
+    var download = DownloadImageUsecase();
 
     try {
       _selectedCards = await fetch.call(_selectedCards, locale);
       ui.Image image = await merge.call(_selectedCards, getMatrixWidth(), getMatrixHeight());
       await download.call(image);
-      if(callback != null) {
+      if (callback != null) {
         callback();
       }
-    } catch(e) {
-      if(error != null) {
+    } catch (e) {
+      if (error != null) {
         error();
       }
     }

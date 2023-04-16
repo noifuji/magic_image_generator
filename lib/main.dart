@@ -7,12 +7,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:isar/isar.dart';
 import 'package:magic_image_generator/view/canvas_view_screen.dart';
 import 'package:magic_image_generator/view/donate_screen.dart';
-import 'package:magic_image_generator/view/widgets/language_drop_down_list.dart';
 import 'package:magic_image_generator/view/search_view_screen.dart';
-import 'package:magic_image_generator/view/widgets/kofi_button.dart';
+import 'package:magic_image_generator/view/widgets/kofi_button_nonweb.dart'
+    if (dart.library.html) 'package:magic_image_generator/view/widgets/kofi_button_web.dart';
+import 'package:magic_image_generator/view/widgets/language_drop_down_list.dart';
 import 'package:magic_image_generator/view/widgets/progress_bar.dart';
 import 'package:magic_image_generator/viewmodel/app_language.dart';
 import 'package:magic_image_generator/viewmodel/canvas_view_model.dart';
@@ -22,12 +22,11 @@ import 'package:provider/provider.dart';
 import './common/configure_nonweb.dart' if (dart.library.html) './common/configure_web.dart';
 import './common/constants.dart' as constants;
 import 'common/util.dart';
-import 'data/card.dart';
 import 'data/card_fetch_csv_api.dart';
 import 'data/card_local_data_source.dart';
-import 'data/card_master_version.dart';
 import 'data/card_remote_data_source.dart';
 import 'data/card_repository_impl.dart';
+import 'data/isar_factory_nonweb.dart' if (dart.library.html) 'data/isar_factory_web.dart';
 import 'domain/card_repository.dart';
 import 'firebase_options.dart';
 
@@ -123,12 +122,7 @@ class _MyAppState extends State<MyApp> {
 
     _progressController.value = 0.1;
 
-    var isar = Isar.getInstance();
-    if (isar == null || !isar.isOpen) {
-      isar = await Isar.open(
-        schemas: [CardSchema, CardMasterVersionSchema],
-      );
-    }
+    var isar = await IsarFactory.getInstance();
 
     _progressController.value = 0.5;
 
@@ -178,7 +172,9 @@ class _MyAppState extends State<MyApp> {
                 ]));
           } else if (dataSnapshot.error != null) {
             if (kDebugMode) {
+
               print(dataSnapshot.error);
+              print(dataSnapshot.stackTrace);
             }
             return const MaterialApp(home: Center(child: Text("error")));
           } else {

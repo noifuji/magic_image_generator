@@ -321,14 +321,13 @@ class CardLocalDataSource {
 
   Future<void> clearAll() async {
     await _isar.writeTxn((isar) async {
-      final cardList = await isar.cards.where().idProperty().findAll();
+      final cardList = await isar.cards.where().findAll();
 
       if (cardList.isEmpty) {
         return;
       }
 
-      await isar.cards
-          .deleteAll(cardList.where((e) => e != null).map((e) => e!).toList());
+      await isar.cards.deleteAll(cardList.map((e) => e.id!).toList());
     });
   }
 

@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'dart:js' as js;
 
-class CopyImageToClipboardWebUsecase {
+class CopyImageToClipboardUsecase {
   Future<void> call(ui.Image image) async {
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
 
