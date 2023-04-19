@@ -104,47 +104,6 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) {
-                            return AdvancedSearchScreen();
-                          },
-                        ),
-                      );
-                    },
-                    child: Text(
-                      AppLocalizations.of(context)!.advancedSearchButton,
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                    ))
-                : IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return AdvancedSearchScreen();
-                          },
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.manage_search),
-                  ),
-          ),
-        ),
-        Expanded(
-          flex: 0,
-          child: Container(
-            margin: const EdgeInsets.only(
-              right: 10,
-            ),
-            child: widget.responsiveColumns > 4
-                ? TextButton(
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.white24,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) {
                             return const ImportDeckListScreen();
                           },
                         ),
@@ -169,7 +128,48 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                     icon: const Icon(Icons.add),
                   ),
           ),
-        )
+        ),
+        Expanded(
+          flex: 0,
+          child: Container(
+            margin: const EdgeInsets.only(
+              right: 10,
+            ),
+            child: widget.responsiveColumns > 4
+                ? TextButton(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.white24,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return AdvancedSearchScreen();
+                      },
+                    ),
+                  );
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.advancedSearchButton,
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                ))
+                : IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return AdvancedSearchScreen();
+                    },
+                  ),
+                );
+              },
+              icon: const Icon(Icons.manage_search),
+            ),
+          ),
+        ),
       ]),
     );
   }
