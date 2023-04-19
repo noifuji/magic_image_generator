@@ -66,7 +66,7 @@ class SearchViewModel extends ChangeNotifier {
       queryFromFilter = AnalyzeFilterUseCase().call(searchFilters, filterDataList);
     }
 
-    Future<void> future = _search("$searchBoxText $queryFromFilter", locale);
+    Future<void> future = _search("($searchBoxText) $queryFromFilter", locale);
     future.then(completer.complete).catchError(completer.completeError);
     searchCompleter = completer;
     notifyListeners();
