@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:magic_image_generator/common/mig_exception.dart';
 import 'package:magic_image_generator/domain/card_repository.dart';
+import 'package:magic_image_generator/domain/import_deck_list_usecase.dart';
 import 'package:magic_image_generator/model/search_result.dart';
 import 'package:magic_image_generator/view/sort_drop_down.dart';
 
@@ -52,7 +53,7 @@ class SearchViewModel extends ChangeNotifier {
     return searchCompleter != null && !searchCompleter!.isCompleted;
   }
 
-  void search(Locale locale, List<SearchFilterData> filterDataList, {String? query}) async {
+  Future<void> search(Locale locale, List<SearchFilterData> filterDataList, {String? query}) async {
     var completer = Completer<void>();
     _searchProgressController = ProgressBarController(0);
 
@@ -69,6 +70,12 @@ class SearchViewModel extends ChangeNotifier {
     future.then(completer.complete).catchError(completer.completeError);
     searchCompleter = completer;
     notifyListeners();
+  }
+
+  Future<void> searchByDeckList(Locale locale, List<SearchFilterData> filterDataList, String rawDeckList, Map<constants.ArenaDeckListGroup, String> groupMap) async {
+    var import = ImportDeckListUsecase();
+    var query = import.call(rawDeckList, groupMap);
+    await search(locale, filterDataList, query: query);
   }
 
   void setSortKey(SortKey sortKey, Locale locale) {

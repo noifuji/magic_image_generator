@@ -32,3 +32,11 @@ const Map<SearchFilter, String> searchFilterColorImagePath = {
   SearchFilter.colorGreen : "assets/images/green.png",
   SearchFilter.colorColorless : "assets/images/colorless.png",
   SearchFilter.colorMulti : "assets/images/multi.png"};
+
+
+enum ArenaDeckListGroup { main, sideboard, companion, commander, none }
+const String arenaDeckListKeyName = 'name';
+const String arenaDeckListKeyQuantity = 'qry';
+const String arenaDeckListKeySetCode = 'set';
+const String arenaDeckListKeyNo = 'no';
+const String arenaDeckListKeyGroup = 'group';

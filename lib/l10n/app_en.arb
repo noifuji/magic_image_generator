@@ -6,6 +6,8 @@
     "download": "Download",
     "sort": "sort by",
     "advancedSearchButton": "Advanced",
+    "importDeckList": "Import",
+    "importDeckHint": "Paste your deck list here!",
 
     "name": "Name",
     "cmc": "Mana Value",
@@ -119,6 +121,9 @@
     "resetButton": "Reset",
     "searchButton": "OK",
 
+    "importDeckTitle": "Import Deck List",
+
+
 
     "menuSearchCard": "Search",
     "menuEditCardImage": "Edit Image",
@@ -130,9 +135,12 @@
 
     "msgCopyDone": "An image was copied!",
 
+    "arenaDeckListGroupMain": "Deck",
+    "arenaDeckListGroupSideboard": "Sideboard",
+    "arenaDeckListGroupCompanion": "Companion",
+    "arenaDeckListGroupCommander": "Commander",
 
     "includedSets": "From 'Return to Ravnica' to the latest are available.",
-
     "howToUse": "How to use",
     "step1Title": "Step1.",
     "step1Content": "Enter queries and search cards.",
@@ -147,6 +155,7 @@
     "exceptionCode200": "Failed to Copy. Please try download.",
     "exceptionCode210": "Failed to Download.",
     "exceptionCode310": "Please wait. Searching is already started.",
+    "exceptionCode410": "Failed to import your deck list.",
 
     "kofi": "Buy Me a Coffee"
 }

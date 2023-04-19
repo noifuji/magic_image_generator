@@ -6,6 +6,8 @@
   "download": "ダウンロード",
   "sort": "ソート",
   "advancedSearchButton": "詳細検索",
+  "importDeckList": "インポート",
+  "importDeckHint": "デッキリストをはりつけよう",
 
   "name": "名前",
   "cmc": "マナ総量",
@@ -123,6 +125,8 @@
   "resetButton": "リセット",
   "searchButton": "OK",
 
+  "importDeckTitle": "デッキインポート",
+
 
   "menuSearchCard": "検索する",
   "menuEditCardImage": "編集する",
@@ -134,8 +138,12 @@
 
   "msgCopyDone": "画像がコピーされたよ!",
 
-  "includedSets": "「ラヴニカへの回帰」以降のセットが検索できるよ。",
+  "arenaDeckListGroupMain": "デッキ",
+  "arenaDeckListGroupSideboard": "サイドボード",
+  "arenaDeckListGroupCompanion": "相棒",
+  "arenaDeckListGroupCommander": "統率者",
 
+  "includedSets": "「ラヴニカへの回帰」以降のセットが検索できるよ。",
   "howToUse": "使い方",
   "step1Title": "Step1.",
   "step1Content": "検索ボックスからカードを検索しましょう.",
@@ -150,6 +158,7 @@
   "exceptionCode200": "コピーに失敗しました. ダウンロードを試してみてね.",
   "exceptionCode210": "ダウンロードに失敗しました.",
   "exceptionCode310": "検索実行中なので少し待ってね.",
+  "exceptionCode410": "デッキリストのインポートに失敗しました.",
 
   "kofi": "投げ銭する"
 }
