@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:image/image.dart';
 import 'package:magic_image_generator/common/mig_exception.dart';
 import 'package:magic_image_generator/domain/card_repository.dart';
 import 'package:magic_image_generator/domain/import_deck_list_usecase.dart';
@@ -61,12 +62,17 @@ class SearchViewModel extends ChangeNotifier {
       searchBoxText = query;
     }
 
-    var queryFromFilter = "";
-    if (_hasFilter()) {
-      queryFromFilter = AnalyzeFilterUseCase().call(searchFilters, filterDataList);
+    var q = "";
+    if(_hasSearchBoxQuery()) {
+      q = "$q($searchBoxText)";
     }
 
-    Future<void> future = _search("($searchBoxText) $queryFromFilter", locale);
+    if (_hasFilter()) {
+      var queryFromFilter = AnalyzeFilterUseCase().call(searchFilters, filterDataList);
+      q = "$q $queryFromFilter";
+    }
+
+    Future<void> future = _search(q, locale);
     future.then(completer.complete).catchError(completer.completeError);
     searchCompleter = completer;
     notifyListeners();
@@ -117,6 +123,10 @@ class SearchViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  bool _hasSearchBoxQuery() {
+    return searchBoxText.replaceAll(' ', '').isNotEmpty;
+  }
+
   bool _hasFilter() {
     bool sum = false;
     for (var f in SearchFilter.values) {
@@ -139,6 +149,8 @@ class SearchViewModel extends ChangeNotifier {
         );
       }
       _searchProgressController.value = 0.2;
+
+      Util.printTimeStamp(query);
 
       //クエリ分析
       var analyzer = AnalyzeQueryUseCase();
