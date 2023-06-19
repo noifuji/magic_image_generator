@@ -55,7 +55,7 @@ class AdvancedSearchScreen extends StatelessWidget {
   ];
 
   final List<SearchFilter> _alchemyCardSets = [
-    SearchFilter.setYone,SearchFilter.setYbro,SearchFilter.setYdmu,
+    SearchFilter.setLtr,SearchFilter.setYone,SearchFilter.setYbro,SearchFilter.setYdmu,
     SearchFilter.setHbg,SearchFilter.setYSnc,SearchFilter.setYNeo,SearchFilter.setYMid];
 
   @override
