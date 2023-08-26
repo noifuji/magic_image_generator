@@ -73,6 +73,9 @@ class SearchFilterFactory {
     }
 
     /****Sets****/
+    else if(sf == SearchFilter.setWoe) {
+      return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.setWoe, searchValue: "woe", searchKey: "set", filterType: SearchFilterType.set);
+    }
     else if(sf == SearchFilter.setMat) {
       return SearchFilterData(filter:sf, name: AppLocalizations.of(context)!.setMat, searchValue: "mat", searchKey: "set", filterType: SearchFilterType.set);
     }
