@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:magic_image_generator/model/card_info_header.dart';
+import 'package:magic_image_generator/domain/entity/card_info_header.dart';
 import 'package:magic_image_generator/view/widgets/flippable_image.dart';
 import 'package:magic_image_generator/view/widgets/overlay_flippable_image.dart';
 import 'package:provider/provider.dart';

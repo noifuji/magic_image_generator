@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:magic_image_generator/domain/entity/card_info_header.dart';
+import 'package:magic_image_generator/domain/entity/search_result.dart';
 import 'package:magic_image_generator/view/search_box_widget.dart';
 import 'package:magic_image_generator/view/search_card.dart';
 import 'package:magic_image_generator/view/sort_drop_down.dart';
@@ -9,8 +11,6 @@ import 'package:uuid/uuid.dart';
 import '../common/constants.dart' as constants;
 import '../common/mig_exception.dart';
 import '../common/util.dart';
-import '../model/card_info_header.dart';
-import '../model/search_result.dart';
 import '../viewmodel/canvas_view_model.dart';
 import '../viewmodel/search_view_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

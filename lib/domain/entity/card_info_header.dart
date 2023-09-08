@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'card_info.dart';
+import 'package:magic_image_generator/domain/entity/card_info.dart';
 
 class CardInfoHeader {
   final String displayId;

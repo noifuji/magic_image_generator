@@ -5,8 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:magic_image_generator/common/mig_exception.dart';
 import 'package:magic_image_generator/domain/card_repository.dart';
-import 'package:magic_image_generator/domain/import_deck_list_usecase.dart';
-import 'package:magic_image_generator/model/search_result.dart';
+import 'package:magic_image_generator/domain/entity/card_info_header.dart';
+import 'package:magic_image_generator/domain/entity/search_result.dart';
+import 'package:magic_image_generator/domain/usecase/import_deck_list_usecase.dart';
 import 'package:magic_image_generator/view/sort_drop_down.dart';
 
 import '../common/constants.dart' as constants;
@@ -15,7 +16,6 @@ import '../common/search_filter_factory.dart';
 import '../common/util.dart';
 import '../domain/usecase/analyze_filter_usecase.dart';
 import '../domain/usecase/analyze_query_usecase.dart';
-import '../model/card_info_header.dart';
 import '../view/widgets/progress_bar.dart';
 
 class SearchViewModel extends ChangeNotifier {

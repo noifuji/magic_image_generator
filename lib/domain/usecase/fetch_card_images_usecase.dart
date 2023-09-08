@@ -4,9 +4,9 @@ import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 
-import '../../model/card_info_header.dart';
 import 'dart:ui' as ui;
 import 'package:image/image.dart' as img;
+import 'package:magic_image_generator/domain/entity/card_info_header.dart';
 
 class FetchCardImagesUsecase {
   Future<List<List<CardInfoHeader>>> call(

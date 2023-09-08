@@ -1,5 +1,5 @@
 import 'dart:convert';
-import '../common/constants.dart';
+import '../../common/constants.dart';
 
 class ImportDeckListUsecase {
   String call(String rawDeckList, Map<ArenaDeckListGroup, String> groupMap) {

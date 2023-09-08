@@ -3,12 +3,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:magic_image_generator/domain/entity/card_info_header.dart';
 import 'package:magic_image_generator/view/canvas_card.dart';
 import 'package:magic_image_generator/viewmodel/canvas_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../common/constants.dart' as constants;
-import '../model/card_info_header.dart';
 
 class CanvasViewScreen extends StatefulWidget {
   final int responsiveColumns;

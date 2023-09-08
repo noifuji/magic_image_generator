@@ -5,8 +5,8 @@ import 'package:magic_image_generator/data/card_memory_datasource.dart';
 import 'package:magic_image_generator/data/card_remote_data_source.dart';
 import 'package:magic_image_generator/data/card_repository_impl.dart';
 import 'package:magic_image_generator/domain/card_repository.dart';
+import 'package:magic_image_generator/domain/entity/card_info_header.dart';
 import 'package:magic_image_generator/domain/usecase/analyze_query_usecase.dart';
-import 'package:magic_image_generator/model/card_info_header.dart';
 
 void main() {
   late CardRepository repo;

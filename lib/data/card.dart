@@ -1,4 +1,4 @@
-import '../model/card_info.dart';
+import '../domain/entity/card_info.dart';
 
 class Card {
   int? id;

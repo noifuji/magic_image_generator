@@ -3,8 +3,7 @@ import 'dart:ui' as ui;
 import 'dart:ui';
 
 import 'package:flutter/widgets.dart';
-
-import '../../model/card_info_header.dart';
+import 'package:magic_image_generator/domain/entity/card_info_header.dart';
 
 class MergeCardImageUseCase {
   Future<ui.Image> call(
