@@ -1,15 +1,14 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:magic_image_generator/data/card_fetch_csv_api.dart';
 import 'package:magic_image_generator/data/card_master_version.dart';
-import 'package:magic_image_generator/domain/search/search_query_symbol.dart';
+import 'package:magic_image_generator/domain/usecase/search_query_symbol.dart';
 
 import '../common/constants.dart' as constants;
 import 'card.dart';
 import 'data_source.dart';
 
-class CardRemoteDataSource implements DataSource{
+class CardRemoteDataSource implements DataSource {
   final CardFetchCsvApi _api;
 
   CardRemoteDataSource(this._api);
@@ -20,7 +19,7 @@ class CardRemoteDataSource implements DataSource{
   }
 
   @override
-  Future<List<Card>> getAll({bool cache=true}) async {
+  Future<List<Card>> getAll({bool cache = true}) async {
     var result = await _api.fetchCardCsv(cache: cache);
 
     //remove header row
@@ -39,19 +38,15 @@ class CardRemoteDataSource implements DataSource{
         //..types = e[8].toString()
         //..subtypes = e[9].toString()
         ..rarity = e[7].toString()
-        ..rarityValue =
-            constants.rarityValueMap[e[7].toString().toLowerCase()]!
+        ..rarityValue = constants.rarityValueMap[e[7].toString().toLowerCase()]!
         ..set = e[8].toString()
         ..text = e[9].toString()
         ..power = (e[10] == "" ? null : e[10].toString())
-        ..powerValue =
-            (e[10] == "" ? null : (_isInt(e[10]) ? e[10] : 0))
+        ..powerValue = (e[10] == "" ? null : (_isInt(e[10]) ? e[10] : 0))
         ..toughness = (e[11] == "" ? null : e[11].toString())
-        ..toughnessValue =
-            (e[11] == "" ? null : (_isInt(e[11]) ? e[11] : 0))
+        ..toughnessValue = (e[11] == "" ? null : (_isInt(e[11]) ? e[11] : 0))
         ..loyalty = e[12].toString()
-        ..loyaltyValue =
-            (e[12] == "" ? null : (_isInt(e[12]) ? e[12] : 0))
+        ..loyaltyValue = (e[12] == "" ? null : (_isInt(e[12]) ? e[12] : 0))
         ..flavor = e[13].toString()
         ..artist = e[14].toString()
         ..imageUrl = "${constants.imageUrlS3}${e[0]}.png"
@@ -103,7 +98,8 @@ class CardRemoteDataSource implements DataSource{
   }
 
   @override
-  Future<List<Card>> get(List<SearchQuerySymbol> query, Locale locale, {Function(double p1)? onProgress}) {
+  Future<List<Card>> get(List<SearchQuerySymbol> query, Locale locale,
+      {Function(double p1)? onProgress}) {
     // TODO: implement get
     throw UnimplementedError();
   }

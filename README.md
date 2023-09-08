@@ -2,7 +2,7 @@
 flutter pub run build_runner build --delete-conflicting-outputs
 
 - デバッグ 
-flutter run -d chrome --web-renderer canvaskit --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false --profile --dart-define=ENV=stg
+fvm flutter run -d chrome --web-renderer canvaskit --dart-define=BROWSER_IMAGE_DECODING_ENABLED=false --profile --dart-define=ENV=stg
 - 
 - ローカルにサーバーたてて実行(スマホ検証用)
   flutter run -d web-server --web-port 8080 --web-hostname 0.0.0.0 --web-renderer canvaskit
@@ -10,7 +10,7 @@ flutter run -d chrome --web-renderer canvaskit --dart-define=BROWSER_IMAGE_DECOD
 
 
 - ステージングビルド
-flutter build web --release --web-renderer canvaskit --dart-define=ENV=stg
+fvm flutter build web --release --web-renderer canvaskit --dart-define=ENV=stg
 
 !!!!!!!!Flutter3.0のバグが修正されるまではこのコマンドでビルドする!!!!!!!!!!!
 flutter build web --release --web-renderer canvaskit　--dart-define=BROWSER_IMAGE_DECODING_ENABLED=false --dart-define=ENV=stg
@@ -23,7 +23,7 @@ aws --region ap-northeast-1 s3 sync ./build/web s3://magic-image-generator-stagi
 
 
 - プロダクションビルド
-flutter build web --release --web-renderer canvaskit --dart-define=ENV=prd
+fvm flutter build web --release --web-renderer canvaskit --dart-define=ENV=prd
 
 !!!!!!!!Flutter3.0のバグが修正されるまではこのコマンドでビルドする!!!!!!!!!!!
 flutter build web --release --web-renderer canvaskit　--dart-define=BROWSER_IMAGE_DECODING_ENABLED=false --dart-define=ENV=prd

@@ -8,5 +8,4 @@ class SearchResult {
   MIGException? exception;
 
   SearchResult({required this.cards, required this.isSuccess, this.exception});
-
 }

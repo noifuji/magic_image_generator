@@ -1,12 +1,6 @@
-import 'package:isar/isar.dart';
-
 import '../model/card_info.dart';
 
-part 'card.g.dart';
-
-@Collection()
 class Card {
-  @Id()
   int? id;
 
   late String multiverseId;
@@ -70,95 +64,95 @@ class Card {
   }
 
   dynamic getValue(String property) {
-    if(property == "multiverseId") {
+    if (property == "multiverseId") {
       return multiverseId;
-    } else if(property == "layout") {
+    } else if (property == "layout") {
       return layout;
-    } else if(property == "name") {
+    } else if (property == "name") {
       return name;
-    } else if(property == "manaCost") {
+    } else if (property == "manaCost") {
       return manaCost;
-    } else if(property == "cmc") {
+    } else if (property == "cmc") {
       return cmc;
-    } else if(property == "colorIdentity") {
+    } else if (property == "colorIdentity") {
       return colorIdentity;
-    } else if(property == "type") {
+    } else if (property == "type") {
       return type;
-    } else if(property == "rarity") {
+    } else if (property == "rarity") {
       return rarity;
-    } else if(property == "rarityValue") {
+    } else if (property == "rarityValue") {
       return rarityValue;
-    } else if(property == "set") {
+    } else if (property == "set") {
       return set;
-    } else if(property == "text") {
+    } else if (property == "text") {
       return text;
-    } else if(property == "power") {
+    } else if (property == "power") {
       return power;
-    } else if(property == "powerValue") {
+    } else if (property == "powerValue") {
       return powerValue;
-    } else if(property == "toughness") {
+    } else if (property == "toughness") {
       return toughness;
-    } else if(property == "toughnessValue") {
+    } else if (property == "toughnessValue") {
       return toughnessValue;
-    } else if(property == "loyalty") {
+    } else if (property == "loyalty") {
       return loyalty;
-    } else if(property == "loyaltyValue") {
+    } else if (property == "loyaltyValue") {
       return loyaltyValue;
-    } else if(property == "flavor") {
+    } else if (property == "flavor") {
       return flavor;
-    } else if(property == "artist") {
+    } else if (property == "artist") {
       return artist;
-    } else if(property == "imageUrl") {
+    } else if (property == "imageUrl") {
       return imageUrl;
-    } else if(property == "nameJp") {
+    } else if (property == "nameJp") {
       return nameJp;
-    } else if(property == "nameJpYomi") {
+    } else if (property == "nameJpYomi") {
       return nameJpYomi;
-    } else if(property == "textJp") {
+    } else if (property == "textJp") {
       return textJp;
-    } else if(property == "typeJp") {
+    } else if (property == "typeJp") {
       return typeJp;
-    } else if(property == "flavorJp") {
+    } else if (property == "flavorJp") {
       return flavorJp;
-    } else if(property == "imageUrlJp") {
+    } else if (property == "imageUrlJp") {
       return imageUrlJp;
-    } else if(property == "multiverseIdJp") {
+    } else if (property == "multiverseIdJp") {
       return multiverseIdJp;
-    } else if(property == "legalityAlchemy") {
+    } else if (property == "legalityAlchemy") {
       return legalityAlchemy;
-    } else if(property == "legalityBrawl") {
+    } else if (property == "legalityBrawl") {
       return legalityBrawl;
-    } else if(property == "legalityCommander") {
+    } else if (property == "legalityCommander") {
       return legalityCommander;
-    } else if(property == "legalityDuel") {
+    } else if (property == "legalityDuel") {
       return legalityDuel;
-    } else if(property == "legalityExplorer") {
+    } else if (property == "legalityExplorer") {
       return legalityExplorer;
-    } else if(property == "legalityFuture") {
+    } else if (property == "legalityFuture") {
       return legalityFuture;
-    } else if(property == "legalityGladiator") {
+    } else if (property == "legalityGladiator") {
       return legalityGladiator;
-    } else if(property == "legalityHistoric") {
+    } else if (property == "legalityHistoric") {
       return legalityHistoric;
-    } else if(property == "legalityHistoricbrawl") {
+    } else if (property == "legalityHistoricbrawl") {
       return legalityHistoricbrawl;
-    } else if(property == "legalityLegacy") {
+    } else if (property == "legalityLegacy") {
       return legalityLegacy;
-    } else if(property == "legalityModern") {
+    } else if (property == "legalityModern") {
       return legalityModern;
-    } else if(property == "legalityPioneer") {
+    } else if (property == "legalityPioneer") {
       return legalityPioneer;
-    } else if(property == "legalityStandard") {
+    } else if (property == "legalityStandard") {
       return legalityStandard;
-    } else if(property == "legalityVintage") {
+    } else if (property == "legalityVintage") {
       return legalityVintage;
-    } else if(property == "backFaceMultiverseId") {
+    } else if (property == "backFaceMultiverseId") {
       return backFaceMultiverseId;
-    } else if(property == "isBackFace") {
+    } else if (property == "isBackFace") {
       return isBackFace;
-    } else if(property == "backFace") {
+    } else if (property == "backFace") {
       return backFace;
-    } else if(property == "colors") {
+    } else if (property == "colors") {
       return colors;
     }
   }

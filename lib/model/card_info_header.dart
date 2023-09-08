@@ -21,11 +21,18 @@ class CardInfoHeader {
       required this.imageSize,
       required this.rotationAngle});
 
-  CardInfoHeader copyWith({String? displayId, List<CardInfo>? cardFaces, bool? isTransform, bool? isFront, Size? imageSize, double? rotationAngle}) => CardInfoHeader(
-      displayId: displayId ?? this.displayId,
-      cardFaces: cardFaces ?? this.cardFaces,
-      isTransform: isTransform ?? this.isTransform,
-      isFront: isFront ?? this.isFront,
-      imageSize: imageSize ?? this.imageSize,
-      rotationAngle: rotationAngle ?? this.rotationAngle);
+  CardInfoHeader copyWith(
+          {String? displayId,
+          List<CardInfo>? cardFaces,
+          bool? isTransform,
+          bool? isFront,
+          Size? imageSize,
+          double? rotationAngle}) =>
+      CardInfoHeader(
+          displayId: displayId ?? this.displayId,
+          cardFaces: cardFaces ?? this.cardFaces,
+          isTransform: isTransform ?? this.isTransform,
+          isFront: isFront ?? this.isFront,
+          imageSize: imageSize ?? this.imageSize,
+          rotationAngle: rotationAngle ?? this.rotationAngle);
 }

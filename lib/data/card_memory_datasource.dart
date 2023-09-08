@@ -3,20 +3,20 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:magic_image_generator/data/card.dart';
 import 'package:magic_image_generator/data/card_master_version.dart';
-import 'package:magic_image_generator/domain/search/search_query_symbol.dart';
+import 'package:magic_image_generator/domain/usecase/search_query_symbol.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../common/util.dart';
-import '../domain/search/color_type.dart';
-import '../domain/search/rarity_type.dart';
-import '../domain/search/relational_operator_type.dart';
-import '../domain/search/search_condition.dart';
-import '../domain/search/search_keyword_type.dart';
-import '../domain/search/search_operator.dart';
-import '../domain/search/search_operator_type.dart';
+import '../domain/usecase/color_type.dart';
+import '../domain/usecase/rarity_type.dart';
+import '../domain/usecase/relational_operator_type.dart';
+import '../domain/usecase/search_condition.dart';
+import '../domain/usecase/search_keyword_type.dart';
+import '../domain/usecase/search_operator.dart';
+import '../domain/usecase/search_operator_type.dart';
 import 'data_source.dart';
 
-class CardMemoryDataSource implements DataSource{
+class CardMemoryDataSource implements DataSource {
   static final conditionMap = {
     RelationalOperatorType.contains: ConditionType.contains,
     RelationalOperatorType.equals: ConditionType.eq,
@@ -113,7 +113,8 @@ class CardMemoryDataSource implements DataSource{
   }
 
   @override
-  Future<List<Card>> get(List<SearchQuerySymbol> query, Locale locale, {Function(double p1)? onProgress}) async {
+  Future<List<Card>> get(List<SearchQuerySymbol> query, Locale locale,
+      {Function(double p1)? onProgress}) async {
     Util.printTimeStamp("start CardLocalDataSource get");
     var propertyMap = {};
     if (locale.languageCode == "ja") {
@@ -122,10 +123,6 @@ class CardMemoryDataSource implements DataSource{
       propertyMap = propertyMapEn;
     } else {
       throw Exception();
-    }
-
-    for (var s in query) {
-      print(s);
     }
 
     List<FilterOperation> stack = [];
@@ -184,23 +181,24 @@ class CardMemoryDataSource implements DataSource{
     }
 
     //クエリの変換が完了
-    if(onProgress != null) {
+    if (onProgress != null) {
       onProgress(0.1);
     }
 
     final start = DateTime.now();
     final fn = _buildQuery(FilterGroup.and(stack));
-    List<Card> results =[];
-    for(final card in data) {
-      if(fn(card)) {
+    List<Card> results = [];
+    for (final card in data) {
+      if (fn(card)) {
         results.add(card);
       }
     }
-    debugPrint("process time:${DateTime.now().difference(start).inMilliseconds}");
+    debugPrint(
+        "process time:${DateTime.now().difference(start).inMilliseconds}");
     debugPrint("result length:${results.length}");
 
     //クエリの実行が完了
-    if(onProgress != null) {
+    if (onProgress != null) {
       onProgress(0.5);
     }
 
@@ -232,32 +230,31 @@ class CardMemoryDataSource implements DataSource{
     //第一面のみ、片面または、両面がヒットしたカードの第一面
     Util.printTimeStamp("start 第一面のみ、片面または、両面がヒットしたカードの第一面");
     final frontFaces = cards.where((element) => !element.isBackFace).toList();
-    if(onProgress != null) {
+    if (onProgress != null) {
       onProgress(0.6);
     }
-
 
     //第二面のみがヒットしたカード
     Util.printTimeStamp("start 第二面のみがヒットしたカード");
     final backFacesWithoutFrontSide = cards
         .where((element) => element.isBackFace)
         .where((element) => !frontFaces
-        .map((e) => e.backFaceMultiverseId)
-        .where((e) => e != null)
-        .contains(element.multiverseId))
+            .map((e) => e.backFaceMultiverseId)
+            .where((e) => e != null)
+            .contains(element.multiverseId))
         .toList();
-    if(onProgress != null) {
+    if (onProgress != null) {
       onProgress(0.7);
     }
 
     if (backFacesWithoutFrontSide.isNotEmpty) {
       //第二面がヒットしたカードの第一面を取得
       Util.printTimeStamp("start 第二面がヒットしたカードの第一面を取得");
-      final backFaceIds = backFacesWithoutFrontSide.map((e) => e.multiverseId)
-          .toList();
+      final backFaceIds =
+          backFacesWithoutFrontSide.map((e) => e.multiverseId).toList();
       final frontFacesOfBackFacesWithoutFrontSide = <Card>[];
-      for(int i =0; i<data.length; i++) {
-        if(backFaceIds.contains(data[i].backFaceMultiverseId)) {
+      for (int i = 0; i < data.length; i++) {
+        if (backFaceIds.contains(data[i].backFaceMultiverseId)) {
           frontFacesOfBackFacesWithoutFrontSide.add(data[i]);
         }
       }
@@ -271,7 +268,7 @@ class CardMemoryDataSource implements DataSource{
         }
         return e;
       }).toList());
-      if(onProgress != null) {
+      if (onProgress != null) {
         onProgress(0.9);
       }
     }
@@ -280,37 +277,38 @@ class CardMemoryDataSource implements DataSource{
     Util.printTimeStamp("start 第二面のある札には、第二面の情報をつけておく。");
     List<String> frontFacesWithBackSide = frontFaces
         .where((e) =>
-    e.backFaceMultiverseId != null && e.backFaceMultiverseId != "")
+            e.backFaceMultiverseId != null && e.backFaceMultiverseId != "")
         .map((e) => e.backFaceMultiverseId!)
         .toList();
 
     List<Card> backFaces = [];
     if (frontFacesWithBackSide.isNotEmpty) {
-      for(int i =0; i<data.length; i++) {
-        if(frontFacesWithBackSide.contains(data[i].multiverseId)) {
+      for (int i = 0; i < data.length; i++) {
+        if (frontFacesWithBackSide.contains(data[i].multiverseId)) {
           backFaces.add(data[i]);
         }
       }
     }
-    if(onProgress != null) {
+    if (onProgress != null) {
       onProgress(1.0);
     }
 
     result.addAll(frontFaces.map((e) {
       if (e.backFaceMultiverseId != null && e.backFaceMultiverseId != "") {
         e.backFace = backFaces.firstWhere(
-                (element) => element.multiverseId == e.backFaceMultiverseId);
+            (element) => element.multiverseId == e.backFaceMultiverseId);
       }
       return e;
     }).toList());
 
-    debugPrint("post process time:${DateTime.now().difference(postProcessSatrt).inMilliseconds}");
+    debugPrint(
+        "post process time:${DateTime.now().difference(postProcessSatrt).inMilliseconds}");
     Util.printTimeStamp("end CardLocalDataSource get");
     return Future<List<Card>>.value(result);
   }
 
   @override
-  Future<List<Card>> getAll({bool cache=true}) {
+  Future<List<Card>> getAll({bool cache = true}) {
     // TODO: implement getAll
     throw UnimplementedError();
   }
@@ -325,7 +323,7 @@ class CardMemoryDataSource implements DataSource{
 
   @override
   Future<void> insertAll(List<Card> cards) async {
-    for(int i = 0; i < cards.length; i++) {
+    for (int i = 0; i < cards.length; i++) {
       cards[i].id = i;
     }
     data = cards;
@@ -412,14 +410,14 @@ class CardMemoryDataSource implements DataSource{
 
     if (condition.value == ColorType.colorless) {
       //colorlessの場合
-      return FilterCondition<int>(
+      return const FilterCondition<int>(
           type: ConditionType.eq,
           property: "colors",
           value: 0,
           caseSensitive: false);
     } else if (condition.value == ColorType.multiColor) {
       //multicolorの場合
-      return FilterCondition<int>(
+      return const FilterCondition<int>(
           type: ConditionType.gt,
           property: "colors",
           value: 1,
@@ -465,33 +463,32 @@ class CardMemoryDataSource implements DataSource{
 
   bool Function(Card) _buildQuery(FilterOperation filter,
       {FilterGroupType filterGroupType = FilterGroupType.and}) {
-    if(filter is FilterGroup) {
+    if (filter is FilterGroup) {
       List<bool Function(Card)> results = [];
-      for(final filterInFilterGroup in filter.filters) {
-        results.add(_buildQuery(filterInFilterGroup,
-            filterGroupType: filter.type
-        ));
+      for (final filterInFilterGroup in filter.filters) {
+        results.add(
+            _buildQuery(filterInFilterGroup, filterGroupType: filter.type));
       }
-      if(filter.type == FilterGroupType.and) {
+      if (filter.type == FilterGroupType.and) {
         return (Card card) {
           bool isTargetCard = true;
-          for(final r in results) {
+          for (final r in results) {
             isTargetCard = isTargetCard && r(card);
           }
           return isTargetCard;
         };
-      } else if(filter.type == FilterGroupType.or) {
+      } else if (filter.type == FilterGroupType.or) {
         return (Card card) {
           bool isTargetCard = false;
-          for(final r in results) {
+          for (final r in results) {
             isTargetCard = isTargetCard || r(card);
           }
           return isTargetCard;
         };
-      } else if(filter.type == FilterGroupType.not) {
+      } else if (filter.type == FilterGroupType.not) {
         return (Card card) {
           bool isTargetCard = true;
-          for(final r in results) {
+          for (final r in results) {
             isTargetCard = !r(card);
           }
           return isTargetCard;
@@ -500,49 +497,50 @@ class CardMemoryDataSource implements DataSource{
         throw Exception("Unexpected FilterGroupType:${filter.type}");
       }
     } else if (filter is FilterCondition) {
-      if(filter.type == ConditionType.eq) {
+      if (filter.type == ConditionType.eq) {
         return (Card card) {
-          if(card.getValue(filter.property) == null) {
+          if (card.getValue(filter.property) == null) {
             return false;
           }
-          if(filter.value1 is String && !filter.caseSensitive) {
-            return (card.getValue(filter.property) as String).toLowerCase()
-                == (filter.value1 as String).toLowerCase();
+          if (filter.value1 is String && !filter.caseSensitive) {
+            return (card.getValue(filter.property) as String).toLowerCase() ==
+                (filter.value1 as String).toLowerCase();
           } else {
             return card.getValue(filter.property) == filter.value1;
           }
         };
-      } else if(filter.type == ConditionType.contains) {
+      } else if (filter.type == ConditionType.contains) {
         return (Card card) {
-          if(card.getValue(filter.property) == null) {
+          if (card.getValue(filter.property) == null) {
             return false;
           }
-          if(filter.value1 is String && !filter.caseSensitive) {
-            return (card.getValue(filter.property) as String).toLowerCase()
+          if (filter.value1 is String && !filter.caseSensitive) {
+            return (card.getValue(filter.property) as String)
+                .toLowerCase()
                 .contains((filter.value1 as String).toLowerCase());
           } else {
             return card.getValue(filter.property).contains(filter.value1);
           }
         };
-      } else if(filter.type == ConditionType.gt) {
+      } else if (filter.type == ConditionType.gt) {
         return (Card card) {
-          if(card.getValue(filter.property) == null) {
+          if (card.getValue(filter.property) == null) {
             return false;
           }
-          return filter.include1 ?
-          card.getValue(filter.property) >= (filter.value1)
-          :card.getValue(filter.property) > (filter.value1);
+          return filter.include1
+              ? card.getValue(filter.property) >= (filter.value1)
+              : card.getValue(filter.property) > (filter.value1);
         };
-      } else if(filter.type == ConditionType.lt) {
+      } else if (filter.type == ConditionType.lt) {
         return (Card card) {
-          if(card.getValue(filter.property) == null) {
+          if (card.getValue(filter.property) == null) {
             return false;
           }
-          return filter.include1 ?
-          card.getValue(filter.property) <= (filter.value1)
-              :card.getValue(filter.property) < (filter.value1);
+          return filter.include1
+              ? card.getValue(filter.property) <= (filter.value1)
+              : card.getValue(filter.property) < (filter.value1);
         };
-      } else if(filter.type == ConditionType.isNull) {
+      } else if (filter.type == ConditionType.isNull) {
         return (Card card) {
           return card.getValue(filter.property) == null;
         };
@@ -553,7 +551,6 @@ class CardMemoryDataSource implements DataSource{
 
     throw Exception("never reached");
   }
-
 }
 
 abstract class FilterOperation {

@@ -5,8 +5,10 @@ class ImportDeckListUsecase {
   String call(String rawDeckList, Map<ArenaDeckListGroup, String> groupMap) {
     var jsonDeckList = convertToJson(rawDeckList, groupMap);
     var deckList = json.decode(jsonDeckList);
-    List<String> main = deckList.map<String>((x) => x[arenaDeckListKeyName] as String).toList();
-    return main.fold<String>('', (p,c) => (p == ''? 'name="$c"' : '$p or name="$c"'));
+    List<String> main =
+        deckList.map<String>((x) => x[arenaDeckListKeyName] as String).toList();
+    return main.fold<String>(
+        '', (p, c) => (p == '' ? 'name="$c"' : '$p or name="$c"'));
   }
 
   String convertToJson(String s, Map<ArenaDeckListGroup, String> groupMap) {
@@ -17,7 +19,7 @@ class ImportDeckListUsecase {
     for (int i = 0; i < l.length; i++) {
       if (l[i].isEmpty) {
       } else if (isNumeric(l[i][0])) {
-        if(group == ArenaDeckListGroup.none) {
+        if (group == ArenaDeckListGroup.none) {
           throw Exception();
         }
         result.add(convertStrToMap(l[i], group));
@@ -56,19 +58,21 @@ class ImportDeckListUsecase {
 
     int setIndex = tmp.indexWhere((x) => x.contains('('));
 
-    if(setIndex > 1) {
-      map[arenaDeckListKeyName]  = tmp.sublist(1, setIndex).fold<String>('', (p, c) {
+    if (setIndex > 1) {
+      map[arenaDeckListKeyName] =
+          tmp.sublist(1, setIndex).fold<String>('', (p, c) {
         return (p == '' ? c : '$p $c');
       });
 
-      map[arenaDeckListKeySetCode] =  tmp[setIndex].replaceAll('(', '').replaceAll(')', '');
-
+      map[arenaDeckListKeySetCode] =
+          tmp[setIndex].replaceAll('(', '').replaceAll(')', '');
 
       if (tmp.asMap().containsKey(setIndex + 1)) {
         map[arenaDeckListKeyNo] = tmp[setIndex + 1];
       }
     } else {
-      map[arenaDeckListKeyName] = tmp.sublist(1, tmp.length).fold<String>('', (p, c) {
+      map[arenaDeckListKeyName] =
+          tmp.sublist(1, tmp.length).fold<String>('', (p, c) {
         return (p == '' ? c : '$p $c');
       });
     }

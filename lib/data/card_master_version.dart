@@ -1,10 +1,4 @@
-import 'package:isar/isar.dart';
-
-part 'card_master_version.g.dart';
-
-@Collection()
 class CardMasterVersion {
-  @Id()
   int? id;
 
   late int version;

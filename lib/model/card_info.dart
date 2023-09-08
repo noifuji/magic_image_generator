@@ -35,22 +35,23 @@ class CardInfo {
       this.image});
 
   CardInfo copyWith(
-      {String? multiverseId,
-      String? name,
-      String? nameJpYomi,
-      String? imageUrl,
-      String? imageUrlJp,
-      String? layout,
-      int? cmc,
-      bool? isFront,
-      ui.Image? image}) =>CardInfo(
-        multiverseId: multiverseId ?? this.multiverseId,
-        name: name ?? this.name,
-        nameJpYomi: nameJpYomi ?? this.nameJpYomi,
-        imageUrl: imageUrl ?? this.imageUrl,
-        imageUrlJp: imageUrlJp ?? this.imageUrlJp,
-        layout: layout ?? this.layout,
-        cmc: cmc ?? this.cmc,
-        isFront: isFront ?? this.isFront,
-        image: image);
+          {String? multiverseId,
+          String? name,
+          String? nameJpYomi,
+          String? imageUrl,
+          String? imageUrlJp,
+          String? layout,
+          int? cmc,
+          bool? isFront,
+          ui.Image? image}) =>
+      CardInfo(
+          multiverseId: multiverseId ?? this.multiverseId,
+          name: name ?? this.name,
+          nameJpYomi: nameJpYomi ?? this.nameJpYomi,
+          imageUrl: imageUrl ?? this.imageUrl,
+          imageUrlJp: imageUrlJp ?? this.imageUrlJp,
+          layout: layout ?? this.layout,
+          cmc: cmc ?? this.cmc,
+          isFront: isFront ?? this.isFront,
+          image: image);
 }

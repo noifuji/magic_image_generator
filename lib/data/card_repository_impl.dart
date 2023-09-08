@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:magic_image_generator/data/card_master_version.dart';
-import 'package:magic_image_generator/domain/search/search_query_symbol.dart';
+import 'package:magic_image_generator/domain/usecase/search_query_symbol.dart';
 import 'package:uuid/uuid.dart';
 
 import '../common/util.dart';
@@ -40,17 +40,21 @@ class CardRepositoryImpl implements CardRepository {
     Util.printTimeStamp("CardRepositoryImpl _localDataSource.insertAll(cards)");
     await _localDataSource.insertAll(cards);
     onProgress(0.7);
-    Util.printTimeStamp("CardRepositoryImpl _localDataSource.insertVersion(_vRemote)");
+    Util.printTimeStamp(
+        "CardRepositoryImpl _localDataSource.insertVersion(_vRemote)");
     await _localDataSource.insertVersion(vRemote);
-
   }
 
   @override
-  Future<List<CardInfoHeader>> get(List<SearchQuerySymbol> query, Locale locale, {Function(double)? onProgress}) async {
-    List<Card> cards = await _localDataSource.get(query, locale, onProgress: onProgress);
+  Future<List<CardInfoHeader>> get(List<SearchQuerySymbol> query, Locale locale,
+      {Function(double)? onProgress}) async {
+    List<Card> cards =
+        await _localDataSource.get(query, locale, onProgress: onProgress);
     return Future<List<CardInfoHeader>>.value(cards.map((e) {
       var front = e.convert();
-      var isTransform = (front.layout == "transform" || front.layout == "modal_dfc" || front.layout == "meld");
+      var isTransform = (front.layout == "transform" ||
+          front.layout == "modal_dfc" ||
+          front.layout == "meld");
       var cardFaces = [front];
       if (isTransform && e.backFace != null) {
         cardFaces.add(e.backFace!.convert());
@@ -61,7 +65,8 @@ class CardRepositoryImpl implements CardRepository {
           cardFaces: cardFaces,
           isTransform: isTransform,
           isFront: true,
-          imageSize: const Size(constants.rawCardImageWidth, constants.rawCardImageHeight),
+          imageSize: const Size(
+              constants.rawCardImageWidth, constants.rawCardImageHeight),
           rotationAngle: 0);
 
       return cih;

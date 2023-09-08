@@ -398,18 +398,10 @@ packages:
     source: hosted
     version: "1.0.4"
   isar:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: isar
       sha256: d1863d38b3bd3acb7e040414a8d1d98d708c4621db3c09980b7a310b63460e2c
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.5.0"
-  isar_flutter_libs:
-    dependency: "direct main"
-    description:
-      name: isar_flutter_libs
-      sha256: "581d1352b41205617cc1d124e75baf747650803337c734d2352d5eef7b9cb26b"
       url: "https://pub.dev"
     source: hosted
     version: "2.5.0"

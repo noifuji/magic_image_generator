@@ -19,16 +19,15 @@ import 'package:magic_image_generator/viewmodel/canvas_view_model.dart';
 import 'package:magic_image_generator/viewmodel/search_view_model.dart';
 import 'package:provider/provider.dart';
 
-import './common/configure_nonweb.dart' if (dart.library.html) './common/configure_web.dart';
+import './common/configure_nonweb.dart'
+    if (dart.library.html) './common/configure_web.dart';
 import './common/constants.dart' as constants;
 import 'common/util.dart';
 import 'data/card_fetch_csv_api.dart';
-import 'data/card_local_data_source.dart';
 import 'data/card_memory_datasource.dart';
 import 'data/card_remote_data_source.dart';
 import 'data/card_repository_impl.dart';
 import 'data/data_source.dart';
-import 'data/isar_factory_nonweb.dart' if (dart.library.html) 'data/isar_factory_web.dart';
 import 'domain/card_repository.dart';
 import 'firebase_options.dart';
 
@@ -95,17 +94,20 @@ Future<void> main() async {
     );
   }
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
+  const MyApp({Key? key}) : super(key: key);
 
-  static _MyAppState? of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
+  @override
+  MyAppState createState() => MyAppState();
+
+  static MyAppState? of(BuildContext context) =>
+      context.findAncestorStateOfType<MyAppState>();
 }
 
-class _MyAppState extends State<MyApp> {
+class MyAppState extends State<MyApp> {
   late ProgressBarController _progressController;
   late Future<CardRepository> _initAppFuture;
   late final SearchViewModel _searchViewModel;
@@ -124,15 +126,15 @@ class _MyAppState extends State<MyApp> {
     await _appLanguage.loadLocale();
 
     _progressController.value = 0.1;
-
-    var isar = await IsarFactory.getInstance();
-
     _progressController.value = 0.5;
 
-    DataSource localDataSource = CardMemoryDataSource();//CardLocalDataSource(isar);
-    CardRemoteDataSource remoteDataSource = CardRemoteDataSource(CardFetchCsvApi());
+    DataSource localDataSource =
+        CardMemoryDataSource(); //CardLocalDataSource(isar);
+    CardRemoteDataSource remoteDataSource =
+        CardRemoteDataSource(CardFetchCsvApi());
     CardRepository repo = CardRepositoryImpl(localDataSource, remoteDataSource);
-    await repo.init(onProgress: (value) => _progressController.value = (0.5 + 0.5 * value));
+    await repo.init(
+        onProgress: (value) => _progressController.value = (0.5 + 0.5 * value));
 
     _searchViewModel = SearchViewModel(repo);
     _canvasViewModel = CanvasViewModel();
@@ -151,7 +153,8 @@ class _MyAppState extends State<MyApp> {
           if (dataSnapshot.connectionState == ConnectionState.waiting) {
             Util.printTimeStamp("_MyHomePageState build waiting");
             return MaterialApp(
-                onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+                onGenerateTitle: (context) =>
+                    AppLocalizations.of(context)!.appTitle,
                 localizationsDelegates: const [
                   AppLocalizations.delegate,
                   GlobalMaterialLocalizations.delegate,
@@ -159,23 +162,28 @@ class _MyAppState extends State<MyApp> {
                   GlobalCupertinoLocalizations.delegate,
                 ],
                 supportedLocales: AppLocalizations.supportedLocales,
-                theme: ThemeData(brightness: Brightness.dark, fontFamily: "NotoSansJP-Regular"),
-                darkTheme: ThemeData(brightness: Brightness.dark, fontFamily: "NotoSansJP-Regular"),
+                theme: ThemeData(
+                    brightness: Brightness.dark,
+                    fontFamily: "NotoSansJP-Regular"),
+                darkTheme: ThemeData(
+                    brightness: Brightness.dark,
+                    fontFamily: "NotoSansJP-Regular"),
                 themeMode: ThemeMode.dark,
                 home: Row(children: [
                   const Expanded(flex: 1, child: SizedBox.shrink()),
                   Expanded(
                       flex: 1,
-                      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                        ProgressBar(
-                          controller: _progressController,
-                        )
-                      ])),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ProgressBar(
+                              controller: _progressController,
+                            )
+                          ])),
                   const Expanded(flex: 1, child: SizedBox.shrink()),
                 ]));
           } else if (dataSnapshot.error != null) {
             if (kDebugMode) {
-
               print(dataSnapshot.error);
               print(dataSnapshot.stackTrace);
             }
@@ -194,7 +202,8 @@ class _MyAppState extends State<MyApp> {
                           FocusManager.instance.primaryFocus?.unfocus();
                         },
                         child: MaterialApp(
-                          onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+                          onGenerateTitle: (context) =>
+                              AppLocalizations.of(context)!.appTitle,
                           locale: Provider.of<AppLanguage>(context).appLocale,
                           localizationsDelegates: const [
                             AppLocalizations.delegate,
@@ -203,8 +212,12 @@ class _MyAppState extends State<MyApp> {
                             GlobalCupertinoLocalizations.delegate,
                           ],
                           supportedLocales: AppLocalizations.supportedLocales,
-                          theme: ThemeData(brightness: Brightness.dark, fontFamily: "NotoSansJP-Regular"),
-                          darkTheme: ThemeData(brightness: Brightness.dark, fontFamily: "NotoSansJP-Regular"),
+                          theme: ThemeData(
+                              brightness: Brightness.dark,
+                              fontFamily: "NotoSansJP-Regular"),
+                          darkTheme: ThemeData(
+                              brightness: Brightness.dark,
+                              fontFamily: "NotoSansJP-Regular"),
                           themeMode: ThemeMode.dark,
                           home: const MyHomePage(),
                         ))));
@@ -234,18 +247,22 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     Util.printTimeStamp("_MyHomePageState build start");
-    return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
       final breakpoint = Breakpoint.fromConstraints(constraints);
       int columns = breakpoint.columns;
       double gutterWidth = breakpoint.gutters;
       double marginWidth = breakpoint.gutters;
-      double columnWidth = (constraints.maxWidth - marginWidth * 2 - gutterWidth * (columns - 1)) / columns;
+      double columnWidth = (constraints.maxWidth -
+              marginWidth * 2 -
+              gutterWidth * (columns - 1)) /
+          columns;
 
       if (columns > 4) {
         return Scaffold(
             appBar: AppBar(
               title: Text(AppLocalizations.of(context)!.appTitle),
-              actions: [
+              actions: const [
                 KofiButton(),
                 LanguageDropDownList(),
               ],
@@ -254,7 +271,8 @@ class _MyHomePageState extends State<MyHomePage> {
               Expanded(
                   flex: constants.searchViewRatio,
                   child: Container(
-                      margin: EdgeInsets.only(left: marginWidth, right: gutterWidth),
+                      margin: EdgeInsets.only(
+                          left: marginWidth, right: gutterWidth),
                       child: SearchViewScreen(
                         responsiveColumns: columns ~/ 2,
                         responsiveColumnWidth: columnWidth,
@@ -271,14 +289,17 @@ class _MyHomePageState extends State<MyHomePage> {
                         responsiveGutterWidth: gutterWidth,
                       )))
             ]),
-            floatingActionButton: Column(mainAxisSize: MainAxisSize.min, children: [
+            floatingActionButton:
+                Column(mainAxisSize: MainAxisSize.min, children: [
               FloatingActionButton(
                 heroTag: "copy",
                 onPressed: () async {
                   await copyImageToClipBoard();
 
-                  if (Util.getCurrentEnvironment() == constants.Environment.production) {
-                    await FirebaseAnalytics.instance.logEvent(name: "click_copy_button");
+                  if (Util.getCurrentEnvironment() ==
+                      constants.Environment.production) {
+                    await FirebaseAnalytics.instance
+                        .logEvent(name: "click_copy_button");
                   }
                 },
                 tooltip: AppLocalizations.of(context)!.copy,
@@ -290,8 +311,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () async {
                   await downloadImage();
 
-                  if (Util.getCurrentEnvironment() == constants.Environment.production) {
-                    await FirebaseAnalytics.instance.logEvent(name: "click_download_button");
+                  if (Util.getCurrentEnvironment() ==
+                      constants.Environment.production) {
+                    await FirebaseAnalytics.instance
+                        .logEvent(name: "click_download_button");
                   }
                 },
                 tooltip: AppLocalizations.of(context)!.download,
@@ -312,29 +335,35 @@ class _MyHomePageState extends State<MyHomePage> {
           responsiveGutterWidth: gutterWidth,
         ));
 
-        _widgetOptions.add(DonateScreen());
+        _widgetOptions.add(const DonateScreen());
 
         return Scaffold(
             appBar: AppBar(
               title: Text(AppLocalizations.of(context)!.appTitle),
-              actions: [LanguageDropDownList()],
+              actions: const [LanguageDropDownList()],
             ),
             body: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Expanded(
                   flex: constants.searchViewRatio,
-                  child: Container(margin: EdgeInsets.only(left: marginWidth, right: gutterWidth), child: _widgetOptions[_selectedIndex])),
+                  child: Container(
+                      margin: EdgeInsets.only(
+                          left: marginWidth, right: gutterWidth),
+                      child: _widgetOptions[_selectedIndex])),
             ]),
             floatingActionButton: Container(
                 margin: const EdgeInsets.only(bottom: 0.0),
-                child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+                child:
+                    Column(mainAxisAlignment: MainAxisAlignment.end, children: [
                   if (_selectedIndex == 1)
                     FloatingActionButton(
                       heroTag: "copy",
                       onPressed: () async {
                         await copyImageToClipBoard();
 
-                        if (Util.getCurrentEnvironment() == constants.Environment.production) {
-                          await FirebaseAnalytics.instance.logEvent(name: "click_copy_button");
+                        if (Util.getCurrentEnvironment() ==
+                            constants.Environment.production) {
+                          await FirebaseAnalytics.instance
+                              .logEvent(name: "click_copy_button");
                         }
                       },
                       tooltip: AppLocalizations.of(context)!.copy,
@@ -347,8 +376,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       onPressed: () async {
                         await downloadImage();
 
-                        if (Util.getCurrentEnvironment() == constants.Environment.production) {
-                          await FirebaseAnalytics.instance.logEvent(name: "click_download_button");
+                        if (Util.getCurrentEnvironment() ==
+                            constants.Environment.production) {
+                          await FirebaseAnalytics.instance
+                              .logEvent(name: "click_download_button");
                         }
                       },
                       tooltip: AppLocalizations.of(context)!.download,
@@ -357,9 +388,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 ])),
             bottomNavigationBar: BottomNavigationBar(
               items: <BottomNavigationBarItem>[
-                BottomNavigationBarItem(icon: const Icon(Icons.search), label: AppLocalizations.of(context)!.menuSearchCard),
-                BottomNavigationBarItem(icon: const Icon(Icons.style), label: AppLocalizations.of(context)!.menuEditCardImage),
-                BottomNavigationBarItem(icon: const Icon(Icons.favorite), label: AppLocalizations.of(context)!.donate),
+                BottomNavigationBarItem(
+                    icon: const Icon(Icons.search),
+                    label: AppLocalizations.of(context)!.menuSearchCard),
+                BottomNavigationBarItem(
+                    icon: const Icon(Icons.style),
+                    label: AppLocalizations.of(context)!.menuEditCardImage),
+                BottomNavigationBarItem(
+                    icon: const Icon(Icons.favorite),
+                    label: AppLocalizations.of(context)!.donate),
               ],
               currentIndex: _selectedIndex,
               onTap: _onItemTapped,
@@ -369,7 +406,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> copyImageToClipBoard() async {
-    Provider.of<CanvasViewModel>(context, listen: false).copyImageToClipBoard(Localizations.localeOf(context), callback: () {
+    Provider.of<CanvasViewModel>(context, listen: false)
+        .copyImageToClipBoard(Localizations.localeOf(context), callback: () {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(AppLocalizations.of(context)!.msgCopyDone),
       ));
@@ -381,7 +419,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> downloadImage() async {
-    Provider.of<CanvasViewModel>(context, listen: false).downloadImage(Localizations.localeOf(context), error: () {
+    Provider.of<CanvasViewModel>(context, listen: false)
+        .downloadImage(Localizations.localeOf(context), error: () {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(AppLocalizations.of(context)!.exceptionCode210),
       ));

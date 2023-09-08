@@ -1,3 +1,1 @@
-class CardIsarDatabase {
-
-}
+class CardIsarDatabase {}

@@ -24,12 +24,10 @@ class SearchCard extends StatefulWidget {
 class _SearchCardState extends State<SearchCard> {
   late final FlippableImageController _fiController;
 
-
   @override
   void initState() {
     super.initState();
     _fiController = FlippableImageController();
-
   }
 
   @override
@@ -38,32 +36,33 @@ class _SearchCardState extends State<SearchCard> {
     Image? backImage;
     List<Widget> overlays = [];
 
-
-    if(widget.card.isTransform && widget.card.cardFaces.length > 1) {
+    if (widget.card.isTransform && widget.card.cardFaces.length > 1) {
       overlays.add(_createFlipButton());
 
       if (widget.card.isFront) {
-        frontImage =
-            Image.network(widget.card.firstFace.imageUrlLocale(Localizations.localeOf(context)));
-        backImage =
-            Image.network(widget.card.secondFace!.imageUrlLocale(Localizations.localeOf(context)));
+        frontImage = Image.network(widget.card.firstFace
+            .imageUrlLocale(Localizations.localeOf(context)));
+        backImage = Image.network(widget.card.secondFace!
+            .imageUrlLocale(Localizations.localeOf(context)));
       } else {
-        frontImage =
-            Image.network(widget.card.secondFace!.imageUrlLocale(Localizations.localeOf(context)));
-        backImage =
-            Image.network(widget.card.firstFace.imageUrlLocale(Localizations.localeOf(context)));
+        frontImage = Image.network(widget.card.secondFace!
+            .imageUrlLocale(Localizations.localeOf(context)));
+        backImage = Image.network(widget.card.firstFace
+            .imageUrlLocale(Localizations.localeOf(context)));
       }
     } else {
-      frontImage = Image.network(widget.card.firstFace.imageUrlLocale(Localizations.localeOf(context)));
+      frontImage = Image.network(widget.card.firstFace
+          .imageUrlLocale(Localizations.localeOf(context)));
     }
 
-    bool isInCanvas = Provider.of<CanvasViewModel>(context).isInCanvas(widget.card);
+    bool isInCanvas =
+        Provider.of<CanvasViewModel>(context).isInCanvas(widget.card);
     return Container(
         foregroundDecoration: BoxDecoration(
           color: Colors.black.withOpacity(isInCanvas ? 0.4 : 0),
           //backgroundBlendMode: BlendMode.srcATop,
         ),
-        child:OverlayFlippableImage(
+        child: OverlayFlippableImage(
           width: widget.card.imageSize.width,
           height: widget.card.imageSize.height,
           rotationAngle: widget.card.rotationAngle,
@@ -71,32 +70,33 @@ class _SearchCardState extends State<SearchCard> {
           controller: _fiController,
           backSide: backImage,
           overlays: overlays,
-          onFlipped: ()=> Provider.of<SearchViewModel>(context, listen: false).flip(widget.card),
+          onFlipped: () => Provider.of<SearchViewModel>(context, listen: false)
+              .flip(widget.card),
         ));
   }
 
   Widget _createFlipButton() {
     return Positioned.fill(
         child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            width: 30.0 * widget.scale,
-            height: 30.0 * widget.scale,
-            margin: const EdgeInsets.only(),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withAlpha(200),
-              shape: BoxShape.circle,
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        width: 30.0 * widget.scale,
+        height: 30.0 * widget.scale,
+        margin: const EdgeInsets.only(),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary.withAlpha(200),
+          shape: BoxShape.circle,
+        ),
+        child: IconButton(
+            padding: const EdgeInsets.all(0.0),
+            alignment: Alignment.center,
+            icon: Icon(
+              Icons.autorenew,
+              size: 20.0 * widget.scale,
             ),
-            child: IconButton(
-                padding: const EdgeInsets.all(0.0),
-                alignment: Alignment.center,
-                icon: Icon(
-                  Icons.autorenew,
-                  size: 20.0 * widget.scale,
-                ),
-                color: Theme.of(context).colorScheme.onPrimary,
-                onPressed: () => _fiController.flip()),
-          ),
-        ));
+            color: Theme.of(context).colorScheme.onPrimary,
+            onPressed: () => _fiController.flip()),
+      ),
+    ));
   }
 }
