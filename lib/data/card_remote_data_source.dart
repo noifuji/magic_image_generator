@@ -1,21 +1,27 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:magic_image_generator/data/card_fetch_csv_api.dart';
 import 'package:magic_image_generator/data/card_master_version.dart';
+import 'package:magic_image_generator/domain/search/search_query_symbol.dart';
 
 import '../common/constants.dart' as constants;
 import 'card.dart';
+import 'data_source.dart';
 
-class CardRemoteDataSource {
+class CardRemoteDataSource implements DataSource{
   final CardFetchCsvApi _api;
 
   CardRemoteDataSource(this._api);
 
+  @override
   Future<CardMasterVersion> getVersion() {
     return _api.fetchCardMasterVersion();
   }
 
-  Future<List<Card>> getAll() async {
-    var result = await _api.fetchCardCsv();
+  @override
+  Future<List<Card>> getAll({bool cache=true}) async {
+    var result = await _api.fetchCardCsv(cache: cache);
 
     //remove header row
     result.removeAt(0);
@@ -39,22 +45,21 @@ class CardRemoteDataSource {
         ..text = e[9].toString()
         ..power = (e[10] == "" ? null : e[10].toString())
         ..powerValue =
-            (e[10] == "" ? null : (isInt(e[10]) ? e[10] : 0))
+            (e[10] == "" ? null : (_isInt(e[10]) ? e[10] : 0))
         ..toughness = (e[11] == "" ? null : e[11].toString())
         ..toughnessValue =
-            (e[11] == "" ? null : (isInt(e[11]) ? e[11] : 0))
+            (e[11] == "" ? null : (_isInt(e[11]) ? e[11] : 0))
         ..loyalty = e[12].toString()
         ..loyaltyValue =
-            (e[12] == "" ? null : (isInt(e[12]) ? e[12] : 0))
+            (e[12] == "" ? null : (_isInt(e[12]) ? e[12] : 0))
         ..flavor = e[13].toString()
         ..artist = e[14].toString()
-        ..imageUrl = constants.imageUrlS3 + e[0].toString() + ".png"
+        ..imageUrl = "${constants.imageUrlS3}${e[0]}.png"
         ..nameJpYomi = e[15].toString()
         ..nameJp = e[16].toString()
         ..textJp = e[17].toString()
         ..typeJp = e[18].toString()
-        //..flavorJp = e[22].toString()
-        ..imageUrlJp = constants.imageUrlS3 + e[21].toString() + ".png"
+        ..imageUrlJp = "${constants.imageUrlS3}${e[21]}.png"
         ..multiverseIdJp = e[21].toString()
         ..legalityAlchemy = (e[22] == "legal")
         ..legalityBrawl = (e[23] == "legal")
@@ -78,10 +83,40 @@ class CardRemoteDataSource {
     return Future<List<Card>>.value(cards);
   }
 
-  bool isInt(dynamic s) {
+  bool _isInt(dynamic s) {
     if (s == null) {
       return false;
     }
     return int.tryParse(s.toString()) != null;
+  }
+
+  @override
+  Future<void> clearAll() {
+    // TODO: implement clearAll
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<int> countAll() {
+    // TODO: implement countAll
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Card>> get(List<SearchQuerySymbol> query, Locale locale, {Function(double p1)? onProgress}) {
+    // TODO: implement get
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> insertAll(List<Card> cards) {
+    // TODO: implement insertAll
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> insertVersion(CardMasterVersion v) {
+    // TODO: implement insertVersion
+    throw UnimplementedError();
   }
 }

@@ -1,28 +1,22 @@
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
-import 'package:isar/isar.dart';
+import 'package:magic_image_generator/data/card.dart';
 import 'package:magic_image_generator/data/card_master_version.dart';
-import 'package:magic_image_generator/domain/search/rarity_type.dart';
-import 'package:magic_image_generator/domain/search/relational_operator_type.dart';
-import 'package:magic_image_generator/domain/search/search_condition.dart';
-import 'package:magic_image_generator/domain/search/search_keyword_type.dart';
-import 'package:magic_image_generator/domain/search/search_operator.dart';
-import 'package:magic_image_generator/domain/search/search_operator_type.dart';
+import 'package:magic_image_generator/domain/search/search_query_symbol.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../common/util.dart';
 import '../domain/search/color_type.dart';
-import '../domain/search/search_query_symbol.dart';
-import 'card.dart';
+import '../domain/search/rarity_type.dart';
+import '../domain/search/relational_operator_type.dart';
+import '../domain/search/search_condition.dart';
+import '../domain/search/search_keyword_type.dart';
+import '../domain/search/search_operator.dart';
+import '../domain/search/search_operator_type.dart';
 import 'data_source.dart';
 
-/*
-逆ポーランド記法形式のConditionとOperatorを解読しつつ、Isarの形式に変換する。
-ConditionによってIsarでのクエリが異なる。
-各キーワード毎に変換メソッドを作成する。
- */
-
-class CardLocalDataSource implements DataSource{
+class CardMemoryDataSource implements DataSource{
   static final conditionMap = {
     RelationalOperatorType.contains: ConditionType.contains,
     RelationalOperatorType.equals: ConditionType.eq,
@@ -106,26 +100,20 @@ class CardLocalDataSource implements DataSource{
     SearchKeywordType.loyalty
   ];
 
-  final Isar _isar;
-
-  CardLocalDataSource(this._isar); //TODO:Isarはラップする
+  List<Card> data = [];
 
   @override
-  Future<int> countAll() {
-    return _isar.cards.where().count();
+  Future<void> clearAll() async {
+    data = [];
   }
 
-  /*
-  1つずつ取り出す。
-  conditionならスタックへ
-  演算子and or ならスタックから2つ取り出してisar形式を生成してスタックへ
-  演算子notならスタックから1つとりだしてisar形式を生成してスタックへ
-
-  queryがなくなったら、スタックに残ってるconditionを取り出してisar形式を生成
-
-   */
   @override
-  Future<List<Card>> get(List<SearchQuerySymbol> query, Locale locale, {Function(double)? onProgress}) async {
+  Future<int> countAll() async {
+    return 0;
+  }
+
+  @override
+  Future<List<Card>> get(List<SearchQuerySymbol> query, Locale locale, {Function(double p1)? onProgress}) async {
     Util.printTimeStamp("start CardLocalDataSource get");
     var propertyMap = {};
     if (locale.languageCode == "ja") {
@@ -200,12 +188,16 @@ class CardLocalDataSource implements DataSource{
       onProgress(0.1);
     }
 
-    Util.printTimeStamp(
-        "start _isar.cards.buildQuery(filter: FilterGroup.and(stack)).findAll()");
-    var results =
-        await _isar.cards.buildQuery(filter: FilterGroup.and(stack)).findAll();
-    Util.printTimeStamp(
-        "end _isar.cards.buildQuery(filter: FilterGroup.and(stack)).findAll()");
+    final start = DateTime.now();
+    final fn = _buildQuery(FilterGroup.and(stack));
+    List<Card> results =[];
+    for(final card in data) {
+      if(fn(card)) {
+        results.add(card);
+      }
+    }
+    debugPrint("process time:${DateTime.now().difference(start).inMilliseconds}");
+    debugPrint("result length:${results.length}");
 
     //クエリの実行が完了
     if(onProgress != null) {
@@ -217,6 +209,8 @@ class CardLocalDataSource implements DataSource{
     for (var r in results) {
       cards.add(r);
     }
+
+    final postProcessSatrt = DateTime.now();
 
     //第二面を抽出
     //第一面を抽出　b
@@ -248,9 +242,9 @@ class CardLocalDataSource implements DataSource{
     final backFacesWithoutFrontSide = cards
         .where((element) => element.isBackFace)
         .where((element) => !frontFaces
-            .map((e) => e.backFaceMultiverseId)
-            .where((e) => e != null)
-            .contains(element.multiverseId))
+        .map((e) => e.backFaceMultiverseId)
+        .where((e) => e != null)
+        .contains(element.multiverseId))
         .toList();
     if(onProgress != null) {
       onProgress(0.7);
@@ -259,14 +253,13 @@ class CardLocalDataSource implements DataSource{
     if (backFacesWithoutFrontSide.isNotEmpty) {
       //第二面がヒットしたカードの第一面を取得
       Util.printTimeStamp("start 第二面がヒットしたカードの第一面を取得");
-      final frontFacesOfBackFacesWithoutFrontSide = await _isar.cards
-          .filter()
-          .repeat(backFacesWithoutFrontSide.map((e) => e.multiverseId).toList(),
-              (q, String id) => q.backFaceMultiverseIdEqualTo(id).or())
-          .buildInternal()
-          .findAll();
-      if(onProgress != null) {
-        onProgress(0.8);
+      final backFaceIds = backFacesWithoutFrontSide.map((e) => e.multiverseId)
+          .toList();
+      final frontFacesOfBackFacesWithoutFrontSide = <Card>[];
+      for(int i =0; i<data.length; i++) {
+        if(backFaceIds.contains(data[i].backFaceMultiverseId)) {
+          frontFacesOfBackFacesWithoutFrontSide.add(data[i]);
+        }
       }
 
       //第一面と第二面を紐付けて、リザルトに追加
@@ -287,18 +280,17 @@ class CardLocalDataSource implements DataSource{
     Util.printTimeStamp("start 第二面のある札には、第二面の情報をつけておく。");
     List<String> frontFacesWithBackSide = frontFaces
         .where((e) =>
-            e.backFaceMultiverseId != null && e.backFaceMultiverseId != "")
+    e.backFaceMultiverseId != null && e.backFaceMultiverseId != "")
         .map((e) => e.backFaceMultiverseId!)
         .toList();
 
     List<Card> backFaces = [];
     if (frontFacesWithBackSide.isNotEmpty) {
-      backFaces = await _isar.cards
-          .filter()
-          .repeat(frontFacesWithBackSide,
-              (q, String id) => q.multiverseIdEqualTo(id).or())
-          .buildInternal()
-          .findAll();
+      for(int i =0; i<data.length; i++) {
+        if(frontFacesWithBackSide.contains(data[i].multiverseId)) {
+          backFaces.add(data[i]);
+        }
+      }
     }
     if(onProgress != null) {
       onProgress(1.0);
@@ -307,49 +299,42 @@ class CardLocalDataSource implements DataSource{
     result.addAll(frontFaces.map((e) {
       if (e.backFaceMultiverseId != null && e.backFaceMultiverseId != "") {
         e.backFace = backFaces.firstWhere(
-            (element) => element.multiverseId == e.backFaceMultiverseId);
+                (element) => element.multiverseId == e.backFaceMultiverseId);
       }
       return e;
     }).toList());
 
+    debugPrint("post process time:${DateTime.now().difference(postProcessSatrt).inMilliseconds}");
     Util.printTimeStamp("end CardLocalDataSource get");
     return Future<List<Card>>.value(result);
   }
 
   @override
-  Future<void> insertAll(List<Card> cards) async {
-    await _isar.writeTxn((isar) async {
-      await isar.cards.putAll(cards);
-    });
-  }
-
-  @override
-  Future<void> clearAll() async {
-    await _isar.writeTxn((isar) async {
-      final cardList = await isar.cards.where().findAll();
-
-      if (cardList.isEmpty) {
-        return;
-      }
-
-      await isar.cards.deleteAll(cardList.map((e) => e.id!).toList());
-    });
+  Future<List<Card>> getAll({bool cache=true}) {
+    // TODO: implement getAll
+    throw UnimplementedError();
   }
 
   @override
   Future<CardMasterVersion?> getVersion() async {
-    int? version =
-        await _isar.cardMasterVersions.where().versionProperty().max();
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    final int? version = pref.getInt('master_version');
 
-    return Future.value(
-        version == null ? null : (CardMasterVersion()..version = version));
+    return Future.value(CardMasterVersion()..version = version ?? 0);
+  }
+
+  @override
+  Future<void> insertAll(List<Card> cards) async {
+    for(int i = 0; i < cards.length; i++) {
+      cards[i].id = i;
+    }
+    data = cards;
   }
 
   @override
   Future<void> insertVersion(CardMasterVersion v) async {
-    await _isar.writeTxn((isar) async {
-      await isar.cardMasterVersions.put(v);
-    });
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setInt('master_version', v.version);
   }
 
   FilterOperation _createIsarFilter<T>(
@@ -478,9 +463,164 @@ class CardLocalDataSource implements DataSource{
     throw Exception();
   }
 
-  @override
-  Future<List<Card>> getAll({bool cache=true}) {
-    // TODO: implement getAll
-    throw UnimplementedError();
+  bool Function(Card) _buildQuery(FilterOperation filter,
+      {FilterGroupType filterGroupType = FilterGroupType.and}) {
+    if(filter is FilterGroup) {
+      List<bool Function(Card)> results = [];
+      for(final filterInFilterGroup in filter.filters) {
+        results.add(_buildQuery(filterInFilterGroup,
+            filterGroupType: filter.type
+        ));
+      }
+      if(filter.type == FilterGroupType.and) {
+        return (Card card) {
+          bool isTargetCard = true;
+          for(final r in results) {
+            isTargetCard = isTargetCard && r(card);
+          }
+          return isTargetCard;
+        };
+      } else if(filter.type == FilterGroupType.or) {
+        return (Card card) {
+          bool isTargetCard = false;
+          for(final r in results) {
+            isTargetCard = isTargetCard || r(card);
+          }
+          return isTargetCard;
+        };
+      } else if(filter.type == FilterGroupType.not) {
+        return (Card card) {
+          bool isTargetCard = true;
+          for(final r in results) {
+            isTargetCard = !r(card);
+          }
+          return isTargetCard;
+        };
+      } else {
+        throw Exception("Unexpected FilterGroupType:${filter.type}");
+      }
+    } else if (filter is FilterCondition) {
+      if(filter.type == ConditionType.eq) {
+        return (Card card) {
+          if(card.getValue(filter.property) == null) {
+            return false;
+          }
+          if(filter.value1 is String && !filter.caseSensitive) {
+            return (card.getValue(filter.property) as String).toLowerCase()
+                == (filter.value1 as String).toLowerCase();
+          } else {
+            return card.getValue(filter.property) == filter.value1;
+          }
+        };
+      } else if(filter.type == ConditionType.contains) {
+        return (Card card) {
+          if(card.getValue(filter.property) == null) {
+            return false;
+          }
+          if(filter.value1 is String && !filter.caseSensitive) {
+            return (card.getValue(filter.property) as String).toLowerCase()
+                .contains((filter.value1 as String).toLowerCase());
+          } else {
+            return card.getValue(filter.property).contains(filter.value1);
+          }
+        };
+      } else if(filter.type == ConditionType.gt) {
+        return (Card card) {
+          if(card.getValue(filter.property) == null) {
+            return false;
+          }
+          return filter.include1 ?
+          card.getValue(filter.property) >= (filter.value1)
+          :card.getValue(filter.property) > (filter.value1);
+        };
+      } else if(filter.type == ConditionType.lt) {
+        return (Card card) {
+          if(card.getValue(filter.property) == null) {
+            return false;
+          }
+          return filter.include1 ?
+          card.getValue(filter.property) <= (filter.value1)
+              :card.getValue(filter.property) < (filter.value1);
+        };
+      } else if(filter.type == ConditionType.isNull) {
+        return (Card card) {
+          return card.getValue(filter.property) == null;
+        };
+      }
+    } else {
+      throw Exception("Unexpected Type");
+    }
+
+    throw Exception("never reached");
   }
+
+}
+
+abstract class FilterOperation {
+  const FilterOperation();
+}
+
+/// The type of dynamic filter conditions.
+///
+/// For lists, at least one of the values in the list has to match. For
+/// `isNull`, the entire list hast to be null.
+enum ConditionType {
+  eq,
+  gt,
+  lt,
+  contains,
+  isNull,
+}
+
+/// Create a filter condition dynamically.
+class FilterCondition<T> extends FilterOperation {
+  /// Type of the filter condition.
+  final ConditionType type;
+
+  /// Property used for comparisons.
+  final String property;
+
+  /// Value used for comparisons. Lower bound for `ConditionType.between`.
+  final T? value1;
+
+  /// Should `value1` be part of the results.
+  final bool include1;
+
+  /// Are string operations case sensitive.
+  final bool caseSensitive;
+
+  const FilterCondition({
+    required this.type,
+    required this.property,
+    T? value,
+    bool include = false,
+    this.caseSensitive = true,
+  })  : value1 = value,
+        include1 = include;
+}
+
+/// Thw type of filter groups.
+enum FilterGroupType {
+  and,
+  or,
+  not,
+}
+
+class FilterGroup extends FilterOperation {
+  /// The filter(s) to be grouped.
+  final List<FilterOperation> filters;
+
+  /// Type of this group.
+  final FilterGroupType type;
+
+  /// Create a logical AND filter group.
+  const FilterGroup.and(this.filters) : type = FilterGroupType.and;
+
+  /// Create a logical OR filter group.
+  const FilterGroup.or(this.filters) : type = FilterGroupType.or;
+
+  /// Negate a filter.
+  FilterGroup.not(FilterOperation filter)
+      : filters = [filter],
+        type = FilterGroupType.not;
 }

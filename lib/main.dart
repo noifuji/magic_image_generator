@@ -24,8 +24,10 @@ import './common/constants.dart' as constants;
 import 'common/util.dart';
 import 'data/card_fetch_csv_api.dart';
 import 'data/card_local_data_source.dart';
+import 'data/card_memory_datasource.dart';
 import 'data/card_remote_data_source.dart';
 import 'data/card_repository_impl.dart';
+import 'data/data_source.dart';
 import 'data/isar_factory_nonweb.dart' if (dart.library.html) 'data/isar_factory_web.dart';
 import 'domain/card_repository.dart';
 import 'firebase_options.dart';
@@ -127,7 +129,7 @@ class _MyAppState extends State<MyApp> {
 
     _progressController.value = 0.5;
 
-    CardLocalDataSource localDataSource = CardLocalDataSource(isar);
+    DataSource localDataSource = CardMemoryDataSource();//CardLocalDataSource(isar);
     CardRemoteDataSource remoteDataSource = CardRemoteDataSource(CardFetchCsvApi());
     CardRepository repo = CardRepositoryImpl(localDataSource, remoteDataSource);
     await repo.init(onProgress: (value) => _progressController.value = (0.5 + 0.5 * value));

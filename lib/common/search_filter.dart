@@ -3,7 +3,7 @@ enum SearchFilter{
   rarityCommon,rarityUncommon,rarityRare,rarityMythic,
   typeCreature,typePlaneswalker,typeInstant,typeSorcery,typeEnchantment,typeArtifact,typeLand,typeBattle,
   manaValue0,manaValue1,manaValue2,manaValue3,manaValue4,manaValue5,manaValue6,manaValue7AndMore,
-  setWoe,setMat,setMul,setMom,setOne,setBrr,setBro,setDmu,
+  setWot,setWoe,setMat,setMul,setMom,setOne,setBrr,setBro,setDmu,
   setSnc,setNeo,setVow,setMid,
   setAfr,setStx,setKhm,setZnr,
   setM21,setIko,setThb,setEld,
