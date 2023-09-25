@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:magic_image_generator/data/card_master_version.dart';
 import 'package:magic_image_generator/domain/entity/card_info_header.dart';
-import 'package:magic_image_generator/domain/usecase/search_query_symbol.dart';
+import 'package:magic_image_generator/domain/entity/search_query_symbol.dart';
 import 'package:uuid/uuid.dart';
 
 import '../common/util.dart';

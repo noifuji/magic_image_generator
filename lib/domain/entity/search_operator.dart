@@ -1,5 +1,5 @@
-import 'package:magic_image_generator/domain/usecase/search_operator_type.dart';
-import 'package:magic_image_generator/domain/usecase/search_query_symbol.dart';
+import 'package:magic_image_generator/domain/enum/search_operator_type.dart';
+import 'package:magic_image_generator/domain/entity/search_query_symbol.dart';
 
 class SearchOperator implements SearchQuerySymbol {
   static final Map<String, SearchOperatorType> searchOperatorMap = {

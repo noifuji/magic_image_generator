@@ -383,9 +383,10 @@ class AdvancedSearchScreen extends StatelessWidget {
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: responsive.rowHeight *
-                                              0.6 *
-                                              0.75 *
-                                              0.5)))),
+                                              0.6 * 0.75 * 0.5),
+                                  ),
+                              ),
+                          ),
                           Container(
                             width: responsive.columnWidth *
                                     bottomBarCenterSpaceColSize +

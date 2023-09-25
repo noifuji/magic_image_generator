@@ -1,8 +1,8 @@
-import 'package:magic_image_generator/domain/usecase/search_condition.dart';
-import 'package:magic_image_generator/domain/usecase/search_condition_mapper.dart';
-import 'package:magic_image_generator/domain/usecase/search_operator.dart';
-import 'package:magic_image_generator/domain/usecase/search_operator_type.dart';
-import 'package:magic_image_generator/domain/usecase/search_query_symbol.dart';
+import 'package:magic_image_generator/domain/entity/search_condition.dart';
+import 'package:magic_image_generator/domain/mapper/search_condition_mapper.dart';
+import 'package:magic_image_generator/domain/entity/search_operator.dart';
+import 'package:magic_image_generator/domain/enum/search_operator_type.dart';
+import 'package:magic_image_generator/domain/entity/search_query_symbol.dart';
 
 class AnalyzeQueryUseCase {
   List<SearchQuerySymbol> call(String query) {

@@ -3,17 +3,17 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:magic_image_generator/data/card.dart';
 import 'package:magic_image_generator/data/card_master_version.dart';
-import 'package:magic_image_generator/domain/usecase/search_query_symbol.dart';
+import 'package:magic_image_generator/domain/entity/search_query_symbol.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../common/util.dart';
-import '../domain/usecase/color_type.dart';
-import '../domain/usecase/rarity_type.dart';
-import '../domain/usecase/relational_operator_type.dart';
-import '../domain/usecase/search_condition.dart';
-import '../domain/usecase/search_keyword_type.dart';
-import '../domain/usecase/search_operator.dart';
-import '../domain/usecase/search_operator_type.dart';
+import '../domain/enum/color_type.dart';
+import '../domain/enum/rarity_type.dart';
+import '../domain/enum/relational_operator_type.dart';
+import '../domain/entity/search_condition.dart';
+import '../domain/enum/search_keyword_type.dart';
+import '../domain/entity/search_operator.dart';
+import '../domain/enum/search_operator_type.dart';
 import 'data_source.dart';
 
 class CardMemoryDataSource implements DataSource {

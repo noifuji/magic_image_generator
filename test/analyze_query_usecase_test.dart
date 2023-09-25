@@ -7,9 +7,9 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:magic_image_generator/domain/usecase/analyze_query_usecase.dart';
-import 'package:magic_image_generator/domain/usecase/relational_operator_type.dart';
-import 'package:magic_image_generator/domain/usecase/search_condition.dart';
-import 'package:magic_image_generator/domain/usecase/search_keyword_type.dart';
+import 'package:magic_image_generator/domain/enum/relational_operator_type.dart';
+import 'package:magic_image_generator/domain/entity/search_condition.dart';
+import 'package:magic_image_generator/domain/enum/search_keyword_type.dart';
 
 void main() {
   test('AnalyzeQueryUseCase returns polish notation.', () async {
