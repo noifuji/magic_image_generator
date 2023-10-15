@@ -553,6 +553,14 @@ class SearchFilterFactory {
     }
 
     /****Sets Alchemy****/
+    else if (sf == SearchFilter.setYwoe) {
+      return SearchFilterData(
+          filter: sf,
+          name: AppLocalizations.of(context)!.setYwoe,
+          searchValue: "ywoe",
+          searchKey: "set",
+          filterType: SearchFilterType.set);
+    }
     else if (sf == SearchFilter.setLtr) {
       return SearchFilterData(
           filter: sf,
