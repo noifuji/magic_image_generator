@@ -207,6 +207,14 @@ class SearchFilterFactory {
     }
 
     /****Sets****/
+    else if (sf == SearchFilter.setLci) {
+      return SearchFilterData(
+          filter: sf,
+          name: AppLocalizations.of(context)!.setLci,
+          searchValue: "lci",
+          searchKey: "set",
+          filterType: SearchFilterType.set);
+    }
     else if (sf == SearchFilter.setWot) {
       return SearchFilterData(
           filter: sf,
