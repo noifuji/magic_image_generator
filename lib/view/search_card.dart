@@ -51,8 +51,14 @@ class _SearchCardState extends State<SearchCard> {
             .imageUrlLocale(Localizations.localeOf(context)));
       }
     } else {
-      frontImage = Image.network(widget.card.firstFace
-          .imageUrlLocale(Localizations.localeOf(context)));
+      frontImage = Image.network(
+        widget.card.firstFace.imageUrlLocale(Localizations.localeOf(context)),
+        errorBuilder: (context, e, stacktrace) {
+          return const Center(
+            child: Text("Failed to get image."),
+          );
+        },
+      );
     }
 
     bool isInCanvas =
@@ -72,7 +78,8 @@ class _SearchCardState extends State<SearchCard> {
           overlays: overlays,
           onFlipped: () => Provider.of<SearchViewModel>(context, listen: false)
               .flip(widget.card),
-        ));
+        ),
+    );
   }
 
   Widget _createFlipButton() {
@@ -97,6 +104,7 @@ class _SearchCardState extends State<SearchCard> {
             color: Theme.of(context).colorScheme.onPrimary,
             onPressed: () => _fiController.flip()),
       ),
-    ));
+    ),
+    );
   }
 }
