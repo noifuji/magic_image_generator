@@ -116,6 +116,20 @@ class AdvancedSearchScreen extends StatelessWidget {
     SearchFilter.setYMid
   ];
 
+  final List<SearchFilter> kStandardLegalSets = [
+    SearchFilter.setLci,
+    SearchFilter.setWoe,
+    SearchFilter.setMat,
+    SearchFilter.setMom,
+    SearchFilter.setOne,
+    SearchFilter.setBro,
+    SearchFilter.setDmu,
+    SearchFilter.setSnc,
+    SearchFilter.setNeo,
+    SearchFilter.setVow,
+    SearchFilter.setMid,
+  ];
+
   AdvancedSearchScreen({Key? key}) : super(key: key);
 
   @override
@@ -249,6 +263,7 @@ class AdvancedSearchScreen extends StatelessWidget {
                                           AppLocalizations.of(context)!
                                               .filterTitleSet,
                                           responsive),
+                                      _createCardSetFilter(context, responsive),
                                       _createButtonGrid(context, _cardSets,
                                           cardSetColNum, responsive),
 
@@ -337,6 +352,7 @@ class AdvancedSearchScreen extends StatelessWidget {
                                           AppLocalizations.of(context)!
                                               .filterTitleSet,
                                           responsive),
+                                      _createCardSetFilter(context, responsive),
                                       _createButtonGrid(context, _cardSets,
                                           cardSetColNum, responsive),
                                       Container(
@@ -439,6 +455,37 @@ class AdvancedSearchScreen extends StatelessWidget {
                         ])))
               ])));
     });
+  }
+
+  Widget _createCardSetFilter(context, responsive) {
+    return Container(
+      height: responsive.rowHeight,
+      child:Row(children:[
+      Container(width: responsive.horizontalGutterWidth),
+      SizedBox(
+        width: responsive.columnWidth * 2 +
+            responsive.horizontalGutterWidth,
+        height: responsive.rowHeight * 0.6,
+        child: TextButton(
+          onPressed: () {
+            final model = Provider.of<SearchViewModel>(
+                context,
+                listen: false);
+            model.resetSearchFilter();
+            model.setSearchFilters(kStandardLegalSets);
+          },
+          style: TextButton.styleFrom(
+              backgroundColor: Colors.grey),
+          child: Text(
+            AppLocalizations.of(context)!.filterStandardButton,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: responsive.rowHeight *
+                    0.6 * 0.75 * 0.5),
+          ),
+        ),
+      ),
+    ]),);
   }
 
   Widget _createTitle(

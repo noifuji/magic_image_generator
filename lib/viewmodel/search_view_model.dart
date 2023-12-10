@@ -131,6 +131,13 @@ class SearchViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setSearchFilters(List<SearchFilter> filters) {
+    for(final f in filters) {
+      searchFilters[f] = true;
+    }
+    notifyListeners();
+  }
+
   void resetSearchFilter() {
     for (var f in SearchFilter.values) {
       searchFilters[f] = false;
