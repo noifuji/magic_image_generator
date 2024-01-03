@@ -30,7 +30,6 @@ class WebImageState extends State<WebImage> {
   @override
   void initState() {
     super.initState();
-    debugPrint("WebImageState initState");
     if(widget.controller.value.image == null ) {
       widget.controller.fetchImage(widget.url);
     }

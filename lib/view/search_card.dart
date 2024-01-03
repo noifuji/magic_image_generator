@@ -49,26 +49,37 @@ class _SearchCardState extends State<SearchCard> {
         frontImage = WebImage(
           url:firstUrl,
           controller: widget.card.firstFace.webImageController!,
+          placeHolder: _createDefaultCard(),
+          errorBuilder: (context, error, stacktrace) => _createErrorCard(firstUrl),
         );
         backImage = WebImage(
           url:secondUrl,
           controller: widget.card.secondFace!.webImageController!,
+          placeHolder: _createDefaultCard(),
+          errorBuilder: (context, error, stacktrace) => _createErrorCard(secondUrl),
         );
       } else {
         frontImage = WebImage(
           url:secondUrl,
           controller: widget.card.secondFace!.webImageController!,
+          placeHolder: _createDefaultCard(),
+          errorBuilder: (context, error, stacktrace) => _createErrorCard(secondUrl),
         );
         backImage = WebImage(
           url:firstUrl,
           controller: widget.card.firstFace.webImageController!,
+          placeHolder: _createDefaultCard(),
+          errorBuilder: (context, error, stacktrace) => _createErrorCard(firstUrl),
         );
       }
     } else {
+      final firstUrl = widget.card.firstFace
+          .imageUrlLocale(Localizations.localeOf(context));
       frontImage = WebImage(
-        url:widget.card.firstFace
-            .imageUrlLocale(Localizations.localeOf(context)),
+        url:firstUrl,
         controller: widget.card.firstFace.webImageController!,
+        placeHolder: _createDefaultCard(),
+        errorBuilder: (context, error, stacktrace) => _createErrorCard(firstUrl),
       );
     }
 
@@ -90,6 +101,40 @@ class _SearchCardState extends State<SearchCard> {
           onFlipped: () => Provider.of<SearchViewModel>(context, listen: false)
               .flip(widget.card),
         ),
+    );
+  }
+
+  Widget _createDefaultCard() {
+    return Container(
+      width: widget.card.imageSize.width,
+      height: widget.card.imageSize.height,
+      decoration: const BoxDecoration(color: Colors.white10),
+    );
+  }
+  Widget _createErrorCard(String url) {
+    return Container(
+      width: widget.card.imageSize.width,
+      height: widget.card.imageSize.height,
+      decoration: const BoxDecoration(color: Colors.white10),
+      child: Center(child:
+      Column(children: [
+        Text("カード画像取得に失敗しました。",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+          ),),
+        TextButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+          ),
+          onPressed: () {
+            widget.card.firstFace.webImageController!.fetchImage(url);
+          },
+          child: Text(
+            "再取得",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+          ),),],),),
     );
   }
 
