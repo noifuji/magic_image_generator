@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:magic_image_generator/domain/entity/card_info_header.dart';
 import 'package:magic_image_generator/view/widgets/flippable_image.dart';
 import 'package:magic_image_generator/view/widgets/overlay_flippable_image.dart';
+import 'package:magic_image_generator/view/widgets/web_image.dart';
 import 'package:provider/provider.dart';
 
 import '../viewmodel/canvas_view_model.dart';
@@ -32,32 +33,42 @@ class _SearchCardState extends State<SearchCard> {
 
   @override
   Widget build(BuildContext context) {
-    Image frontImage;
-    Image? backImage;
+    Widget frontImage;
+    Widget? backImage;
     List<Widget> overlays = [];
 
     if (widget.card.isTransform && widget.card.cardFaces.length > 1) {
       overlays.add(_createFlipButton());
 
+      final firstUrl = widget.card.firstFace
+          .imageUrlLocale(Localizations.localeOf(context));
+      final secondUrl = widget.card.secondFace!
+          .imageUrlLocale(Localizations.localeOf(context));
+
       if (widget.card.isFront) {
-        frontImage = Image.network(widget.card.firstFace
-            .imageUrlLocale(Localizations.localeOf(context)));
-        backImage = Image.network(widget.card.secondFace!
-            .imageUrlLocale(Localizations.localeOf(context)));
+        frontImage = WebImage(
+          url:firstUrl,
+          controller: widget.card.firstFace.webImageController!,
+        );
+        backImage = WebImage(
+          url:secondUrl,
+          controller: widget.card.secondFace!.webImageController!,
+        );
       } else {
-        frontImage = Image.network(widget.card.secondFace!
-            .imageUrlLocale(Localizations.localeOf(context)));
-        backImage = Image.network(widget.card.firstFace
-            .imageUrlLocale(Localizations.localeOf(context)));
+        frontImage = WebImage(
+          url:secondUrl,
+          controller: widget.card.secondFace!.webImageController!,
+        );
+        backImage = WebImage(
+          url:firstUrl,
+          controller: widget.card.firstFace.webImageController!,
+        );
       }
     } else {
-      frontImage = Image.network(
-        widget.card.firstFace.imageUrlLocale(Localizations.localeOf(context)),
-        errorBuilder: (context, e, stacktrace) {
-          return const Center(
-            child: Text("Failed to get image."),
-          );
-        },
+      frontImage = WebImage(
+        url:widget.card.firstFace
+            .imageUrlLocale(Localizations.localeOf(context)),
+        controller: widget.card.firstFace.webImageController!,
       );
     }
 

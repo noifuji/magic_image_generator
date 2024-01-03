@@ -1,11 +1,11 @@
 import 'dart:math';
+import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
 import 'package:magic_image_generator/domain/entity/card_info_header.dart';
 import 'package:magic_image_generator/domain/usecase/fetch_card_images_usecase.dart';
 import 'package:magic_image_generator/domain/usecase/merge_card_images_usecase.dart';
 
-import 'dart:ui' as ui;
 import '../domain/usecase/copy_image_to_clipboard_usecase_nonweb.dart'
     if (dart.library.html) '../domain/usecase/copy_image_to_clipboard_usecase_web.dart';
 import '../domain/usecase/download_image_usecase_nonweb.dart'

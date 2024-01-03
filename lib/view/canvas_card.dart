@@ -21,16 +21,12 @@ class CanvasCard extends StatefulWidget {
 
 class _CanvasCardState extends State<CanvasCard> {
   late final FlippableImageController _fiController;
-  late final WebImageController _webImageController;
-  late final WebImageController _webImageControllerBack;
 
   @override
   void initState() {
     super.initState();
     debugPrint("_CanvasCardState initState:${widget.card.firstFace.name}");
     _fiController = FlippableImageController();
-    _webImageController = WebImageController();
-    _webImageControllerBack = WebImageController();
   }
 
   @override
@@ -63,27 +59,27 @@ class _CanvasCardState extends State<CanvasCard> {
       if (widget.card.isFront) {
         frontImage = WebImage(
           url:firstUrl,
-          controller: _webImageController,
+          controller: widget.card.firstFace.webImageController!,
         );
         backImage = WebImage(
           url:secondUrl,
-          controller: _webImageControllerBack,
+          controller: widget.card.secondFace!.webImageController!,
         );
       } else {
         frontImage = WebImage(
           url:secondUrl,
-          controller: _webImageControllerBack,
+          controller: widget.card.secondFace!.webImageController!,
         );
         backImage = WebImage(
           url:firstUrl,
-          controller: _webImageController,
+          controller: widget.card.firstFace.webImageController!,
         );
       }
     } else {
       frontImage = WebImage(
           url:widget.card.firstFace
           .imageUrlLocale(Localizations.localeOf(context)),
-        controller: _webImageController,
+        controller: widget.card.firstFace.webImageController!,
       );
     }
 

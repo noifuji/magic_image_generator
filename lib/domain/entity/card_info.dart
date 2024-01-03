@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
+import 'package:magic_image_generator/view/widgets/web_image.dart';
 
 class CardInfo {
   final String multiverseId;
@@ -12,6 +13,7 @@ class CardInfo {
   final int cmc;
   final bool isFront;
   final ui.Image? image;
+  final WebImageController? webImageController;
 
   String imageUrlLocale(Locale locale) {
     if (locale.languageCode == "en") {
@@ -32,6 +34,7 @@ class CardInfo {
       required this.layout,
       required this.cmc,
       required this.isFront,
+      this.webImageController,
       this.image});
 
   CardInfo copyWith(
@@ -43,7 +46,9 @@ class CardInfo {
           String? layout,
           int? cmc,
           bool? isFront,
-          ui.Image? image}) =>
+          ui.Image? image,
+            WebImageController? webImageController,
+          }) =>
       CardInfo(
           multiverseId: multiverseId ?? this.multiverseId,
           name: name ?? this.name,
@@ -53,5 +58,7 @@ class CardInfo {
           layout: layout ?? this.layout,
           cmc: cmc ?? this.cmc,
           isFront: isFront ?? this.isFront,
-          image: image);
+          image: image ?? this.image,
+        webImageController: webImageController ?? this.webImageController,
+      );
 }
