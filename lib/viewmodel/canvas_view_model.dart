@@ -130,10 +130,25 @@ class CanvasViewModel extends ChangeNotifier {
         copy[row].addAll(_selectedCards[row].sublist(fromCol + 1));
       } else {
         //左から右へ
-        copy[row].insertAll(0, _selectedCards[row].sublist(toCol + 1));
+        //A,B,C,D,EのうちA->D
+        debugPrint("row:$row,fromCol:$fromCol,toCol:$toCol");
+        if(toCol < _selectedCards[row].length) {
+          //[E]
+          copy[row].insertAll(0, _selectedCards[row].sublist(toCol + 1));
+        }
+        //[A]
         copy[row].insert(0, _selectedCards[row][fromCol]);
-        copy[row]
-            .insertAll(0, _selectedCards[row].sublist(fromCol + 1, toCol + 1));
+        //[BCD]
+        if(toCol < _selectedCards[row].length) {
+          copy[row]
+              .insertAll(
+              0, _selectedCards[row].sublist(fromCol + 1, toCol + 1));
+        } else {
+          copy[row]
+              .insertAll(
+              0, _selectedCards[row].sublist(fromCol + 1, toCol));
+        }
+        //[]
         copy[row].insertAll(0, _selectedCards[row].sublist(0, fromCol));
       }
     } else if (toRow == _selectedCards.length) {
