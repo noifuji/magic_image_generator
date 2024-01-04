@@ -5,10 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:magic_image_generator/common/mig_exception.dart';
 import 'package:magic_image_generator/domain/card_repository.dart';
+import 'package:magic_image_generator/domain/entity/card_info.dart';
 import 'package:magic_image_generator/domain/entity/card_info_header.dart';
 import 'package:magic_image_generator/domain/entity/search_result.dart';
 import 'package:magic_image_generator/domain/usecase/import_deck_list_usecase.dart';
 import 'package:magic_image_generator/view/sort_drop_down.dart';
+import 'package:magic_image_generator/view/widgets/web_image.dart';
 
 import '../common/constants.dart' as constants;
 import '../common/search_filter.dart';
@@ -184,6 +186,19 @@ class SearchViewModel extends ChangeNotifier {
         _searchProgressController.value = 0.4 + value * 0.4;
       });
       _searchResult = SearchResult(cards: results, isSuccess: true);
+
+      List<CardInfoHeader> newCardList = [];
+      for(final card in _searchResult.cards) {
+        List<CardInfo> faces = [];
+        for(final face in card.cardFaces) {
+          faces.add(face.copyWith(webImageController: WebImageController()));
+        }
+
+        newCardList.add(card.copyWith(cardFaces: faces));
+      }
+
+      _searchResult.cards = newCardList;
+
       _searchProgressController.value = 0.8;
 
       //ソート

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:magic_image_generator/domain/entity/card_info_header.dart';
 import 'package:magic_image_generator/view/widgets/flippable_image.dart';
 import 'package:magic_image_generator/view/widgets/overlay_flippable_image.dart';
+import 'package:magic_image_generator/view/widgets/web_image.dart';
 import 'package:provider/provider.dart';
 
 import '../viewmodel/canvas_view_model.dart';
@@ -32,32 +33,53 @@ class _SearchCardState extends State<SearchCard> {
 
   @override
   Widget build(BuildContext context) {
-    Image frontImage;
-    Image? backImage;
+    Widget frontImage;
+    Widget? backImage;
     List<Widget> overlays = [];
 
     if (widget.card.isTransform && widget.card.cardFaces.length > 1) {
       overlays.add(_createFlipButton());
 
+      final firstUrl = widget.card.firstFace
+          .imageUrlLocale(Localizations.localeOf(context));
+      final secondUrl = widget.card.secondFace!
+          .imageUrlLocale(Localizations.localeOf(context));
+
       if (widget.card.isFront) {
-        frontImage = Image.network(widget.card.firstFace
-            .imageUrlLocale(Localizations.localeOf(context)));
-        backImage = Image.network(widget.card.secondFace!
-            .imageUrlLocale(Localizations.localeOf(context)));
+        frontImage = WebImage(
+          url:firstUrl,
+          controller: widget.card.firstFace.webImageController!,
+          placeHolder: _createDefaultCard(),
+          errorBuilder: (context, error, stacktrace) => _createErrorCard(firstUrl),
+        );
+        backImage = WebImage(
+          url:secondUrl,
+          controller: widget.card.secondFace!.webImageController!,
+          placeHolder: _createDefaultCard(),
+          errorBuilder: (context, error, stacktrace) => _createErrorCard(secondUrl),
+        );
       } else {
-        frontImage = Image.network(widget.card.secondFace!
-            .imageUrlLocale(Localizations.localeOf(context)));
-        backImage = Image.network(widget.card.firstFace
-            .imageUrlLocale(Localizations.localeOf(context)));
+        frontImage = WebImage(
+          url:secondUrl,
+          controller: widget.card.secondFace!.webImageController!,
+          placeHolder: _createDefaultCard(),
+          errorBuilder: (context, error, stacktrace) => _createErrorCard(secondUrl),
+        );
+        backImage = WebImage(
+          url:firstUrl,
+          controller: widget.card.firstFace.webImageController!,
+          placeHolder: _createDefaultCard(),
+          errorBuilder: (context, error, stacktrace) => _createErrorCard(firstUrl),
+        );
       }
     } else {
-      frontImage = Image.network(
-        widget.card.firstFace.imageUrlLocale(Localizations.localeOf(context)),
-        errorBuilder: (context, e, stacktrace) {
-          return const Center(
-            child: Text("Failed to get image."),
-          );
-        },
+      final firstUrl = widget.card.firstFace
+          .imageUrlLocale(Localizations.localeOf(context));
+      frontImage = WebImage(
+        url:firstUrl,
+        controller: widget.card.firstFace.webImageController!,
+        placeHolder: _createDefaultCard(),
+        errorBuilder: (context, error, stacktrace) => _createErrorCard(firstUrl),
       );
     }
 
@@ -79,6 +101,40 @@ class _SearchCardState extends State<SearchCard> {
           onFlipped: () => Provider.of<SearchViewModel>(context, listen: false)
               .flip(widget.card),
         ),
+    );
+  }
+
+  Widget _createDefaultCard() {
+    return Container(
+      width: widget.card.imageSize.width,
+      height: widget.card.imageSize.height,
+      decoration: const BoxDecoration(color: Colors.white10),
+    );
+  }
+  Widget _createErrorCard(String url) {
+    return Container(
+      width: widget.card.imageSize.width,
+      height: widget.card.imageSize.height,
+      decoration: const BoxDecoration(color: Colors.white10),
+      child: Center(child:
+      Column(children: [
+        Text("カード画像取得に失敗しました。",
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+          ),),
+        TextButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+          ),
+          onPressed: () {
+            widget.card.firstFace.webImageController!.fetchImage(url);
+          },
+          child: Text(
+            "再取得",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+          ),),],),),
     );
   }
 

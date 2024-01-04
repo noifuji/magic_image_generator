@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:magic_image_generator/domain/entity/card_info_header.dart';
 import 'package:magic_image_generator/view/widgets/flippable_image.dart';
 import 'package:magic_image_generator/view/widgets/overlay_flippable_image.dart';
+import 'package:magic_image_generator/view/widgets/web_image.dart';
 import 'package:provider/provider.dart';
 import '../viewmodel/canvas_view_model.dart';
 
@@ -24,6 +25,7 @@ class _CanvasCardState extends State<CanvasCard> {
   @override
   void initState() {
     super.initState();
+    debugPrint("_CanvasCardState initState:${widget.card.firstFace.name}");
     _fiController = FlippableImageController();
   }
 
@@ -42,27 +44,43 @@ class _CanvasCardState extends State<CanvasCard> {
     int colIndex = selectedCards[rowIndex]
         .indexWhere((card) => card.displayId == widget.card.displayId);
 
-    Image frontImage;
-    Image? backImage;
+    Widget frontImage;
+    Widget? backImage;
     List<Widget> overlays = [_createRemoveButton(), _createRotateButton()];
 
     if (widget.card.isTransform) {
       overlays.add(_createFlipButton());
 
+      final firstUrl = widget.card.firstFace
+          .imageUrlLocale(Localizations.localeOf(context));
+      final secondUrl = widget.card.secondFace!
+          .imageUrlLocale(Localizations.localeOf(context));
+
       if (widget.card.isFront) {
-        frontImage = Image.network(widget.card.firstFace
-            .imageUrlLocale(Localizations.localeOf(context)));
-        backImage = Image.network(widget.card.secondFace!
-            .imageUrlLocale(Localizations.localeOf(context)));
+        frontImage = WebImage(
+          url:firstUrl,
+          controller: widget.card.firstFace.webImageController!,
+        );
+        backImage = WebImage(
+          url:secondUrl,
+          controller: widget.card.secondFace!.webImageController!,
+        );
       } else {
-        frontImage = Image.network(widget.card.secondFace!
-            .imageUrlLocale(Localizations.localeOf(context)));
-        backImage = Image.network(widget.card.firstFace
-            .imageUrlLocale(Localizations.localeOf(context)));
+        frontImage = WebImage(
+          url:secondUrl,
+          controller: widget.card.secondFace!.webImageController!,
+        );
+        backImage = WebImage(
+          url:firstUrl,
+          controller: widget.card.firstFace.webImageController!,
+        );
       }
     } else {
-      frontImage = Image.network(widget.card.firstFace
-          .imageUrlLocale(Localizations.localeOf(context)));
+      frontImage = WebImage(
+          url:widget.card.firstFace
+          .imageUrlLocale(Localizations.localeOf(context)),
+        controller: widget.card.firstFace.webImageController!,
+      );
     }
 
     return Draggable<Map<String, int>>(
