@@ -25,11 +25,13 @@ class ProgressBarState extends State<ProgressBar> {
               end: progress,
             ),
             builder: (context, value, _) {
-              Util.printTimeStamp("animation value = $value");
               return Column(children: [
                 Text(
                   "Loading Data......${(value * 100).round()}%",
-                  style: const TextStyle(color: Colors.white, fontSize: 20, decoration: TextDecoration.none),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      decoration: TextDecoration.none),
                 ),
                 LinearProgressIndicator(
                   value: value,

@@ -57,6 +57,8 @@
   "manaValue6": "6",
   "manaValue7AndMore": "7+",
 
+  "setLci": "イクサラン:失われし洞窟",
+  "setWot": "おとぎ話",
   "setWoe": "エルドレインの森",
   "setMat": "機械兵団の進軍:決戦の後に",
   "setMul": "多元宇宙の伝説",
@@ -124,9 +126,13 @@
   "setYbro": "アルケミー: 兄弟戦争",
   "setYone": "アルケミー: ファイレクシア",
   "setLtr": "指輪物語: 中つ国の伝承",
+  "setYwoe": "アルケミー: エルドレイン",
+  "setYlci": "アルケミー: イクサラン",
 
   "resetButton": "リセット",
   "searchButton": "OK",
+
+  "filterStandardButton": "スタンダードセット",
 
   "importDeckTitle": "デッキインポート",
 

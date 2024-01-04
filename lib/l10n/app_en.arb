@@ -58,6 +58,8 @@
     "manaValue6": "6",
     "manaValue7AndMore": "7+",
 
+    "setLci": "The Lost Caverns of Ixalan",
+    "setWot": "Enchanting Tales",
     "setWoe": "Wilds of Eldraine",
     "setMat": "March of the Machine: The Aftermath",
     "setMul": "Multiverse Legends",
@@ -120,9 +122,13 @@
     "setYbro": "Alchemy: The Brothers' War",
     "setYone": "Alchemy: Phyrexia",
     "setLtr": "The Lord of the Rings: Tales of Middle-earth",
+    "setYwoe": "Alchemy: Eldraine",
+    "setYlci": "Alchemy: Ixalan",
 
     "resetButton": "Reset",
     "searchButton": "OK",
+
+    "filterStandardButton": "Standard Legal",
 
     "importDeckTitle": "Import Deck List",
 

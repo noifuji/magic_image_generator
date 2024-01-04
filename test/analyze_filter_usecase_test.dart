@@ -11,8 +11,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:magic_image_generator/common/search_filter.dart';
 import 'package:magic_image_generator/common/search_filter_factory.dart';
-import 'package:magic_image_generator/domain/search/analyze_filter_usecase.dart';
-
+import 'package:magic_image_generator/domain/usecase/analyze_filter_usecase.dart';
 
 class LocalizationsInj extends StatelessWidget {
   final Widget child;
@@ -35,16 +34,17 @@ class LocalizationsInj extends StatelessWidget {
 
 void main() {
   testWidgets('False flags return empty query.', (WidgetTester tester) async {
-    await tester.pumpWidget(
-        LocalizationsInj(child:
-      Builder(
+    await tester.pumpWidget(LocalizationsInj(
+      child: Builder(
         builder: (BuildContext context) {
           Map<SearchFilter, bool> searchFilters = {};
-          for(var v in SearchFilter.values) {
+          for (var v in SearchFilter.values) {
             searchFilters[v] = false;
           }
 
-          List<SearchFilterData> filterDataList = searchFilters.keys.map((e) => SearchFilterFactory.createSearchFilter(context, e)).toList();
+          List<SearchFilterData> filterDataList = searchFilters.keys
+              .map((e) => SearchFilterFactory.createSearchFilter(context, e))
+              .toList();
           var analyzer = AnalyzeFilterUseCase();
           var result = analyzer.call(searchFilters, filterDataList);
 
@@ -53,25 +53,27 @@ void main() {
           // The builder function must return a widget.
           return const Placeholder();
         },
-      ),)
-    );
+      ),
+    ));
   });
 
-  testWidgets('True artifact flag returns an artifact query.', (WidgetTester tester) async {
-    await tester.pumpWidget(
-        LocalizationsInj(child:
-      Builder(
+  testWidgets('True artifact flag returns an artifact query.',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(LocalizationsInj(
+      child: Builder(
         builder: (BuildContext context) {
           Map<SearchFilter, bool> searchFilters = {};
-          for(var v in SearchFilter.values) {
-            if(v == SearchFilter.typeArtifact) {
+          for (var v in SearchFilter.values) {
+            if (v == SearchFilter.typeArtifact) {
               searchFilters[v] = true;
             } else {
               searchFilters[v] = false;
             }
           }
 
-          List<SearchFilterData> filterDataList = searchFilters.keys.map((e) => SearchFilterFactory.createSearchFilter(context, e)).toList();
+          List<SearchFilterData> filterDataList = searchFilters.keys
+              .map((e) => SearchFilterFactory.createSearchFilter(context, e))
+              .toList();
           var analyzer = AnalyzeFilterUseCase();
           var result = analyzer.call(searchFilters, filterDataList);
 
@@ -80,36 +82,37 @@ void main() {
           // The builder function must return a widget.
           return const Placeholder();
         },
-      ),)
-    );
+      ),
+    ));
   });
 
-  testWidgets('Multiple true flags return multiple queries.', (WidgetTester tester) async {
-    await tester.pumpWidget(
-        LocalizationsInj(child:
-        Builder(
-          builder: (BuildContext context) {
-            Map<SearchFilter, bool> searchFilters = {};
-            for(var v in SearchFilter.values) {
-                searchFilters[v] = false;
-            }
+  testWidgets('Multiple true flags return multiple queries.',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(LocalizationsInj(
+      child: Builder(
+        builder: (BuildContext context) {
+          Map<SearchFilter, bool> searchFilters = {};
+          for (var v in SearchFilter.values) {
+            searchFilters[v] = false;
+          }
 
-            searchFilters[SearchFilter.manaValue1] = true;
-            searchFilters[SearchFilter.colorRed] = true;
-            searchFilters[SearchFilter.colorBlue] = true;
-            searchFilters[SearchFilter.colorMulti] = true;
+          searchFilters[SearchFilter.manaValue1] = true;
+          searchFilters[SearchFilter.colorRed] = true;
+          searchFilters[SearchFilter.colorBlue] = true;
+          searchFilters[SearchFilter.colorMulti] = true;
 
-            List<SearchFilterData> filterDataList = searchFilters.keys.map((e) => SearchFilterFactory.createSearchFilter(context, e)).toList();
-            var analyzer = AnalyzeFilterUseCase();
-            var result = analyzer.call(searchFilters, filterDataList);
+          List<SearchFilterData> filterDataList = searchFilters.keys
+              .map((e) => SearchFilterFactory.createSearchFilter(context, e))
+              .toList();
+          var analyzer = AnalyzeFilterUseCase();
+          var result = analyzer.call(searchFilters, filterDataList);
 
-            expect(result, "( (c:u and c:r and c:m ) (cmc=1 ))");
+          expect(result, "( (c:u and c:r and c:m ) (cmc=1 ))");
 
-            // The builder function must return a widget.
-            return const Placeholder();
-          },
-        ),)
-    );
+          // The builder function must return a widget.
+          return const Placeholder();
+        },
+      ),
+    ));
   });
-
 }

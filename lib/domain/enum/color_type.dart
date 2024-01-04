@@ -1,4 +1,4 @@
-enum ColorType{
+enum ColorType {
   colorless,
 
   white,

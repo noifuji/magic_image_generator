@@ -13,7 +13,11 @@ class SearchBoxWidget extends StatefulWidget {
   final double responsiveColumnWidth;
   final double responsiveGutterWidth;
 
-  const SearchBoxWidget({Key? key, required this.responsiveColumns, required this.responsiveColumnWidth, required this.responsiveGutterWidth})
+  const SearchBoxWidget(
+      {Key? key,
+      required this.responsiveColumns,
+      required this.responsiveColumnWidth,
+      required this.responsiveGutterWidth})
       : super(key: key);
 
   @override
@@ -41,21 +45,31 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
             child: SizedBox(
               child: TextField(
                 controller: myController,
-                decoration: InputDecoration(hintText: AppLocalizations.of(context)!.searchCardHint, border: InputBorder.none),
+                decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)!.searchCardHint,
+                    border: InputBorder.none),
                 autofocus: false,
                 onSubmitted: (value) async {
-                  if (Provider.of<SearchViewModel>(context, listen: false).isSearching()) {
+                  if (Provider.of<SearchViewModel>(context, listen: false)
+                      .isSearching()) {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(AppLocalizations.of(context)!.exceptionCode310),
+                      content:
+                          Text(AppLocalizations.of(context)!.exceptionCode310),
                     ));
                     return;
                   }
 
-                  List<SearchFilterData> filerDataList = SearchFilter.values.map((e) => SearchFilterFactory.createSearchFilter(context, e)).toList();
-                  Provider.of<SearchViewModel>(context, listen: false).search(Localizations.localeOf(context), filerDataList, query: value);
+                  List<SearchFilterData> filerDataList = SearchFilter.values
+                      .map((e) =>
+                          SearchFilterFactory.createSearchFilter(context, e))
+                      .toList();
+                  Provider.of<SearchViewModel>(context, listen: false).search(
+                      Localizations.localeOf(context), filerDataList,
+                      query: value);
                 },
                 onChanged: (value) {
-                  Provider.of<SearchViewModel>(context, listen: false).searchBoxText = value;
+                  Provider.of<SearchViewModel>(context, listen: false)
+                      .searchBoxText = value;
                 },
               ),
             ),
@@ -67,7 +81,8 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
             icon: const Icon(Icons.cancel),
             onPressed: () async {
               myController.text = "";
-              Provider.of<SearchViewModel>(context, listen: false).searchBoxText = "";
+              Provider.of<SearchViewModel>(context, listen: false)
+                  .searchBoxText = "";
             },
           ),
         ),
@@ -76,15 +91,21 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
           child: IconButton(
             icon: const Icon(Icons.search),
             onPressed: () async {
-              if (Provider.of<SearchViewModel>(context, listen: false).isSearching()) {
+              if (Provider.of<SearchViewModel>(context, listen: false)
+                  .isSearching()) {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   content: Text(AppLocalizations.of(context)!.exceptionCode310),
                 ));
                 return;
               }
 
-              List<SearchFilterData> filerDataList = SearchFilter.values.map((e) => SearchFilterFactory.createSearchFilter(context, e)).toList();
-              Provider.of<SearchViewModel>(context, listen: false).search(Localizations.localeOf(context), filerDataList, query: myController.text);
+              List<SearchFilterData> filerDataList = SearchFilter.values
+                  .map(
+                      (e) => SearchFilterFactory.createSearchFilter(context, e))
+                  .toList();
+              Provider.of<SearchViewModel>(context, listen: false).search(
+                  Localizations.localeOf(context), filerDataList,
+                  query: myController.text);
             },
           ),
         ),
@@ -137,37 +158,37 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
             ),
             child: widget.responsiveColumns > 4
                 ? TextButton(
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.white24,
-                ),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return AdvancedSearchScreen();
-                      },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.white24,
                     ),
-                  );
-                },
-                child: Text(
-                  AppLocalizations.of(context)!.advancedSearchButton,
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
-                ))
-                : IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return AdvancedSearchScreen();
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return AdvancedSearchScreen();
+                          },
+                        ),
+                      );
                     },
+                    child: Text(
+                      AppLocalizations.of(context)!.advancedSearchButton,
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ))
+                : IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return AdvancedSearchScreen();
+                          },
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.manage_search),
                   ),
-                );
-              },
-              icon: const Icon(Icons.manage_search),
-            ),
           ),
         ),
       ]),

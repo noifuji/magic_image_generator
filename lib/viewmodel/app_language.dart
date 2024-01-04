@@ -8,13 +8,14 @@ class AppLanguage extends ChangeNotifier {
 
   Future<void> loadLocale() async {
     var prefs = await SharedPreferences.getInstance();
-    String? storedLanguageCode =  prefs.getString("languageCode");
+    String? storedLanguageCode = prefs.getString("languageCode");
 
-    if(storedLanguageCode != null) {
+    if (storedLanguageCode != null) {
       _appLocale = Locale.fromSubtags(languageCode: storedLanguageCode);
     } else {
-      final List<Locale> systemLocales = WidgetsBinding.instance.window.locales;
-      if(systemLocales.isNotEmpty) {
+      final List<Locale> systemLocales =
+          WidgetsBinding.instance.platformDispatcher.locales;
+      if (systemLocales.isNotEmpty) {
         _appLocale = systemLocales.first;
       }
     }

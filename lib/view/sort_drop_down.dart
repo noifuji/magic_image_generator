@@ -1,17 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:magic_image_generator/viewmodel/search_view_model.dart';
 import 'package:provider/provider.dart';
 
 enum SortKey { name, cmc }
-enum SortOrder {asc, dsc}
+
+enum SortOrder { asc, dsc }
 
 class SortDropdown extends StatefulWidget {
-  late SortKey defaultSortKey;
-  late SortOrder defaultSortOrder;
+  final SortKey defaultSortKey;
+  final SortOrder defaultSortOrder;
 
-  SortDropdown({
+  const SortDropdown({
     Key? key,
     required this.defaultSortKey,
     required this.defaultSortOrder,
@@ -94,7 +94,6 @@ class _SortDropdownState extends State<SortDropdown> {
               return DropdownMenuItem<SortOrder>(
                 value: value["value"],
                 child: Text(value["text"], overflow: TextOverflow.ellipsis),
-
               );
             }).toList(),
           ))

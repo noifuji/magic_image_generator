@@ -1,22 +1,19 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:magic_image_generator/model/card_info_header.dart';
+import 'package:magic_image_generator/domain/entity/card_info_header.dart';
 import 'package:magic_image_generator/view/widgets/flippable_image.dart';
 import 'package:magic_image_generator/view/widgets/overlay_flippable_image.dart';
+import 'package:magic_image_generator/view/widgets/web_image.dart';
 import 'package:provider/provider.dart';
-import 'package:transparent_image/transparent_image.dart';
-import '../common/constants.dart' as constants;
 import '../viewmodel/canvas_view_model.dart';
-
 
 class CanvasCard extends StatefulWidget {
   final CardInfoHeader card;
   final double scale;
 
-  const CanvasCard({Key? key, required this.card, required this.scale}) : super(key: key);
+  const CanvasCard({Key? key, required this.card, required this.scale})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CanvasCardState();
@@ -25,50 +22,79 @@ class CanvasCard extends StatefulWidget {
 class _CanvasCardState extends State<CanvasCard> {
   late final FlippableImageController _fiController;
 
-
   @override
   void initState() {
     super.initState();
+    debugPrint("_CanvasCardState initState:${widget.card.firstFace.name}");
     _fiController = FlippableImageController();
   }
 
   @override
   Widget build(BuildContext context) {
     var selectedCards = Provider.of<CanvasViewModel>(context).selectedCards;
-    int rowIndex = selectedCards.indexWhere((row) => row.where((card) => card.displayId == widget.card.displayId).toList().isNotEmpty);
+    int rowIndex = selectedCards.indexWhere((row) => row
+        .where((card) => card.displayId == widget.card.displayId)
+        .toList()
+        .isNotEmpty);
 
     if (rowIndex < 0) {
       return const SizedBox.shrink();
     }
 
-    int colIndex = selectedCards[rowIndex].indexWhere((card) => card.displayId == widget.card.displayId);
+    int colIndex = selectedCards[rowIndex]
+        .indexWhere((card) => card.displayId == widget.card.displayId);
 
-    Image frontImage;
-    Image? backImage;
+    Widget frontImage;
+    Widget? backImage;
     List<Widget> overlays = [_createRemoveButton(), _createRotateButton()];
 
     if (widget.card.isTransform) {
       overlays.add(_createFlipButton());
 
+      final firstUrl = widget.card.firstFace
+          .imageUrlLocale(Localizations.localeOf(context));
+      final secondUrl = widget.card.secondFace!
+          .imageUrlLocale(Localizations.localeOf(context));
+
       if (widget.card.isFront) {
-        frontImage = Image.network(widget.card.firstFace.imageUrlLocale(Localizations.localeOf(context)));
-        backImage = Image.network(widget.card.secondFace!.imageUrlLocale(Localizations.localeOf(context)));
+        frontImage = WebImage(
+          url:firstUrl,
+          controller: widget.card.firstFace.webImageController!,
+        );
+        backImage = WebImage(
+          url:secondUrl,
+          controller: widget.card.secondFace!.webImageController!,
+        );
       } else {
-        frontImage = Image.network(widget.card.secondFace!.imageUrlLocale(Localizations.localeOf(context)));
-        backImage = Image.network(widget.card.firstFace.imageUrlLocale(Localizations.localeOf(context)));
+        frontImage = WebImage(
+          url:secondUrl,
+          controller: widget.card.secondFace!.webImageController!,
+        );
+        backImage = WebImage(
+          url:firstUrl,
+          controller: widget.card.firstFace.webImageController!,
+        );
       }
     } else {
-      frontImage = Image.network(widget.card.firstFace.imageUrlLocale(Localizations.localeOf(context)));
+      frontImage = WebImage(
+          url:widget.card.firstFace
+          .imageUrlLocale(Localizations.localeOf(context)),
+        controller: widget.card.firstFace.webImageController!,
+      );
     }
 
     return Draggable<Map<String, int>>(
         data: {"row": rowIndex, "col": colIndex},
         feedback: SizedBox(
           width: widget.card.imageSize.width * widget.scale,
-          child: RotatedBox(quarterTurns:  (widget.card.rotationAngle/(pi/2)).round(), child:frontImage),
+          child: RotatedBox(
+              quarterTurns: (widget.card.rotationAngle / (pi / 2)).round(),
+              child: frontImage),
         ),
-        childWhenDragging: SizedBox(width: widget.card.imageSize.width * widget.scale,
-          height: widget.card.imageSize.height * widget.scale,),
+        childWhenDragging: SizedBox(
+          width: widget.card.imageSize.width * widget.scale,
+          height: widget.card.imageSize.height * widget.scale,
+        ),
         child: OverlayFlippableImage(
           key: widget.key,
           width: widget.card.imageSize.width * widget.scale,
@@ -78,7 +104,8 @@ class _CanvasCardState extends State<CanvasCard> {
           controller: _fiController,
           backSide: backImage,
           overlays: overlays,
-          onFlipped: ()=> Provider.of<CanvasViewModel>(context, listen: false).flip(widget.card),
+          onFlipped: () => Provider.of<CanvasViewModel>(context, listen: false)
+              .flip(widget.card),
         ));
   }
 
@@ -86,7 +113,8 @@ class _CanvasCardState extends State<CanvasCard> {
     return Container(
       width: 30.0 * widget.scale,
       height: 30.0 * widget.scale,
-      margin: EdgeInsets.only(top: 10.0 * widget.scale, left: 10.0 * widget.scale),
+      margin:
+          EdgeInsets.only(top: 10.0 * widget.scale, left: 10.0 * widget.scale),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary.withAlpha(200),
         shape: BoxShape.circle,
@@ -99,7 +127,8 @@ class _CanvasCardState extends State<CanvasCard> {
           size: 20.0 * widget.scale,
         ),
         color: Theme.of(context).colorScheme.onPrimary,
-        onPressed: () => Provider.of<CanvasViewModel>(context, listen: false).removeCard(widget.card),
+        onPressed: () => Provider.of<CanvasViewModel>(context, listen: false)
+            .removeCard(widget.card),
       ),
     );
   }
@@ -150,7 +179,9 @@ class _CanvasCardState extends State<CanvasCard> {
               size: 20.0 * widget.scale,
             ),
             color: Theme.of(context).colorScheme.onPrimary,
-            onPressed: () => Provider.of<CanvasViewModel>(context, listen: false).rotate90cw(widget.card)),
+            onPressed: () =>
+                Provider.of<CanvasViewModel>(context, listen: false)
+                    .rotate90cw(widget.card)),
         //Provider.of<CanvasViewModel>(context, listen: false).flip(widget.card), //provider
       ),
     ));

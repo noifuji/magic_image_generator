@@ -27,7 +27,8 @@ class FlippableImage extends StatefulWidget {
   State<StatefulWidget> createState() => _FlippableImageState();
 }
 
-class _FlippableImageState extends State<FlippableImage> with SingleTickerProviderStateMixin {
+class _FlippableImageState extends State<FlippableImage>
+    with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
@@ -75,7 +76,8 @@ class _FlippableImageState extends State<FlippableImage> with SingleTickerProvid
     } else {
       Widget imageForDisplay;
       if (widget.controller.animation.value <= 0.5) {
-        imageForDisplay = RotatedBox(quarterTurns: quarterTurns, child: widget.frontSide);
+        imageForDisplay =
+            RotatedBox(quarterTurns: quarterTurns, child: widget.frontSide);
       } else {
         imageForDisplay = Transform(
           alignment: Alignment.center,
@@ -101,7 +103,6 @@ class FlippableImageController extends ChangeNotifier {
   late Animation _animation;
   late Size _imageSize;
   Function? onFlipped;
-  AnimationStatus _status = AnimationStatus.dismissed;
 
   AnimationController get animationController => _animationController;
 
@@ -112,14 +113,13 @@ class FlippableImageController extends ChangeNotifier {
   void initAnimation(TickerProvider tickerProvider, Size imageSize) {
     _imageSize = imageSize;
 
-    _animationController = AnimationController(vsync: tickerProvider, duration: const Duration(milliseconds: 500));
-    _status = AnimationStatus.dismissed;
+    _animationController = AnimationController(
+        vsync: tickerProvider, duration: const Duration(milliseconds: 500));
     _animation = Tween(end: 1.0, begin: 0.0).animate(_animationController)
       ..addListener(() {
         notifyListeners();
       })
       ..addStatusListener((status) {
-        _status = status;
         if (status == AnimationStatus.completed && onFlipped != null) {
           onFlipped!();
         }

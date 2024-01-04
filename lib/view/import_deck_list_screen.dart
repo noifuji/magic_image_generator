@@ -26,7 +26,8 @@ class ImportDeckListScreenState extends State<ImportDeckListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
       final breakpoint = Breakpoint.fromConstraints(constraints);
 
       int columnSize;
@@ -59,7 +60,9 @@ class ImportDeckListScreenState extends State<ImportDeckListScreen> {
             title: Text(AppLocalizations.of(context)!.importDeckTitle),
           ),
           body: Container(
-              margin: EdgeInsets.only(left: responsive.horizontalMarginWidth, right: responsive.horizontalMarginWidth),
+              margin: EdgeInsets.only(
+                  left: responsive.horizontalMarginWidth,
+                  right: responsive.horizontalMarginWidth),
               child: Column(children: [
                 Expanded(
                   flex: 1,
@@ -73,7 +76,8 @@ class ImportDeckListScreenState extends State<ImportDeckListScreen> {
                           maxLines: null,
                           minLines: 6,
                           decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)!.importDeckHint,
+                            hintText:
+                                AppLocalizations.of(context)!.importDeckHint,
                           ),
                         ),
                       ),
@@ -82,34 +86,53 @@ class ImportDeckListScreenState extends State<ImportDeckListScreen> {
                 ),
                 Expanded(
                     flex: 0,
-                    child: Container(
+                    child: SizedBox(
                         height: responsive.rowHeight,
                         child: Row(children: [
                           Container(
-                            width: responsive.columnWidth * bottomBarMarginColSize + responsive.horizontalGutterWidth * bottomBarMarginColSize,
+                            width: responsive.columnWidth *
+                                    bottomBarMarginColSize +
+                                responsive.horizontalGutterWidth *
+                                    bottomBarMarginColSize,
                           ),
-                          Container(
-                              width: responsive.columnWidth * 2 + responsive.horizontalGutterWidth,
+                          SizedBox(
+                              width: responsive.columnWidth * 2 +
+                                  responsive.horizontalGutterWidth,
                               height: responsive.rowHeight * 0.6,
                               child: TextButton(
                                   onPressed: () {
                                     _controller.clear();
                                   },
-                                  style: TextButton.styleFrom(backgroundColor: Colors.grey),
-                                  child: Text(AppLocalizations.of(context)!.resetButton,
-                                      style: TextStyle(color: Colors.white, fontSize: responsive.rowHeight * 0.6 * 0.75 * 0.5)))),
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.grey),
+                                  child: Text(
+                                      AppLocalizations.of(context)!.resetButton,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: responsive.rowHeight *
+                                              0.6 *
+                                              0.75 *
+                                              0.5)))),
                           Container(
-                            width: responsive.columnWidth * bottomBarCenterSpaceColSize +
-                                responsive.horizontalGutterWidth * (bottomBarMarginColSize + 1),
+                            width: responsive.columnWidth *
+                                    bottomBarCenterSpaceColSize +
+                                responsive.horizontalGutterWidth *
+                                    (bottomBarMarginColSize + 1),
                           ),
-                          Container(
-                              width: responsive.columnWidth * 2 + responsive.horizontalGutterWidth,
+                          SizedBox(
+                              width: responsive.columnWidth * 2 +
+                                  responsive.horizontalGutterWidth,
                               height: responsive.rowHeight * 0.6,
                               child: TextButton(
                                   onPressed: () async {
-                                    if (Provider.of<SearchViewModel>(context, listen: false).isSearching()) {
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                        content: Text(AppLocalizations.of(context)!.exceptionCode310),
+                                    if (Provider.of<SearchViewModel>(context,
+                                            listen: false)
+                                        .isSearching()) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                            AppLocalizations.of(context)!
+                                                .exceptionCode310),
                                       ));
                                       return;
                                     }
@@ -119,23 +142,51 @@ class ImportDeckListScreenState extends State<ImportDeckListScreen> {
                                     Navigator.pop(context);
                                     try {
                                       List<SearchFilterData> filerDataList =
-                                      SearchFilter.values.map((e) => SearchFilterFactory.createSearchFilter(context, e)).toList();
-                                      await Provider.of<SearchViewModel>(context, listen: false)
-                                          .searchByDeckList(Localizations.localeOf(context), filerDataList, rawDeckList, {
-                                        ArenaDeckListGroup.main: AppLocalizations.of(context)!.arenaDeckListGroupMain,
-                                        ArenaDeckListGroup.sideboard: AppLocalizations.of(context)!.arenaDeckListGroupSideboard,
-                                        ArenaDeckListGroup.companion: AppLocalizations.of(context)!.arenaDeckListGroupCompanion,
-                                        ArenaDeckListGroup.commander: AppLocalizations.of(context)!.arenaDeckListGroupCommander,
+                                          SearchFilter.values
+                                              .map((e) => SearchFilterFactory
+                                                  .createSearchFilter(
+                                                      context, e))
+                                              .toList();
+                                      await Provider.of<SearchViewModel>(
+                                              context,
+                                              listen: false)
+                                          .searchByDeckList(
+                                              Localizations.localeOf(context),
+                                              filerDataList,
+                                              rawDeckList, {
+                                        ArenaDeckListGroup.main:
+                                            AppLocalizations.of(context)!
+                                                .arenaDeckListGroupMain,
+                                        ArenaDeckListGroup.sideboard:
+                                            AppLocalizations.of(context)!
+                                                .arenaDeckListGroupSideboard,
+                                        ArenaDeckListGroup.companion:
+                                            AppLocalizations.of(context)!
+                                                .arenaDeckListGroupCompanion,
+                                        ArenaDeckListGroup.commander:
+                                            AppLocalizations.of(context)!
+                                                .arenaDeckListGroupCommander,
                                       });
-                                    } catch(e) {
-                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                        content: Text(AppLocalizations.of(context)!.exceptionCode410),
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                            AppLocalizations.of(context)!
+                                                .exceptionCode410),
                                       ));
                                     }
                                   },
-                                  style: TextButton.styleFrom(backgroundColor: Colors.orange),
-                                  child: Text(AppLocalizations.of(context)!.searchButton,
-                                      style: TextStyle(color: Colors.white, fontSize: responsive.rowHeight * 0.6 * 0.75 * 0.5)))),
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: Colors.orange),
+                                  child: Text(
+                                      AppLocalizations.of(context)!
+                                          .searchButton,
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: responsive.rowHeight *
+                                              0.6 *
+                                              0.75 *
+                                              0.5)))),
                         ])))
               ])));
     });
@@ -163,10 +214,14 @@ class ResponsiveGridValues {
   }) {
     horizontalGutterWidth = gutterWidth;
     horizontalMarginWidth = gutterWidth;
-    columnWidth = (maxWidth - horizontalMarginWidth * 2 - horizontalGutterWidth * (displayColumnSize - 1)) / displayColumnSize;
+    columnWidth = (maxWidth -
+            horizontalMarginWidth * 2 -
+            horizontalGutterWidth * (displayColumnSize - 1)) /
+        displayColumnSize;
 
     verticalGutterHeight = gutterWidth;
     verticalMarginHeight = gutterWidth;
-    rowHeight = (maxHeight - (rowSize + 1) * verticalGutterHeight) / (rowSize + 1);
+    rowHeight =
+        (maxHeight - (rowSize + 1) * verticalGutterHeight) / (rowSize + 1);
   }
 }

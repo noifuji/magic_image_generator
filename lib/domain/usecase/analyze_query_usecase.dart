@@ -1,21 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:magic_image_generator/domain/search/search_condition.dart';
-import 'package:magic_image_generator/domain/search/search_condition_mapper.dart';
-import 'package:magic_image_generator/domain/search/search_operator.dart';
-import 'package:magic_image_generator/domain/search/search_operator_type.dart';
-import 'package:magic_image_generator/domain/search/search_query_symbol.dart';
+import 'package:magic_image_generator/domain/entity/search_condition.dart';
+import 'package:magic_image_generator/domain/mapper/search_condition_mapper.dart';
+import 'package:magic_image_generator/domain/entity/search_operator.dart';
+import 'package:magic_image_generator/domain/enum/search_operator_type.dart';
+import 'package:magic_image_generator/domain/entity/search_query_symbol.dart';
 
 class AnalyzeQueryUseCase {
-
   List<SearchQuerySymbol> call(String query) {
-    List<String> split = p_lex(replaceDoubleBytesSpace(query));
+    List<String> split = pLex(replaceDoubleBytesSpace(query));
     List<String> doubleQuoteChecked = checkDoubleQuote(split);
     List<String> operatorsChecked = checkOperators(doubleQuoteChecked);
     List<List<String>> symbolStringArray = checkSpace(operatorsChecked);
-    List<SearchQuerySymbol> symbolArray = convertToPolishNotation(complementAnd(convertToSearchQuerySymbol(symbolStringArray)));
+    List<SearchQuerySymbol> symbolArray = convertToPolishNotation(
+        complementAnd(convertToSearchQuerySymbol(symbolStringArray)));
 
-    int conditionCount = symbolArray.fold<int>(0, (p, e) => p + (e is SearchCondition? 1 : 0));
-    if(conditionCount == 0) {
+    int conditionCount =
+        symbolArray.fold<int>(0, (p, e) => p + (e is SearchCondition ? 1 : 0));
+    if (conditionCount == 0) {
       throw Exception();
     }
 
@@ -26,10 +26,10 @@ class AnalyzeQueryUseCase {
     return str.replaceAll("　", " ");
   }
 
-  List<String> p_lex(String str) {
-    RegExp regExp = new RegExp(r'[:()<>=\-\\"\s]');
+  List<String> pLex(String str) {
+    RegExp regExp = RegExp(r'[:()<>=\-\\"\s]');
     str = str.replaceAllMapped(regExp, (m) => '@${m[0]}@');
-    return str.split(new RegExp(r"[@]")).where((x) => x != "").toList();
+    return str.split(RegExp(r"[@]")).where((x) => x != "").toList();
   }
 
 /*
@@ -48,8 +48,11 @@ class AnalyzeQueryUseCase {
  */
   List<String> checkDoubleQuote(List<String> p) {
     //validate
-    int countDoubleQuote = p.fold<int>(0, (previousValue, element) => previousValue = previousValue + (element == '"'? 1 : 0));
-    if(countDoubleQuote.isOdd) {
+    int countDoubleQuote = p.fold<int>(
+        0,
+        (previousValue, element) =>
+            previousValue = previousValue + (element == '"' ? 1 : 0));
+    if (countDoubleQuote.isOdd) {
       throw Exception("Format Error");
     }
 
@@ -80,27 +83,32 @@ class AnalyzeQueryUseCase {
   }
 
   List<String> checkOperators(List<String> p) {
-    int countOpenBracket = p.fold<int>(0, (previousValue, element) => previousValue = previousValue + (element == '('? 1 : 0));
-    int countCloseBracket = p.fold<int>(0, (previousValue, element) => previousValue = previousValue + (element == ')'? 1 : 0));
-    if(countOpenBracket != countCloseBracket) {
+    int countOpenBracket = p.fold<int>(
+        0,
+        (previousValue, element) =>
+            previousValue = previousValue + (element == '(' ? 1 : 0));
+    int countCloseBracket = p.fold<int>(
+        0,
+        (previousValue, element) =>
+            previousValue = previousValue + (element == ')' ? 1 : 0));
+    if (countOpenBracket != countCloseBracket) {
       throw Exception("Format Error");
     }
-
 
     List<String> symbol = SearchOperator.searchOperatorMap.keys.toList();
     List<String> r = [];
 
-    while(p.isNotEmpty) {
+    while (p.isNotEmpty) {
       String t = p.first;
       p.removeAt(0);
-      if(symbol.contains(t)) {
-        if(r.isNotEmpty && r.last != " ") {
+      if (symbol.contains(t)) {
+        if (r.isNotEmpty && r.last != " ") {
           r.add(" ");
         }
 
         r.add(t);
 
-        if(p.isNotEmpty && p.first != " ") {
+        if (p.isNotEmpty && p.first != " ") {
           r.add(" ");
         }
       } else {
@@ -109,24 +117,25 @@ class AnalyzeQueryUseCase {
     }
 
     return r;
-
   }
 
   List<List<String>> checkSpace(List<String> p) {
     List<List<String>> r = [];
 
     List<String> tmp = [];
-    while(p.isNotEmpty) {
+    while (p.isNotEmpty) {
       var t = p.first;
       p.removeAt(0);
-      if(t == " ") {//空白区切り
-        if(tmp.isEmpty) {
+      if (t == " ") {
+        //空白区切り
+        if (tmp.isEmpty) {
           continue;
         }
 
         r.add(tmp);
         tmp = [];
-      } else if(p.isEmpty) {//配列のおわり
+      } else if (p.isEmpty) {
+        //配列のおわり
         tmp.add(t);
         r.add(tmp);
         tmp = [];
@@ -136,7 +145,6 @@ class AnalyzeQueryUseCase {
     }
 
     return r;
-
   }
 
   /*
@@ -167,27 +175,35 @@ d. その他（演算子）の場合
     List<SearchQuerySymbol> result = [];
     List<SearchQuerySymbol> stack = [];
 
-    for(var i=0; i< e.length; i++) {
+    for (var i = 0; i < e.length; i++) {
       var t = e[i];
 
-      if(t is SearchOperator && [SearchOperatorType.and, SearchOperatorType.or,SearchOperatorType.not].contains(t.searchOperatorType)) {
-        if(stack.isEmpty) {
+      if (t is SearchOperator &&
+          [
+            SearchOperatorType.and,
+            SearchOperatorType.or,
+            SearchOperatorType.not
+          ].contains(t.searchOperatorType)) {
+        if (stack.isEmpty) {
           stack.add(t);
           continue;
         }
 
         var stackLast = stack.last;
-        if(stackLast is SearchOperator && stackLast.priority > t.priority) {
+        if (stackLast is SearchOperator && stackLast.priority > t.priority) {
           result.add(stackLast);
           stack.removeLast();
         } else {
           stack.add(t);
         }
-      } else if(t is SearchOperator && t.searchOperatorType == SearchOperatorType.openedBracket) {
+      } else if (t is SearchOperator &&
+          t.searchOperatorType == SearchOperatorType.openedBracket) {
         stack.add(t);
-      } else if(t is SearchOperator && t.searchOperatorType == SearchOperatorType.closedBracket) {
+      } else if (t is SearchOperator &&
+          t.searchOperatorType == SearchOperatorType.closedBracket) {
         var stackLast = stack.last;
-        while(!(stackLast is SearchOperator && stackLast.searchOperatorType == SearchOperatorType.openedBracket)) {
+        while (!(stackLast is SearchOperator &&
+            stackLast.searchOperatorType == SearchOperatorType.openedBracket)) {
           result.add(stack.last);
           stack.removeLast();
           stackLast = stack.last;
@@ -196,12 +212,10 @@ d. その他（演算子）の場合
         stack.removeLast();
       } else {
         result.add(t);
-
       }
-
     }
 
-    for(var i = stack.length-1; i >= 0; i--) {
+    for (var i = stack.length - 1; i >= 0; i--) {
       result.add(stack[i]);
     }
 
@@ -231,26 +245,41 @@ d. その他（演算子）の場合
   List<SearchQuerySymbol> complementAnd(List<SearchQuerySymbol> p) {
     List<SearchQuerySymbol> r = [];
 
-    while(p.length > 1) {
+    while (p.length > 1) {
       var t = p.first;
       p.removeAt(0);
 
       var first = t;
       var second = p.first;
 
-      if((first is SearchCondition && second is SearchCondition) ||
-          (first is SearchCondition && second is SearchOperator && second.searchOperatorType == SearchOperatorType.openedBracket) ||
-          (first is SearchOperator && first.searchOperatorType == SearchOperatorType.closedBracket && second is SearchCondition) ||
-          (first is SearchOperator && first.searchOperatorType == SearchOperatorType.closedBracket && second is SearchOperator && second.searchOperatorType == SearchOperatorType.openedBracket) ||
-          (first is SearchCondition && second is SearchOperator && second.searchOperatorType == SearchOperatorType.not)) {
+      if ((first is SearchCondition && second is SearchCondition) ||
+          (first is SearchCondition &&
+              second is SearchOperator &&
+              second.searchOperatorType == SearchOperatorType.openedBracket) ||
+          (first is SearchOperator &&
+              first.searchOperatorType == SearchOperatorType.closedBracket &&
+              second is SearchCondition) ||
+          (first is SearchOperator &&
+              first.searchOperatorType == SearchOperatorType.closedBracket &&
+              second is SearchOperator &&
+              second.searchOperatorType == SearchOperatorType.openedBracket) ||
+          (first is SearchCondition &&
+              second is SearchOperator &&
+              second.searchOperatorType == SearchOperatorType.not)) {
         r.add(t);
         r.add(SearchOperator(["and"]));
-      } else if((first is SearchOperator &&
-          first.searchOperatorType == SearchOperatorType.openedBracket &&
-          second is SearchOperator && second.searchOperatorType == SearchOperatorType.closedBracket) ||
+      } else if ((first is SearchOperator &&
+              first.searchOperatorType == SearchOperatorType.openedBracket &&
+              second is SearchOperator &&
+              second.searchOperatorType == SearchOperatorType.closedBracket) ||
           (first is SearchOperator &&
-              [SearchOperatorType.and, SearchOperatorType.or,SearchOperatorType.not,].contains(first.searchOperatorType) &&
-              second is SearchOperator && second.searchOperatorType == SearchOperatorType.closedBracket)) {
+              [
+                SearchOperatorType.and,
+                SearchOperatorType.or,
+                SearchOperatorType.not,
+              ].contains(first.searchOperatorType) &&
+              second is SearchOperator &&
+              second.searchOperatorType == SearchOperatorType.closedBracket)) {
         throw Exception("Format Error");
       } else {
         r.add(t);
@@ -265,16 +294,15 @@ d. その他（演算子）の場合
   List<SearchQuerySymbol> convertToSearchQuerySymbol(List<List<String>> p) {
     return p.map((e) {
       e = e.map((ele) => ele.toLowerCase()).toList();
-      if(SearchOperator.isSearchOperator(e)) {
+      if (SearchOperator.isSearchOperator(e)) {
         return SearchOperator(e);
-      } else if(SearchConditionMapper.isMappable(e)) {
+      } else if (SearchConditionMapper.isMappable(e)) {
         return SearchConditionMapper.map(e);
-      } else if(e.length == 1) {
-        return SearchConditionMapper.map(["name", ":" , e[0]]);
+      } else if (e.length == 1) {
+        return SearchConditionMapper.map(["name", ":", e[0]]);
       }
 
       throw Exception();
     }).toList();
   }
-
 }

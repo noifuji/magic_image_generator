@@ -3,11 +3,11 @@ import "../../common/constants.dart" as constants;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class KofiButton extends StatelessWidget {
-  bool isSmall;
-  double? width;
-  double? height;
+  final bool isSmall;
+  final double? width;
+  final double? height;
 
-  KofiButton({Key? key, this.isSmall = false, this.width, this.height})
+  const KofiButton({Key? key, this.isSmall = false, this.width, this.height})
       : super(key: key);
 
   @override
@@ -35,12 +35,12 @@ class KofiButton extends StatelessWidget {
           Image.asset(constants.kofiIcon),
           if (!isSmall)
             Text(AppLocalizations.of(context)!.kofi,
-                style: (width!=null && height != null)
-                    ? TextStyle(color: Colors.white, fontSize: height*0.75*0.5)
+                style: (width != null && height != null)
+                    ? TextStyle(
+                        color: Colors.white, fontSize: height * 0.75 * 0.5)
                     : const TextStyle(color: Colors.white)),
         ]));
   }
 
-  void onPressed() {
-  }
+  void onPressed() {}
 }
