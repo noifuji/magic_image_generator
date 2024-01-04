@@ -175,6 +175,168 @@ class AdvancedSearchScreen extends StatelessWidget {
           gutterWidth: breakpoint.gutters,
           maxHeight: constraints.maxHeight);
 
+      final leftWidgets = <Widget>[
+        Container(
+          height:
+          responsive.verticalMarginHeight,
+        ),
+        _createTitle(
+            context,
+            AppLocalizations.of(context)!
+                .filterTitleColor,
+            responsive),
+        Container(
+          height: responsive.verticalGutterHeight,
+        ),
+        _createColorButtons(context, responsive),
+        Container(
+          height: responsive.verticalGutterHeight,
+        ),
+        _createTitle(
+            context,
+            AppLocalizations.of(context)!
+                .filterTitleRarity,
+            responsive),
+        ..._createButtonRows(context, _rarities,
+            rarityColNum, responsive),
+        _createTitle(
+            context,
+            AppLocalizations.of(context)!
+                .filterTitleType,
+            responsive),
+        ..._createButtonRows(context, _cardTypes,
+            cardTypeColNum, responsive),
+      ];
+
+      final rightWidgets = <Widget>[
+        Container(
+          height: responsive.verticalMarginHeight,
+        ),
+
+        //マナコスト
+        _createTitle(
+            context,
+            AppLocalizations.of(context)!
+                .filterTitleManaValue,
+            responsive),
+        Container(
+          height: responsive.verticalGutterHeight,
+        ),
+        _createManaValueButtons(
+            context, responsive),
+        Container(
+          height: responsive.verticalGutterHeight,
+        ),
+
+        //カードセット
+        _createTitle(
+            context,
+            AppLocalizations.of(context)!
+                .filterTitleSet,
+            responsive),
+        _createCardSetFilter(context, responsive),
+        ..._createButtonRows(context, _cardSets,
+            cardSetColNum, responsive),
+
+        //アルケミーカードセット
+        _createTitle(
+            context,
+            AppLocalizations.of(context)!
+                .filterTitleAlchemySet,
+            responsive),
+        ..._createButtonRows(
+            context,
+            _alchemyCardSets,
+            cardSetColNum,
+            responsive)
+      ];
+
+      final widgetsForMobile = <Widget>[
+        Container(
+          height: responsive.verticalMarginHeight,
+        ),
+
+        _createTitle(
+            context,
+            AppLocalizations.of(context)!
+                .filterTitleColor,
+            responsive),
+        Container(
+          height: responsive.verticalGutterHeight,
+        ),
+        _createColorButtons(context, responsive),
+        Container(
+          height: responsive.verticalGutterHeight,
+        ),
+
+        //マナコスト
+        _createTitle(
+            context,
+            AppLocalizations.of(context)!
+                .filterTitleManaValue,
+            responsive),
+        Container(
+          height: responsive.verticalGutterHeight,
+        ),
+        _createManaValueButtons(
+            context, responsive),
+        Container(
+          height: responsive.verticalGutterHeight,
+        ),
+
+        //レアリティ
+        _createTitle(
+            context,
+            AppLocalizations.of(context)!
+                .filterTitleRarity,
+            responsive),
+        Container(
+          height: responsive.verticalGutterHeight,
+        ),
+        ..._createButtonRows(context, _rarities,
+            rarityColNum, responsive),
+        Container(
+          height: responsive.verticalGutterHeight,
+        ),
+
+        //カードタイプ
+        _createTitle(
+            context,
+            AppLocalizations.of(context)!
+                .filterTitleType,
+            responsive),
+        ..._createButtonRows(context, _cardTypes,
+            cardTypeColNum, responsive),
+        Container(
+          height: responsive.verticalGutterHeight,
+        ),
+
+        //カードセット
+        _createTitle(
+            context,
+            AppLocalizations.of(context)!
+                .filterTitleSet,
+            responsive),
+        _createCardSetFilter(context, responsive),
+        ..._createButtonRows(context, _cardSets,
+            cardSetColNum, responsive),
+        Container(
+          height: responsive.verticalGutterHeight,
+        ),
+
+        //アルケミーカードセット
+        _createTitle(
+            context,
+            AppLocalizations.of(context)!
+                .filterTitleAlchemySet,
+            responsive),
+        ..._createButtonRows(
+            context,
+            _alchemyCardSets,
+            cardSetColNum,
+            responsive),
+      ];
+
       return Scaffold(
           appBar: AppBar(
             title: Text(AppLocalizations.of(context)!.advancedSearch),
@@ -192,191 +354,30 @@ class AdvancedSearchScreen extends StatelessWidget {
                         ? ([
                             Expanded(
                                 flex: 1,
-                                child: SingleChildScrollView(
-                                    primary: false,
-                                    child: Column(children: [
-                                      Container(
-                                        height:
-                                            responsive.horizontalMarginWidth,
-                                      ),
-                                      _createTitle(
-                                          context,
-                                          AppLocalizations.of(context)!
-                                              .filterTitleColor,
-                                          responsive),
-                                      Container(
-                                        height: responsive.verticalGutterHeight,
-                                      ),
-                                      _createColorButtons(context, responsive),
-                                      Container(
-                                        height: responsive.verticalGutterHeight,
-                                      ),
-                                      _createTitle(
-                                          context,
-                                          AppLocalizations.of(context)!
-                                              .filterTitleRarity,
-                                          responsive),
-                                      Container(
-                                        height: responsive.verticalGutterHeight,
-                                      ),
-                                      _createButtonGrid(context, _rarities,
-                                          rarityColNum, responsive),
-                                      Container(
-                                        height: responsive.verticalGutterHeight,
-                                      ),
-                                      _createTitle(
-                                          context,
-                                          AppLocalizations.of(context)!
-                                              .filterTitleType,
-                                          responsive),
-                                      _createButtonGrid(context, _cardTypes,
-                                          cardTypeColNum, responsive)
-                                    ]))),
+                                child: ListView.builder(
+                                  itemCount: leftWidgets.length,
+                                    itemBuilder: (context, index) =>
+                                    leftWidgets[index])),
                             Container(width: responsive.horizontalGutterWidth),
                             Expanded(
                                 flex: 1,
-                                child: SingleChildScrollView(
-                                    primary: false,
-                                    child: Column(children: [
-                                      Container(
-                                        height: responsive.verticalMarginHeight,
-                                      ),
-
-                                      //マナコスト
-                                      _createTitle(
-                                          context,
-                                          AppLocalizations.of(context)!
-                                              .filterTitleManaValue,
-                                          responsive),
-                                      Container(
-                                        height: responsive.verticalGutterHeight,
-                                      ),
-                                      _createManaValueButtons(
-                                          context, responsive),
-                                      Container(
-                                        height: responsive.verticalGutterHeight,
-                                      ),
-
-                                      //カードセット
-                                      _createTitle(
-                                          context,
-                                          AppLocalizations.of(context)!
-                                              .filterTitleSet,
-                                          responsive),
-                                      _createCardSetFilter(context, responsive),
-                                      _createButtonGrid(context, _cardSets,
-                                          cardSetColNum, responsive),
-
-                                      //アルケミーカードセット
-                                      _createTitle(
-                                          context,
-                                          AppLocalizations.of(context)!
-                                              .filterTitleAlchemySet,
-                                          responsive),
-                                      _createButtonGrid(
-                                          context,
-                                          _alchemyCardSets,
-                                          cardSetColNum,
-                                          responsive)
-                                    ]))),
+                                child: ListView.builder(
+                                    itemCount: rightWidgets.length,
+                                    itemBuilder: (context, index) =>
+                                    rightWidgets[index])),
                           ])
                         : ([
-                            SingleChildScrollView(
-                                primary: false,
-                                child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        height: responsive.verticalMarginHeight,
-                                      ),
-
-                                      _createTitle(
-                                          context,
-                                          AppLocalizations.of(context)!
-                                              .filterTitleColor,
-                                          responsive),
-                                      Container(
-                                        height: responsive.verticalGutterHeight,
-                                      ),
-                                      _createColorButtons(context, responsive),
-                                      Container(
-                                        height: responsive.verticalGutterHeight,
-                                      ),
-
-                                      //マナコスト
-                                      _createTitle(
-                                          context,
-                                          AppLocalizations.of(context)!
-                                              .filterTitleManaValue,
-                                          responsive),
-                                      Container(
-                                        height: responsive.verticalGutterHeight,
-                                      ),
-                                      _createManaValueButtons(
-                                          context, responsive),
-                                      Container(
-                                        height: responsive.verticalGutterHeight,
-                                      ),
-
-                                      //レアリティ
-                                      _createTitle(
-                                          context,
-                                          AppLocalizations.of(context)!
-                                              .filterTitleRarity,
-                                          responsive),
-                                      Container(
-                                        height: responsive.verticalGutterHeight,
-                                      ),
-                                      _createButtonGrid(context, _rarities,
-                                          rarityColNum, responsive),
-                                      Container(
-                                        height: responsive.verticalGutterHeight,
-                                      ),
-
-                                      //カードタイプ
-                                      _createTitle(
-                                          context,
-                                          AppLocalizations.of(context)!
-                                              .filterTitleType,
-                                          responsive),
-                                      _createButtonGrid(context, _cardTypes,
-                                          cardTypeColNum, responsive),
-                                      Container(
-                                        height: responsive.verticalGutterHeight,
-                                      ),
-
-                                      //カードセット
-                                      _createTitle(
-                                          context,
-                                          AppLocalizations.of(context)!
-                                              .filterTitleSet,
-                                          responsive),
-                                      _createCardSetFilter(context, responsive),
-                                      _createButtonGrid(context, _cardSets,
-                                          cardSetColNum, responsive),
-                                      Container(
-                                        height: responsive.verticalGutterHeight,
-                                      ),
-
-                                      //アルケミーカードセット
-                                      _createTitle(
-                                          context,
-                                          AppLocalizations.of(context)!
-                                              .filterTitleAlchemySet,
-                                          responsive),
-                                      _createButtonGrid(
-                                          context,
-                                          _alchemyCardSets,
-                                          cardSetColNum,
-                                          responsive),
-                                    ]))
+                        Expanded(
+                            flex: 1,
+                            child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          itemCount: widgetsForMobile.length,
+                          itemBuilder: (context, index) =>
+                          widgetsForMobile[index]),),
                           ]),
                   ),
                 ),
-                Expanded(
-                    flex: 0,
-                    child: SizedBox(
+                SizedBox(
                         height: responsive.rowHeight,
                         child: Row(children: [
                           Container(
@@ -452,7 +453,7 @@ class AdvancedSearchScreen extends StatelessWidget {
                                               0.6 *
                                               0.75 *
                                               0.5)))),
-                        ])))
+                        ]))
               ])));
     });
   }
@@ -594,7 +595,7 @@ class AdvancedSearchScreen extends StatelessWidget {
     return Row(children: result);
   }
 
-  Widget _createButtonGrid(BuildContext context, List<SearchFilter> filters,
+  List<Widget> _createButtonRows(BuildContext context, List<SearchFilter> filters,
       int column, ResponsiveGridValues res) {
     int rows = filters.length ~/ column;
     rows = rows + (filters.length % column > 0 ? 1 : 0);
@@ -618,10 +619,10 @@ class AdvancedSearchScreen extends StatelessWidget {
         ),
       );
     }
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start, children: result);
+    return result;
   }
 
+  //トグルボタンの行を作成
   Widget _createTextButtons(BuildContext context, List<SearchFilter> filters,
       int length, ResponsiveGridValues res) {
     double w = res.columnWidth *
