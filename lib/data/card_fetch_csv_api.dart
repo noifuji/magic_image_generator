@@ -13,15 +13,15 @@ class CardFetchCsvApi {
     DateTime start = DateTime.now();
     Response response = await http.get(Uri.parse(Util.getCardMasterUrl()),
         headers: cache ? {} : {"Cache-Control": "no-cache"});
-    debugPrint("http.get:${DateTime.now().difference(start).inMilliseconds}");
+    Util.printTimeStamp("http.get:${DateTime.now().difference(start).inMilliseconds}");
 
     start = DateTime.now();
     var rawBytes = GZipDecoder().decodeBytes(response.bodyBytes);
-    debugPrint(
+    Util.printTimeStamp(
         "GZipDecoder().decodeBytes:${DateTime.now().difference(start).inMilliseconds}");
     start = DateTime.now();
     String decodedResponseBody = const Utf8Decoder().convert(rawBytes);
-    debugPrint(
+    Util.printTimeStamp(
         "Utf8Decoder().convert:${DateTime.now().difference(start).inMilliseconds}");
 
     csv.CsvToListConverter converter =
@@ -29,7 +29,7 @@ class CardFetchCsvApi {
 
     start = DateTime.now();
     List<List> listCreated = converter.convert(decodedResponseBody);
-    debugPrint(
+    Util.printTimeStamp(
         "converter.convert:${DateTime.now().difference(start).inMilliseconds}");
 
     return Future<List<List<dynamic>>>.value(listCreated);

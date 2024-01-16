@@ -22,7 +22,8 @@
   "filterTitleType": "カードタイプ",
   "filterTitleManaValue": "マナコスト",
   "filterTitleSet": "カードセット",
-  "filterTitleAlchemySet": "アルケミー",
+  "filterTitleAlchemySet": "アルケミーセット",
+  "filterTitleSupplementalSet": "サプリメントセット",
 
   "rarityCommon": "コモン",
   "rarityUncommon": "アンコモン",
@@ -58,13 +59,11 @@
   "manaValue7AndMore": "7+",
 
   "setLci": "イクサラン:失われし洞窟",
-  "setWot": "おとぎ話",
   "setWoe": "エルドレインの森",
+
   "setMat": "機械兵団の進軍:決戦の後に",
-  "setMul": "多元宇宙の伝説",
   "setMom": "機械兵団の進軍",
   "setOne": "ファイレクシア:完全なる統一",
-  "setBrr": "旧枠アーティファクト",
   "setBro": "兄弟戦争",
   "setDmu": "団結のドミナリア",
 
@@ -128,6 +127,22 @@
   "setLtr": "指輪物語: 中つ国の伝承",
   "setYwoe": "アルケミー: エルドレイン",
   "setYlci": "アルケミー: イクサラン",
+
+  "setWot": "おとぎ話",
+  "setMul": "多元宇宙の伝説",
+  "setSis": "過去の影",
+  "setBrr": "旧枠版アーティファクト",
+  "setJ21": "Jumpstart: Historic Horizons",
+  "setSta": "ミスティカルアーカイブ",
+  "setJmp": "Jumpstart",
+  "setHa7": "ヒストリック・アンソロジー7",
+  "setHa6": "ヒストリック・アンソロジー6",
+  "setHa5": "ヒストリック・アンソロジー5",
+  "setHa4": "ヒストリック・アンソロジー4",
+  "setHa3": "ヒストリック・アンソロジー3",
+  "setHa2": "ヒストリック・アンソロジー2",
+  "setHa1": "ヒストリック・アンソロジー1",
+  "setAnb": "アリーナ基礎セット",
 
   "resetButton": "リセット",
   "searchButton": "OK",

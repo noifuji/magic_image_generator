@@ -22,6 +22,7 @@ import '../view/widgets/progress_bar.dart';
 
 class SearchViewModel extends ChangeNotifier {
   final CardRepository _repository;
+  double advancedSearchScrollPosition = 0;
   SortKey _sortKey = SortKey.cmc;
   SortOrder _sortOrder = SortOrder.asc;
   SearchResult _searchResult = SearchResult(cards: [], isSuccess: false);

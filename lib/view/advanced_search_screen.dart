@@ -10,7 +10,15 @@ import 'package:provider/provider.dart';
 import '../common/constants.dart' as constants;
 import '../common/search_filter.dart';
 
-class AdvancedSearchScreen extends StatelessWidget {
+class AdvancedSearchScreen extends StatefulWidget {
+  const AdvancedSearchScreen({super.key});
+
+  @override
+  State<AdvancedSearchScreen> createState() => _AdvancedSearchScreenState();
+}
+
+
+class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   final List<SearchFilter> _rarities = [
     SearchFilter.rarityCommon,
     SearchFilter.rarityUncommon,
@@ -52,13 +60,10 @@ class AdvancedSearchScreen extends StatelessWidget {
 
   final List<SearchFilter> _cardSets = [
     SearchFilter.setLci,
-    SearchFilter.setWot,
     SearchFilter.setWoe,
     SearchFilter.setMat,
-    SearchFilter.setMul,
     SearchFilter.setMom,
     SearchFilter.setOne,
-    SearchFilter.setBrr,
     SearchFilter.setBro,
     SearchFilter.setDmu,
     SearchFilter.setSnc,
@@ -116,6 +121,24 @@ class AdvancedSearchScreen extends StatelessWidget {
     SearchFilter.setYMid
   ];
 
+  final List<SearchFilter> _supplementalSet = [
+    SearchFilter.setWot,
+    SearchFilter.setMul,
+    SearchFilter.setSis,
+    SearchFilter.setBrr,
+    SearchFilter.setJ21,
+    SearchFilter.setSta,
+    SearchFilter.setJmp,
+    SearchFilter.setHa7,
+    SearchFilter.setHa6,
+    SearchFilter.setHa5,
+    SearchFilter.setHa4,
+    SearchFilter.setHa3,
+    SearchFilter.setHa2,
+    SearchFilter.setHa1,
+    SearchFilter.setAnb,
+  ];
+
   final List<SearchFilter> kStandardLegalSets = [
     SearchFilter.setLci,
     SearchFilter.setWoe,
@@ -130,7 +153,15 @@ class AdvancedSearchScreen extends StatelessWidget {
     SearchFilter.setMid,
   ];
 
-  AdvancedSearchScreen({Key? key}) : super(key: key);
+  late final ScrollController rightPaneScrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    rightPaneScrollController = ScrollController(
+        initialScrollOffset: Provider.of<SearchViewModel>(context,
+            listen: false).advancedSearchScrollPosition,);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -248,6 +279,18 @@ class AdvancedSearchScreen extends StatelessWidget {
             context,
             _alchemyCardSets,
             cardSetColNum,
+            responsive),
+
+        //サプリメントセット
+        _createTitle(
+            context,
+            AppLocalizations.of(context)!
+                .filterTitleSupplementalSet,
+            responsive),
+        ..._createButtonRows(
+            context,
+            _supplementalSet,
+            cardSetColNum,
             responsive)
       ];
 
@@ -335,6 +378,18 @@ class AdvancedSearchScreen extends StatelessWidget {
             _alchemyCardSets,
             cardSetColNum,
             responsive),
+
+        //サプリメントセット
+        _createTitle(
+            context,
+            AppLocalizations.of(context)!
+                .filterTitleSupplementalSet,
+            responsive),
+        ..._createButtonRows(
+            context,
+            _supplementalSet,
+            cardSetColNum,
+            responsive),
       ];
 
       return Scaffold(
@@ -362,6 +417,7 @@ class AdvancedSearchScreen extends StatelessWidget {
                             Expanded(
                                 flex: 1,
                                 child: ListView.builder(
+                                  controller: rightPaneScrollController,
                                     itemCount: rightWidgets.length,
                                     itemBuilder: (context, index) =>
                                     rightWidgets[index])),
@@ -431,6 +487,9 @@ class AdvancedSearchScreen extends StatelessWidget {
                                       return;
                                     }
 
+
+                                    Provider.of<SearchViewModel>(context,
+                                        listen: false).advancedSearchScrollPosition = rightPaneScrollController.position.pixels;
                                     Navigator.pop(context);
                                     List<SearchFilterData> filerDataList =
                                         SearchFilter.values

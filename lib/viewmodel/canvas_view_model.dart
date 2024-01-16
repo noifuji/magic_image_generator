@@ -22,6 +22,7 @@ class CanvasViewModel extends ChangeNotifier {
   }
 
   void addSelectedCards(int rowIndex, CardInfoHeader card) {
+    debugPrint("ID=${card.firstFace.multiverseId}, name=${card.firstFace.nameJpYomi}");
     if (rowIndex > _selectedCards.length) {
       throw Exception();
     }

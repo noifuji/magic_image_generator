@@ -25,7 +25,6 @@ class _CanvasCardState extends State<CanvasCard> {
   @override
   void initState() {
     super.initState();
-    debugPrint("_CanvasCardState initState:${widget.card.firstFace.name}");
     _fiController = FlippableImageController();
   }
 

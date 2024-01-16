@@ -129,7 +129,7 @@ class MyAppState extends State<MyApp> {
     _progressController.value = 0.5;
 
     DataSource localDataSource =
-        CardMemoryDataSource(); //CardLocalDataSource(isar);
+        CardMemoryDataSource();
     CardRemoteDataSource remoteDataSource =
         CardRemoteDataSource(CardFetchCsvApi());
     CardRepository repo = CardRepositoryImpl(localDataSource, remoteDataSource);
