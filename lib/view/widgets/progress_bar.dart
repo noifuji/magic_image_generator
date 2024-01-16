@@ -15,19 +15,19 @@ class ProgressBarState extends State<ProgressBar> {
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
         valueListenable: widget.controller,
-        builder: (BuildContext context, double progress, Widget? child) {
-          Util.printTimeStamp("progress updated = $progress");
+        builder: (BuildContext context, Progress progress, Widget? child) {
+          Util.printTimeStamp("progress updated = ${progress.progressValue}");
           return TweenAnimationBuilder<double>(
             duration: const Duration(milliseconds: 250),
             curve: Curves.easeIn,
             tween: Tween<double>(
               begin: 0,
-              end: progress,
+              end: progress.progressValue,
             ),
             builder: (context, value, _) {
               return Column(children: [
                 Text(
-                  "Loading Data......${(value * 100).round()}%",
+                  "${progress.taskName}......${(value * 100).round()}%",
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -45,6 +45,26 @@ class ProgressBarState extends State<ProgressBar> {
   }
 }
 
-class ProgressBarController extends ValueNotifier<double> {
-  ProgressBarController(double value) : super(value);
+class Progress {
+  final double progressValue;
+  final String taskName;
+
+  Progress({
+    required this.progressValue,
+    required this.taskName,
+  });
+
+  Progress copyWith(
+      double? progressValue,
+      String? taskName,
+      ) {
+    return Progress(
+        progressValue: progressValue ?? this.progressValue,
+      taskName: taskName ?? this.taskName,
+    );
+  }
+}
+
+class ProgressBarController extends ValueNotifier<Progress> {
+  ProgressBarController(Progress value) : super(value);
 }

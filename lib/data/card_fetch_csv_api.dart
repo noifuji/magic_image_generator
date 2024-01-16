@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:archive/archive.dart';
 import 'package:csv/csv.dart' as csv;
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:magic_image_generator/data/card_master_version.dart';

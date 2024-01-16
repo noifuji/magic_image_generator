@@ -20,11 +20,11 @@ class CardRepositoryImpl implements CardRepository {
   CardRepositoryImpl(this._localDataSource, this._remoteDataSource);
 
   @override
-  Future<void> init({required Function(double value) onProgress}) async {
+  Future<void> init({required Function(double value, String task) onProgress}) async {
+    onProgress(0, "Downloading Database Version");
     CardMasterVersion vRemote = await _remoteDataSource.getVersion();
-    onProgress(0.1);
+    onProgress(0.1, "Checking Database Version");
     CardMasterVersion? vLocal = await _localDataSource.getVersion();
-    onProgress(0.2);
 
     bool useCache = false;
     if (vLocal != null && vLocal.version >= vRemote.version) {
@@ -32,16 +32,17 @@ class CardRepositoryImpl implements CardRepository {
     }
 
     Util.printTimeStamp("CardRepositoryImpl _remoteDataSource.getAll()");
+    onProgress(0.2, "Downloading Database");
     List<Card> cards = await _remoteDataSource.getAll(cache: useCache);
-    onProgress(0.5);
     Util.printTimeStamp("CardRepositoryImpl _localDataSource.clearAll()");
+    onProgress(0.5, "Refreshing Database");
     await _localDataSource.clearAll();
-    onProgress(0.6);
     Util.printTimeStamp("CardRepositoryImpl _localDataSource.insertAll(cards)");
+    onProgress(0.6, "Refreshing Database");
     await _localDataSource.insertAll(cards);
-    onProgress(0.7);
     Util.printTimeStamp(
         "CardRepositoryImpl _localDataSource.insertVersion(_vRemote)");
+    onProgress(0.7, "Refreshing Database");
     await _localDataSource.insertVersion(vRemote);
   }
 

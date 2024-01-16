@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:breakpoint/breakpoint.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -117,29 +116,30 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _progressController = ProgressBarController(0);
     _initAppFuture = _initApp();
   }
 
   Future<CardRepository> _initApp() async {
     Util.printTimeStamp("_MyAppState _initApp");
+    _progressController = ProgressBarController(
+        Progress(progressValue: 0,
+            taskName: "Initialize Languages"));
     await _appLanguage.loadLocale();
 
-    _progressController.value = 0.1;
-    _progressController.value = 0.5;
-
-    DataSource localDataSource =
-        CardMemoryDataSource();
+    DataSource localDataSource = CardMemoryDataSource();
     CardRemoteDataSource remoteDataSource =
         CardRemoteDataSource(CardFetchCsvApi());
     CardRepository repo = CardRepositoryImpl(localDataSource, remoteDataSource);
     await repo.init(
-        onProgress: (value) => _progressController.value = (0.5 + 0.5 * value));
+        onProgress: (value, task) => _progressController.value  =
+            Progress(progressValue: 0.5 + 0.5 * value,
+                taskName: task));
 
     _searchViewModel = SearchViewModel(repo);
     _canvasViewModel = CanvasViewModel();
 
-    _progressController.value = 1.0;
+    _progressController.value = Progress(progressValue: 1.0,
+        taskName: "");
 
     return Future<CardRepository>.value(repo);
   }
@@ -183,11 +183,31 @@ class MyAppState extends State<MyApp> {
                   const Expanded(flex: 1, child: SizedBox.shrink()),
                 ]));
           } else if (dataSnapshot.error != null) {
-            if (kDebugMode) {
-              print(dataSnapshot.error);
-              print(dataSnapshot.stackTrace);
-            }
-            return const MaterialApp(home: Center(child: Text("error")));
+              debugPrint(dataSnapshot.error.toString());
+              debugPrint(dataSnapshot.stackTrace.toString());
+            return MaterialApp(
+              onGenerateTitle: (context) =>
+              AppLocalizations.of(context)!.appTitle,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: AppLocalizations.supportedLocales,
+              theme: ThemeData(
+                  brightness: Brightness.dark,
+                  fontFamily: "NotoSansJP-Regular"),
+              darkTheme: ThemeData(
+                  brightness: Brightness.dark,
+                  fontFamily: "NotoSansJP-Regular"),
+              themeMode: ThemeMode.dark,
+              home: Builder(builder: (context) => Scaffold(
+                body: Center(
+                  child: Text(AppLocalizations.of(context)!.errorReload),
+                ),
+              ),),
+            );
           } else {
             return MultiProvider(
                 providers: [

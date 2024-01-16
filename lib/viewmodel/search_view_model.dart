@@ -18,11 +18,11 @@ import '../common/search_filter_factory.dart';
 import '../common/util.dart';
 import '../domain/usecase/analyze_filter_usecase.dart';
 import '../domain/usecase/analyze_query_usecase.dart';
-import '../view/widgets/progress_bar.dart';
 
 class SearchViewModel extends ChangeNotifier {
   final CardRepository _repository;
   double advancedSearchScrollPosition = 0;
+  double advancedSearchScrollPositionMobile = 0;
   SortKey _sortKey = SortKey.cmc;
   SortOrder _sortOrder = SortOrder.asc;
   SearchResult _searchResult = SearchResult(cards: [], isSuccess: false);
@@ -36,10 +36,6 @@ class SearchViewModel extends ChangeNotifier {
   SortOrder get order => _sortOrder;
 
   Completer<void>? searchCompleter;
-  late ProgressBarController _searchProgressController;
-
-  ProgressBarController get searchProgressController =>
-      _searchProgressController;
 
   SearchViewModel(this._repository) {
     for (var v in SearchFilter.values) {
@@ -62,7 +58,6 @@ class SearchViewModel extends ChangeNotifier {
   Future<void> search(Locale locale, List<SearchFilterData> filterDataList,
       {String? query}) async {
     var completer = Completer<void>();
-    _searchProgressController = ProgressBarController(0);
 
     if (query != null) {
       searchBoxText = query;
@@ -172,19 +167,16 @@ class SearchViewModel extends ChangeNotifier {
           },
         );
       }
-      _searchProgressController.value = 0.2;
 
       Util.printTimeStamp(query);
 
       //クエリ分析
       var analyzer = AnalyzeQueryUseCase();
       var conditions = analyzer.call(query);
-      _searchProgressController.value = 0.4;
 
       //クエリ実行
       List<CardInfoHeader> results =
           await _repository.get(conditions, locale, onProgress: (value) {
-        _searchProgressController.value = 0.4 + value * 0.4;
       });
       _searchResult = SearchResult(cards: results, isSuccess: true);
 
@@ -200,11 +192,9 @@ class SearchViewModel extends ChangeNotifier {
 
       _searchResult.cards = newCardList;
 
-      _searchProgressController.value = 0.8;
 
       //ソート
       sortSearchResults(locale);
-      _searchProgressController.value = 1.0;
     } catch (e, stackTrace) {
       if (kDebugMode) {
         print(e);

@@ -174,12 +174,14 @@
     "step3Title": "Step3.",
     "step3Content": "Tap 'Copy Button' or 'Download Button'. You can get a card image!",
 
-    "errorReload": "Error. Please reload this page.",
+    "errorReload": "Error. Reload this page.",
     "exceptionCode100": "Failed to search. Confirm your query.",
     "exceptionCode200": "Failed to Copy. Please try download.",
     "exceptionCode210": "Failed to Download.",
     "exceptionCode310": "Please wait. Searching is already started.",
     "exceptionCode410": "Failed to import your deck list.",
 
-    "kofi": "Buy Me a Coffee"
+    "kofi": "Buy Me a Coffee",
+
+    "searching": "Searching cards...."
 }

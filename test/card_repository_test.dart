@@ -14,7 +14,7 @@ void main() {
   setUpAll(() async {
     repo = CardRepositoryImpl(
         CardMemoryDataSource(), CardRemoteDataSource(CardFetchCsvApi()));
-    await repo.init(onProgress: (value) => {});
+    await repo.init(onProgress: (value, task) => {});
   });
 
   test('Double quoted query', () async {

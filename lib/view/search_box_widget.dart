@@ -166,7 +166,7 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) {
-                            return AdvancedSearchScreen();
+                            return const AdvancedSearchScreen();
                           },
                         ),
                       );
@@ -182,7 +182,7 @@ class _SearchBoxWidgetState extends State<SearchBoxWidget> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) {
-                            return AdvancedSearchScreen();
+                            return const AdvancedSearchScreen();
                           },
                         ),
                       );

@@ -154,6 +154,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   ];
 
   late final ScrollController rightPaneScrollController;
+  late final ScrollController mobilePaneScrollController;
 
   @override
   void initState() {
@@ -161,6 +162,9 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
     rightPaneScrollController = ScrollController(
         initialScrollOffset: Provider.of<SearchViewModel>(context,
             listen: false).advancedSearchScrollPosition,);
+    mobilePaneScrollController = ScrollController(
+        initialScrollOffset: Provider.of<SearchViewModel>(context,
+            listen: false).advancedSearchScrollPositionMobile,);
   }
 
   @override
@@ -426,6 +430,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                         Expanded(
                             flex: 1,
                             child: ListView.builder(
+                                controller: mobilePaneScrollController,
                           scrollDirection: Axis.vertical,
                           itemCount: widgetsForMobile.length,
                           itemBuilder: (context, index) =>
@@ -487,9 +492,22 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                                       return;
                                     }
 
-
-                                    Provider.of<SearchViewModel>(context,
-                                        listen: false).advancedSearchScrollPosition = rightPaneScrollController.position.pixels;
+                                    if(rightPaneScrollController.hasClients) {
+                                      Provider
+                                          .of<SearchViewModel>(context,
+                                          listen: false)
+                                          .advancedSearchScrollPosition =
+                                          rightPaneScrollController.position
+                                              .pixels;
+                                    }
+                                    if(mobilePaneScrollController.hasClients) {
+                                      Provider
+                                          .of<SearchViewModel>(context,
+                                          listen: false)
+                                          .advancedSearchScrollPositionMobile =
+                                          mobilePaneScrollController.position
+                                              .pixels;
+                                    }
                                     Navigator.pop(context);
                                     List<SearchFilterData> filerDataList =
                                         SearchFilter.values
@@ -518,7 +536,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   }
 
   Widget _createCardSetFilter(context, responsive) {
-    return Container(
+    return SizedBox(
       height: responsive.rowHeight,
       child:Row(children:[
       Container(width: responsive.horizontalGutterWidth),
