@@ -10,7 +10,7 @@ class FlippableImage extends StatefulWidget {
   final double rotationAngle;
   final FlippableImageController controller;
   final Widget? backSide;
-  final Function? onFlipped;
+  final Function(bool isBegin)? onFlipped;
 
   const FlippableImage({
     Key? key,
@@ -34,18 +34,6 @@ class _FlippableImageState extends State<FlippableImage>
     super.initState();
     widget.controller.onFlipped ??= widget.onFlipped;
     widget.controller.initAnimation(this, Size(widget.width, widget.height));
-  }
-
-  @override
-  void didUpdateWidget(FlippableImage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    //isFrontが変わっている場合は、アニメーションを実行する。
-    //isFront=trueなら右方向に回転する。falseなら逆回転。
-    //frontとbackが途中で変わった場合、
-
-    if (widget.backSide != null && widget.frontSide != oldWidget.frontSide) {
-      widget.controller.animationController.reset();
-    }
   }
 
   @override
@@ -102,7 +90,10 @@ class FlippableImageController extends ChangeNotifier {
   late AnimationController _animationController;
   late Animation _animation;
   late Size _imageSize;
-  Function? onFlipped;
+  Function(bool isBegin)? onFlipped;
+  final double initialRotationValue;
+
+  FlippableImageController({this.initialRotationValue = 0});
 
   AnimationController get animationController => _animationController;
 
@@ -114,19 +105,29 @@ class FlippableImageController extends ChangeNotifier {
     _imageSize = imageSize;
 
     _animationController = AnimationController(
-        vsync: tickerProvider, duration: const Duration(milliseconds: 500));
+      value: initialRotationValue,
+      vsync: tickerProvider,
+      duration: const Duration(milliseconds: 500),
+    );
     _animation = Tween(end: 1.0, begin: 0.0).animate(_animationController)
       ..addListener(() {
         notifyListeners();
       })
       ..addStatusListener((status) {
+        debugPrint(status.toString());
         if (status == AnimationStatus.completed && onFlipped != null) {
-          onFlipped!();
+          onFlipped!(false);
+        } else if (status == AnimationStatus.dismissed && onFlipped != null) {
+          onFlipped!(true);
         }
       });
   }
 
   void flip() {
-    _animationController.forward();
+    if (_animationController.value == 0) {
+      _animationController.forward();
+    } else {
+      _animationController.reverse();
+    }
   }
 }

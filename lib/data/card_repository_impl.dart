@@ -20,7 +20,8 @@ class CardRepositoryImpl implements CardRepository {
   CardRepositoryImpl(this._localDataSource, this._remoteDataSource);
 
   @override
-  Future<void> init({required Function(double value, String task) onProgress}) async {
+  Future<void> init(
+      {required Function(double value, String task) onProgress}) async {
     onProgress(0, "Downloading Database Version");
     CardMasterVersion vRemote = await _remoteDataSource.getVersion();
     onProgress(0.1, "Checking Database Version");

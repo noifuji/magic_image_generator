@@ -214,16 +214,14 @@ class SearchFilterFactory {
           searchValue: "mkm",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }
-    else if (sf == SearchFilter.setLci) {
+    } else if (sf == SearchFilter.setLci) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setLci,
           searchValue: "lci",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }
-    else if (sf == SearchFilter.setWoe) {
+    } else if (sf == SearchFilter.setWoe) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setWoe,
@@ -237,7 +235,7 @@ class SearchFilterFactory {
           searchValue: "mat",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }  else if (sf == SearchFilter.setMom) {
+    } else if (sf == SearchFilter.setMom) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setMom,
@@ -251,7 +249,7 @@ class SearchFilterFactory {
           searchValue: "one",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }  else if (sf == SearchFilter.setBro) {
+    } else if (sf == SearchFilter.setBro) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setBro,
@@ -555,24 +553,21 @@ class SearchFilterFactory {
           searchValue: "ymkm",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }
-    else if (sf == SearchFilter.setYlci) {
+    } else if (sf == SearchFilter.setYlci) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setYlci,
           searchValue: "ylci",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }
-    else if (sf == SearchFilter.setYwoe) {
+    } else if (sf == SearchFilter.setYwoe) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setYwoe,
           searchValue: "ywoe",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }
-    else if (sf == SearchFilter.setLtr) {
+    } else if (sf == SearchFilter.setLtr) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setLtr,
@@ -659,88 +654,77 @@ class SearchFilterFactory {
           searchValue: "brr",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }
-    else if (sf == SearchFilter.setJ21) {
+    } else if (sf == SearchFilter.setJ21) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setJ21,
           searchValue: "j21",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }
-    else if (sf == SearchFilter.setSta) {
+    } else if (sf == SearchFilter.setSta) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setSta,
           searchValue: "sta",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }
-    else if (sf == SearchFilter.setJmp) {
+    } else if (sf == SearchFilter.setJmp) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setJmp,
           searchValue: "jmp",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }
-    else if (sf == SearchFilter.setHa7) {
+    } else if (sf == SearchFilter.setHa7) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setHa7,
           searchValue: "ha7",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }
-    else if (sf == SearchFilter.setHa6) {
+    } else if (sf == SearchFilter.setHa6) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setHa6,
           searchValue: "ha6",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }
-    else if (sf == SearchFilter.setHa5) {
+    } else if (sf == SearchFilter.setHa5) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setHa5,
           searchValue: "ha5",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }
-    else if (sf == SearchFilter.setHa4) {
+    } else if (sf == SearchFilter.setHa4) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setHa4,
           searchValue: "ha4",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }
-    else if (sf == SearchFilter.setHa3) {
+    } else if (sf == SearchFilter.setHa3) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setHa3,
           searchValue: "ha3",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }
-    else if (sf == SearchFilter.setHa2) {
+    } else if (sf == SearchFilter.setHa2) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setHa2,
           searchValue: "ha2",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }
-    else if (sf == SearchFilter.setHa1) {
+    } else if (sf == SearchFilter.setHa1) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setHa1,
           searchValue: "ha1",
           searchKey: "set",
           filterType: SearchFilterType.set);
-    }
-    else if (sf == SearchFilter.setAnb) {
+    } else if (sf == SearchFilter.setAnb) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setAnb,

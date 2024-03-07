@@ -8,14 +8,14 @@ class DonateScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(
-        child: SizedBox(
-            width: 300,
-            height: 80,
-            child: KofiButton(
-              width: 200,
-              height: 50,
-            ),
+      child: SizedBox(
+        width: 300,
+        height: 80,
+        child: KofiButton(
+          width: 200,
+          height: 50,
         ),
+      ),
     );
   }
 }

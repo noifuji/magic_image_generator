@@ -55,11 +55,11 @@ class Progress {
   });
 
   Progress copyWith(
-      double? progressValue,
-      String? taskName,
-      ) {
+    double? progressValue,
+    String? taskName,
+  ) {
     return Progress(
-        progressValue: progressValue ?? this.progressValue,
+      progressValue: progressValue ?? this.progressValue,
       taskName: taskName ?? this.taskName,
     );
   }

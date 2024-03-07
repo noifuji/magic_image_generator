@@ -122,8 +122,7 @@ class MyAppState extends State<MyApp> {
   Future<CardRepository> _initApp() async {
     Util.printTimeStamp("_MyAppState _initApp");
     _progressController = ProgressBarController(
-        Progress(progressValue: 0,
-            taskName: "Initialize Languages"));
+        Progress(progressValue: 0, taskName: "Initialize Languages"));
     await _appLanguage.loadLocale();
 
     DataSource localDataSource = CardMemoryDataSource();
@@ -131,15 +130,13 @@ class MyAppState extends State<MyApp> {
         CardRemoteDataSource(CardFetchCsvApi());
     CardRepository repo = CardRepositoryImpl(localDataSource, remoteDataSource);
     await repo.init(
-        onProgress: (value, task) => _progressController.value  =
-            Progress(progressValue: 0.5 + 0.5 * value,
-                taskName: task));
+        onProgress: (value, task) => _progressController.value =
+            Progress(progressValue: 0.5 + 0.5 * value, taskName: task));
 
     _searchViewModel = SearchViewModel(repo);
     _canvasViewModel = CanvasViewModel();
 
-    _progressController.value = Progress(progressValue: 1.0,
-        taskName: "");
+    _progressController.value = Progress(progressValue: 1.0, taskName: "");
 
     return Future<CardRepository>.value(repo);
   }
@@ -183,11 +180,11 @@ class MyAppState extends State<MyApp> {
                   const Expanded(flex: 1, child: SizedBox.shrink()),
                 ]));
           } else if (dataSnapshot.error != null) {
-              debugPrint(dataSnapshot.error.toString());
-              debugPrint(dataSnapshot.stackTrace.toString());
+            debugPrint(dataSnapshot.error.toString());
+            debugPrint(dataSnapshot.stackTrace.toString());
             return MaterialApp(
               onGenerateTitle: (context) =>
-              AppLocalizations.of(context)!.appTitle,
+                  AppLocalizations.of(context)!.appTitle,
               localizationsDelegates: const [
                 AppLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
@@ -202,11 +199,13 @@ class MyAppState extends State<MyApp> {
                   brightness: Brightness.dark,
                   fontFamily: "NotoSansJP-Regular"),
               themeMode: ThemeMode.dark,
-              home: Builder(builder: (context) => Scaffold(
-                body: Center(
-                  child: Text(AppLocalizations.of(context)!.errorReload),
+              home: Builder(
+                builder: (context) => Scaffold(
+                  body: Center(
+                    child: Text(AppLocalizations.of(context)!.errorReload),
+                  ),
                 ),
-              ),),
+              ),
             );
           } else {
             return MultiProvider(

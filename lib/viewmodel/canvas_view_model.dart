@@ -22,7 +22,8 @@ class CanvasViewModel extends ChangeNotifier {
   }
 
   void addSelectedCards(int rowIndex, CardInfoHeader card) {
-    debugPrint("ID=${card.firstFace.multiverseId}, name=${card.firstFace.nameJpYomi}");
+    debugPrint(
+        "ID=${card.firstFace.multiverseId}, name=${card.firstFace.nameJpYomi}, isFront=${card.isFront}");
     if (rowIndex > _selectedCards.length) {
       throw Exception();
     }
@@ -49,14 +50,14 @@ class CanvasViewModel extends ChangeNotifier {
     return result;
   }
 
-  void flip(CardInfoHeader card) {
+  void flip({required CardInfoHeader card, required bool toFront}) {
     int rowIndex = selectedCards.indexWhere((row) =>
         row.where((c) => c.displayId == card.displayId).toList().isNotEmpty);
     int colIndex = selectedCards[rowIndex]
         .indexWhere((c) => c.displayId == card.displayId);
 
-    _selectedCards[rowIndex][colIndex] = _selectedCards[rowIndex][colIndex]
-        .copyWith(isFront: !_selectedCards[rowIndex][colIndex].isFront);
+    _selectedCards[rowIndex][colIndex] =
+        _selectedCards[rowIndex][colIndex].copyWith(isFront: toFront);
     notifyListeners();
   }
 
@@ -133,21 +134,19 @@ class CanvasViewModel extends ChangeNotifier {
         //左から右へ
         //A,B,C,D,EのうちA->D
         debugPrint("row:$row,fromCol:$fromCol,toCol:$toCol");
-        if(toCol < _selectedCards[row].length) {
+        if (toCol < _selectedCards[row].length) {
           //[E]
           copy[row].insertAll(0, _selectedCards[row].sublist(toCol + 1));
         }
         //[A]
         copy[row].insert(0, _selectedCards[row][fromCol]);
         //[BCD]
-        if(toCol < _selectedCards[row].length) {
-          copy[row]
-              .insertAll(
+        if (toCol < _selectedCards[row].length) {
+          copy[row].insertAll(
               0, _selectedCards[row].sublist(fromCol + 1, toCol + 1));
         } else {
           copy[row]
-              .insertAll(
-              0, _selectedCards[row].sublist(fromCol + 1, toCol));
+              .insertAll(0, _selectedCards[row].sublist(fromCol + 1, toCol));
         }
         //[]
         copy[row].insertAll(0, _selectedCards[row].sublist(0, fromCol));

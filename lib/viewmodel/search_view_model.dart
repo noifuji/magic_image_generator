@@ -43,11 +43,11 @@ class SearchViewModel extends ChangeNotifier {
     }
   }
 
-  void flip(CardInfoHeader card) {
+  void flip({required CardInfoHeader card, required bool toFront}) {
     int index = _searchResult.cards
         .indexWhere((element) => element.displayId == card.displayId);
-    _searchResult.cards[index] = _searchResult.cards[index]
-        .copyWith(isFront: !_searchResult.cards[index].isFront);
+    _searchResult.cards[index] =
+        _searchResult.cards[index].copyWith(isFront: toFront);
     notifyListeners();
   }
 
@@ -130,7 +130,7 @@ class SearchViewModel extends ChangeNotifier {
   }
 
   void setSearchFilters(List<SearchFilter> filters) {
-    for(final f in filters) {
+    for (final f in filters) {
       searchFilters[f] = true;
     }
     notifyListeners();
@@ -176,14 +176,13 @@ class SearchViewModel extends ChangeNotifier {
 
       //クエリ実行
       List<CardInfoHeader> results =
-          await _repository.get(conditions, locale, onProgress: (value) {
-      });
+          await _repository.get(conditions, locale, onProgress: (value) {});
       _searchResult = SearchResult(cards: results, isSuccess: true);
 
       List<CardInfoHeader> newCardList = [];
-      for(final card in _searchResult.cards) {
+      for (final card in _searchResult.cards) {
         List<CardInfo> faces = [];
-        for(final face in card.cardFaces) {
+        for (final face in card.cardFaces) {
           faces.add(face.copyWith(webImageController: WebImageController()));
         }
 
@@ -191,7 +190,6 @@ class SearchViewModel extends ChangeNotifier {
       }
 
       _searchResult.cards = newCardList;
-
 
       //ソート
       sortSearchResults(locale);

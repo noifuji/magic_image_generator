@@ -10,7 +10,7 @@ class OverlayFlippableImage extends StatefulWidget {
   final Widget? backSide;
   final List<Widget>? overlays;
   final FlippableImageController controller;
-  final Function? onFlipped;
+  final Function(bool isBegin)? onFlipped;
 
   const OverlayFlippableImage({
     Key? key,

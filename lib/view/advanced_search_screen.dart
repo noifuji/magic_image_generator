@@ -17,7 +17,6 @@ class AdvancedSearchScreen extends StatefulWidget {
   State<AdvancedSearchScreen> createState() => _AdvancedSearchScreenState();
 }
 
-
 class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   final List<SearchFilter> _rarities = [
     SearchFilter.rarityCommon,
@@ -163,11 +162,13 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   void initState() {
     super.initState();
     rightPaneScrollController = ScrollController(
-        initialScrollOffset: Provider.of<SearchViewModel>(context,
-            listen: false).advancedSearchScrollPosition,);
+      initialScrollOffset: Provider.of<SearchViewModel>(context, listen: false)
+          .advancedSearchScrollPosition,
+    );
     mobilePaneScrollController = ScrollController(
-        initialScrollOffset: Provider.of<SearchViewModel>(context,
-            listen: false).advancedSearchScrollPositionMobile,);
+      initialScrollOffset: Provider.of<SearchViewModel>(context, listen: false)
+          .advancedSearchScrollPositionMobile,
+    );
   }
 
   @override
@@ -215,13 +216,9 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
 
       final leftWidgets = <Widget>[
         Container(
-          height:
-          responsive.verticalMarginHeight,
+          height: responsive.verticalMarginHeight,
         ),
-        _createTitle(
-            context,
-            AppLocalizations.of(context)!
-                .filterTitleColor,
+        _createTitle(context, AppLocalizations.of(context)!.filterTitleColor,
             responsive),
         Container(
           height: responsive.verticalGutterHeight,
@@ -230,20 +227,12 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
         Container(
           height: responsive.verticalGutterHeight,
         ),
-        _createTitle(
-            context,
-            AppLocalizations.of(context)!
-                .filterTitleRarity,
+        _createTitle(context, AppLocalizations.of(context)!.filterTitleRarity,
             responsive),
-        ..._createButtonRows(context, _rarities,
-            rarityColNum, responsive),
+        ..._createButtonRows(context, _rarities, rarityColNum, responsive),
         _createTitle(
-            context,
-            AppLocalizations.of(context)!
-                .filterTitleType,
-            responsive),
-        ..._createButtonRows(context, _cardTypes,
-            cardTypeColNum, responsive),
+            context, AppLocalizations.of(context)!.filterTitleType, responsive),
+        ..._createButtonRows(context, _cardTypes, cardTypeColNum, responsive),
       ];
 
       final rightWidgets = <Widget>[
@@ -252,53 +241,35 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
         ),
 
         //マナコスト
-        _createTitle(
-            context,
-            AppLocalizations.of(context)!
-                .filterTitleManaValue,
-            responsive),
+        _createTitle(context,
+            AppLocalizations.of(context)!.filterTitleManaValue, responsive),
         Container(
           height: responsive.verticalGutterHeight,
         ),
-        _createManaValueButtons(
-            context, responsive),
+        _createManaValueButtons(context, responsive),
         Container(
           height: responsive.verticalGutterHeight,
         ),
 
         //カードセット
         _createTitle(
-            context,
-            AppLocalizations.of(context)!
-                .filterTitleSet,
-            responsive),
+            context, AppLocalizations.of(context)!.filterTitleSet, responsive),
         _createCardSetFilter(context, responsive),
-        ..._createButtonRows(context, _cardSets,
-            cardSetColNum, responsive),
+        ..._createButtonRows(context, _cardSets, cardSetColNum, responsive),
 
         //アルケミーカードセット
-        _createTitle(
-            context,
-            AppLocalizations.of(context)!
-                .filterTitleAlchemySet,
-            responsive),
+        _createTitle(context,
+            AppLocalizations.of(context)!.filterTitleAlchemySet, responsive),
         ..._createButtonRows(
-            context,
-            _alchemyCardSets,
-            cardSetColNum,
-            responsive),
+            context, _alchemyCardSets, cardSetColNum, responsive),
 
         //サプリメントセット
         _createTitle(
             context,
-            AppLocalizations.of(context)!
-                .filterTitleSupplementalSet,
+            AppLocalizations.of(context)!.filterTitleSupplementalSet,
             responsive),
         ..._createButtonRows(
-            context,
-            _supplementalSet,
-            cardSetColNum,
-            responsive)
+            context, _supplementalSet, cardSetColNum, responsive)
       ];
 
       final widgetsForMobile = <Widget>[
@@ -306,10 +277,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
           height: responsive.verticalMarginHeight,
         ),
 
-        _createTitle(
-            context,
-            AppLocalizations.of(context)!
-                .filterTitleColor,
+        _createTitle(context, AppLocalizations.of(context)!.filterTitleColor,
             responsive),
         Container(
           height: responsive.verticalGutterHeight,
@@ -320,83 +288,57 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
         ),
 
         //マナコスト
-        _createTitle(
-            context,
-            AppLocalizations.of(context)!
-                .filterTitleManaValue,
-            responsive),
+        _createTitle(context,
+            AppLocalizations.of(context)!.filterTitleManaValue, responsive),
         Container(
           height: responsive.verticalGutterHeight,
         ),
-        _createManaValueButtons(
-            context, responsive),
+        _createManaValueButtons(context, responsive),
         Container(
           height: responsive.verticalGutterHeight,
         ),
 
         //レアリティ
-        _createTitle(
-            context,
-            AppLocalizations.of(context)!
-                .filterTitleRarity,
+        _createTitle(context, AppLocalizations.of(context)!.filterTitleRarity,
             responsive),
         Container(
           height: responsive.verticalGutterHeight,
         ),
-        ..._createButtonRows(context, _rarities,
-            rarityColNum, responsive),
+        ..._createButtonRows(context, _rarities, rarityColNum, responsive),
         Container(
           height: responsive.verticalGutterHeight,
         ),
 
         //カードタイプ
         _createTitle(
-            context,
-            AppLocalizations.of(context)!
-                .filterTitleType,
-            responsive),
-        ..._createButtonRows(context, _cardTypes,
-            cardTypeColNum, responsive),
+            context, AppLocalizations.of(context)!.filterTitleType, responsive),
+        ..._createButtonRows(context, _cardTypes, cardTypeColNum, responsive),
         Container(
           height: responsive.verticalGutterHeight,
         ),
 
         //カードセット
         _createTitle(
-            context,
-            AppLocalizations.of(context)!
-                .filterTitleSet,
-            responsive),
+            context, AppLocalizations.of(context)!.filterTitleSet, responsive),
         _createCardSetFilter(context, responsive),
-        ..._createButtonRows(context, _cardSets,
-            cardSetColNum, responsive),
+        ..._createButtonRows(context, _cardSets, cardSetColNum, responsive),
         Container(
           height: responsive.verticalGutterHeight,
         ),
 
         //アルケミーカードセット
-        _createTitle(
-            context,
-            AppLocalizations.of(context)!
-                .filterTitleAlchemySet,
-            responsive),
+        _createTitle(context,
+            AppLocalizations.of(context)!.filterTitleAlchemySet, responsive),
         ..._createButtonRows(
-            context,
-            _alchemyCardSets,
-            cardSetColNum,
-            responsive),
+            context, _alchemyCardSets, cardSetColNum, responsive),
 
         //サプリメントセット
         _createTitle(
             context,
-            AppLocalizations.of(context)!
-                .filterTitleSupplementalSet,
+            AppLocalizations.of(context)!.filterTitleSupplementalSet,
             responsive),
         ..._createButtonRows(
-            context,
-            _supplementalSet,
-            cardSetColNum,
-            responsive),
+            context, _supplementalSet, cardSetColNum, responsive),
       ];
 
       return Scaffold(
@@ -417,123 +359,117 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                             Expanded(
                                 flex: 1,
                                 child: ListView.builder(
-                                  itemCount: leftWidgets.length,
+                                    itemCount: leftWidgets.length,
                                     itemBuilder: (context, index) =>
-                                    leftWidgets[index])),
+                                        leftWidgets[index])),
                             Container(width: responsive.horizontalGutterWidth),
                             Expanded(
                                 flex: 1,
                                 child: ListView.builder(
-                                  controller: rightPaneScrollController,
+                                    controller: rightPaneScrollController,
                                     itemCount: rightWidgets.length,
                                     itemBuilder: (context, index) =>
-                                    rightWidgets[index])),
+                                        rightWidgets[index])),
                           ])
                         : ([
-                        Expanded(
-                            flex: 1,
-                            child: ListView.builder(
-                                controller: mobilePaneScrollController,
-                          scrollDirection: Axis.vertical,
-                          itemCount: widgetsForMobile.length,
-                          itemBuilder: (context, index) =>
-                          widgetsForMobile[index]),),
+                            Expanded(
+                              flex: 1,
+                              child: ListView.builder(
+                                  controller: mobilePaneScrollController,
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: widgetsForMobile.length,
+                                  itemBuilder: (context, index) =>
+                                      widgetsForMobile[index]),
+                            ),
                           ]),
                   ),
                 ),
                 SizedBox(
-                        height: responsive.rowHeight,
-                        child: Row(children: [
-                          Container(
-                            width: responsive.columnWidth *
-                                    bottomBarMarginColSize +
-                                responsive.horizontalGutterWidth *
-                                    bottomBarMarginColSize,
+                    height: responsive.rowHeight,
+                    child: Row(children: [
+                      Container(
+                        width: responsive.columnWidth * bottomBarMarginColSize +
+                            responsive.horizontalGutterWidth *
+                                bottomBarMarginColSize,
+                      ),
+                      SizedBox(
+                        width: responsive.columnWidth * 2 +
+                            responsive.horizontalGutterWidth,
+                        height: responsive.rowHeight * 0.6,
+                        child: TextButton(
+                          onPressed: () {
+                            Provider.of<SearchViewModel>(context, listen: false)
+                                .resetSearchFilter();
+                          },
+                          style: TextButton.styleFrom(
+                              backgroundColor: Colors.grey),
+                          child: Text(
+                            AppLocalizations.of(context)!.resetButton,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize:
+                                    responsive.rowHeight * 0.6 * 0.75 * 0.5),
                           ),
-                          SizedBox(
-                              width: responsive.columnWidth * 2 +
-                                  responsive.horizontalGutterWidth,
-                              height: responsive.rowHeight * 0.6,
-                              child: TextButton(
-                                  onPressed: () {
-                                    Provider.of<SearchViewModel>(context,
-                                            listen: false)
-                                        .resetSearchFilter();
-                                  },
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: Colors.grey),
-                                  child: Text(
-                                      AppLocalizations.of(context)!.resetButton,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: responsive.rowHeight *
-                                              0.6 * 0.75 * 0.5),
-                                  ),
-                              ),
-                          ),
-                          Container(
-                            width: responsive.columnWidth *
-                                    bottomBarCenterSpaceColSize +
-                                responsive.horizontalGutterWidth *
-                                    (bottomBarMarginColSize + 1),
-                          ),
-                          SizedBox(
-                              width: responsive.columnWidth * 2 +
-                                  responsive.horizontalGutterWidth,
-                              height: responsive.rowHeight * 0.6,
-                              child: TextButton(
-                                  onPressed: () async {
-                                    if (Provider.of<SearchViewModel>(context,
-                                            listen: false)
-                                        .isSearching()) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Text(
-                                            AppLocalizations.of(context)!
-                                                .exceptionCode310),
-                                      ));
-                                      return;
-                                    }
+                        ),
+                      ),
+                      Container(
+                        width: responsive.columnWidth *
+                                bottomBarCenterSpaceColSize +
+                            responsive.horizontalGutterWidth *
+                                (bottomBarMarginColSize + 1),
+                      ),
+                      SizedBox(
+                          width: responsive.columnWidth * 2 +
+                              responsive.horizontalGutterWidth,
+                          height: responsive.rowHeight * 0.6,
+                          child: TextButton(
+                              onPressed: () async {
+                                if (Provider.of<SearchViewModel>(context,
+                                        listen: false)
+                                    .isSearching()) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
+                                    content: Text(AppLocalizations.of(context)!
+                                        .exceptionCode310),
+                                  ));
+                                  return;
+                                }
 
-                                    if(rightPaneScrollController.hasClients) {
-                                      Provider
-                                          .of<SearchViewModel>(context,
-                                          listen: false)
+                                if (rightPaneScrollController.hasClients) {
+                                  Provider.of<SearchViewModel>(context,
+                                              listen: false)
                                           .advancedSearchScrollPosition =
-                                          rightPaneScrollController.position
-                                              .pixels;
-                                    }
-                                    if(mobilePaneScrollController.hasClients) {
-                                      Provider
-                                          .of<SearchViewModel>(context,
-                                          listen: false)
+                                      rightPaneScrollController.position.pixels;
+                                }
+                                if (mobilePaneScrollController.hasClients) {
+                                  Provider.of<SearchViewModel>(context,
+                                              listen: false)
                                           .advancedSearchScrollPositionMobile =
-                                          mobilePaneScrollController.position
-                                              .pixels;
-                                    }
-                                    Navigator.pop(context);
-                                    List<SearchFilterData> filerDataList =
-                                        SearchFilter.values
-                                            .map((e) => SearchFilterFactory
-                                                .createSearchFilter(context, e))
-                                            .toList();
-                                    Provider.of<SearchViewModel>(context,
-                                            listen: false)
-                                        .search(Localizations.localeOf(context),
-                                            filerDataList);
-                                  },
-                                  style: TextButton.styleFrom(
-                                      backgroundColor: Colors.orange),
-                                  child: Text(
-                                      AppLocalizations.of(context)!
-                                          .searchButton,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: responsive.rowHeight *
-                                              0.6 *
-                                              0.75 *
-                                              0.5)))),
-                        ]))
+                                      mobilePaneScrollController
+                                          .position.pixels;
+                                }
+                                Navigator.pop(context);
+                                List<SearchFilterData> filerDataList =
+                                    SearchFilter.values
+                                        .map((e) => SearchFilterFactory
+                                            .createSearchFilter(context, e))
+                                        .toList();
+                                Provider.of<SearchViewModel>(context,
+                                        listen: false)
+                                    .search(Localizations.localeOf(context),
+                                        filerDataList);
+                              },
+                              style: TextButton.styleFrom(
+                                  backgroundColor: Colors.orange),
+                              child: Text(
+                                  AppLocalizations.of(context)!.searchButton,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: responsive.rowHeight *
+                                          0.6 *
+                                          0.75 *
+                                          0.5)))),
+                    ]))
               ])));
     });
   }
@@ -541,32 +477,29 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   Widget _createCardSetFilter(context, responsive) {
     return SizedBox(
       height: responsive.rowHeight,
-      child:Row(children:[
-      Container(width: responsive.horizontalGutterWidth),
-      SizedBox(
-        width: responsive.columnWidth * 2 +
-            responsive.horizontalGutterWidth,
-        height: responsive.rowHeight * 0.6,
-        child: TextButton(
-          onPressed: () {
-            final model = Provider.of<SearchViewModel>(
-                context,
-                listen: false);
-            model.resetSearchFilter();
-            model.setSearchFilters(kStandardLegalSets);
-          },
-          style: TextButton.styleFrom(
-              backgroundColor: Colors.grey),
-          child: Text(
-            AppLocalizations.of(context)!.filterStandardButton,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: responsive.rowHeight *
-                    0.6 * 0.75 * 0.5),
+      child: Row(children: [
+        Container(width: responsive.horizontalGutterWidth),
+        SizedBox(
+          width: responsive.columnWidth * 2 + responsive.horizontalGutterWidth,
+          height: responsive.rowHeight * 0.6,
+          child: TextButton(
+            onPressed: () {
+              final model =
+                  Provider.of<SearchViewModel>(context, listen: false);
+              model.resetSearchFilter();
+              model.setSearchFilters(kStandardLegalSets);
+            },
+            style: TextButton.styleFrom(backgroundColor: Colors.grey),
+            child: Text(
+              AppLocalizations.of(context)!.filterStandardButton,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: responsive.rowHeight * 0.6 * 0.75 * 0.5),
+            ),
           ),
         ),
-      ),
-    ]),);
+      ]),
+    );
   }
 
   Widget _createTitle(
@@ -675,8 +608,8 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
     return Row(children: result);
   }
 
-  List<Widget> _createButtonRows(BuildContext context, List<SearchFilter> filters,
-      int column, ResponsiveGridValues res) {
+  List<Widget> _createButtonRows(BuildContext context,
+      List<SearchFilter> filters, int column, ResponsiveGridValues res) {
     int rows = filters.length ~/ column;
     rows = rows + (filters.length % column > 0 ? 1 : 0);
 

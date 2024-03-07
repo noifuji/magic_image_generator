@@ -50,6 +50,7 @@ class FetchCardImagesUsecase {
   }
 
   Future<ui.Image> _fetchImage(String path) async {
+    debugPrint('path=$path');
     var completer = Completer<ImageInfo>();
     var img = NetworkImage(path, scale: 2.0);
     img

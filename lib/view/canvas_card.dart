@@ -25,7 +25,8 @@ class _CanvasCardState extends State<CanvasCard> {
   @override
   void initState() {
     super.initState();
-    _fiController = FlippableImageController();
+    _fiController = FlippableImageController(
+        initialRotationValue: widget.card.isFront ? 0 : 1);
   }
 
   @override
@@ -50,34 +51,23 @@ class _CanvasCardState extends State<CanvasCard> {
     if (widget.card.isTransform) {
       overlays.add(_createFlipButton());
 
-      final firstUrl = widget.card.firstFace
-          .imageUrlLocale(Localizations.localeOf(context));
+      final firstUrl =
+          widget.card.firstFace.imageUrlLocale(Localizations.localeOf(context));
       final secondUrl = widget.card.secondFace!
           .imageUrlLocale(Localizations.localeOf(context));
 
-      if (widget.card.isFront) {
-        frontImage = WebImage(
-          url:firstUrl,
-          controller: widget.card.firstFace.webImageController!,
-        );
-        backImage = WebImage(
-          url:secondUrl,
-          controller: widget.card.secondFace!.webImageController!,
-        );
-      } else {
-        frontImage = WebImage(
-          url:secondUrl,
-          controller: widget.card.secondFace!.webImageController!,
-        );
-        backImage = WebImage(
-          url:firstUrl,
-          controller: widget.card.firstFace.webImageController!,
-        );
-      }
+      frontImage = WebImage(
+        url: firstUrl,
+        controller: widget.card.firstFace.webImageController!,
+      );
+      backImage = WebImage(
+        url: secondUrl,
+        controller: widget.card.secondFace!.webImageController!,
+      );
     } else {
       frontImage = WebImage(
-          url:widget.card.firstFace
-          .imageUrlLocale(Localizations.localeOf(context)),
+        url: widget.card.firstFace
+            .imageUrlLocale(Localizations.localeOf(context)),
         controller: widget.card.firstFace.webImageController!,
       );
     }
@@ -103,8 +93,10 @@ class _CanvasCardState extends State<CanvasCard> {
           controller: _fiController,
           backSide: backImage,
           overlays: overlays,
-          onFlipped: () => Provider.of<CanvasViewModel>(context, listen: false)
-              .flip(widget.card),
+          onFlipped: (isBegin) {
+            Provider.of<CanvasViewModel>(context, listen: false)
+                .flip(card: widget.card, toFront: isBegin);
+          },
         ));
   }
 

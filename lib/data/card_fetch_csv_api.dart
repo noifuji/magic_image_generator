@@ -12,7 +12,8 @@ class CardFetchCsvApi {
     DateTime start = DateTime.now();
     Response response = await http.get(Uri.parse(Util.getCardMasterUrl()),
         headers: cache ? {} : {"Cache-Control": "no-cache"});
-    Util.printTimeStamp("http.get:${DateTime.now().difference(start).inMilliseconds}");
+    Util.printTimeStamp(
+        "http.get:${DateTime.now().difference(start).inMilliseconds}");
 
     start = DateTime.now();
     var rawBytes = GZipDecoder().decodeBytes(response.bodyBytes);
