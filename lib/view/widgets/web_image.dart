@@ -27,10 +27,14 @@ class WebImage extends StatefulWidget {
 }
 
 class WebImageState extends State<WebImage> {
+  String url = "";
+
   @override
   void initState() {
+    debugPrint("initState WebImage:${widget.url}");
+    url = widget.url;
     super.initState();
-    if(widget.controller.value.image == null ) {
+    if (widget.controller.value.image == null) {
       widget.controller.fetchImage(widget.url);
     }
   }
@@ -43,6 +47,13 @@ class WebImageState extends State<WebImage> {
 
   @override
   Widget build(BuildContext context) {
+    //debugPrint("rebuild WebImage:${widget.url}");
+
+    if (url != widget.url) {
+      widget.controller.fetchImage(widget.url);
+      url = widget.url;
+    }
+
     return ValueListenableBuilder(
         valueListenable: widget.controller,
         builder: (context, value, child) {
