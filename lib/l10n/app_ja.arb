@@ -58,6 +58,7 @@
   "manaValue6": "6",
   "manaValue7AndMore": "7+",
 
+  "setMkm": "カルロフ邸殺人事件",
   "setLci": "イクサラン:失われし洞窟",
   "setWoe": "エルドレインの森",
 
@@ -127,6 +128,7 @@
   "setLtr": "指輪物語: 中つ国の伝承",
   "setYwoe": "アルケミー: エルドレイン",
   "setYlci": "アルケミー: イクサラン",
+  "setYmkm": "アルケミー: カルロフ邸",
 
   "setWot": "おとぎ話",
   "setMul": "多元宇宙の伝説",

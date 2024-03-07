@@ -207,6 +207,14 @@ class SearchFilterFactory {
     }
 
     /****Sets****/
+    else if (sf == SearchFilter.setMkm) {
+      return SearchFilterData(
+          filter: sf,
+          name: AppLocalizations.of(context)!.setMkm,
+          searchValue: "mkm",
+          searchKey: "set",
+          filterType: SearchFilterType.set);
+    }
     else if (sf == SearchFilter.setLci) {
       return SearchFilterData(
           filter: sf,
@@ -540,6 +548,14 @@ class SearchFilterFactory {
     }
 
     /****Sets Alchemy****/
+    else if (sf == SearchFilter.setYmkm) {
+      return SearchFilterData(
+          filter: sf,
+          name: AppLocalizations.of(context)!.setYmkm,
+          searchValue: "ymkm",
+          searchKey: "set",
+          filterType: SearchFilterType.set);
+    }
     else if (sf == SearchFilter.setYlci) {
       return SearchFilterData(
           filter: sf,

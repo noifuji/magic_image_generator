@@ -59,6 +59,7 @@
     "manaValue6": "6",
     "manaValue7AndMore": "7+",
 
+    "setMkm": "Murders at Karlov Manor",
     "setLci": "The Lost Caverns of Ixalan",
     "setWoe": "Wilds of Eldraine",
     "setMat": "March of the Machine: The Aftermath",
@@ -122,6 +123,7 @@
     "setLtr": "The Lord of the Rings: Tales of Middle-earth",
     "setYwoe": "Alchemy: Eldraine",
     "setYlci": "Alchemy: Ixalan",
+    "setYmkm": "Alchemy: Karlov Manor",
 
     "setWot": "Wilds of Eldraine: Enchanting Tales",
     "setMul": "Multiverse Legends",

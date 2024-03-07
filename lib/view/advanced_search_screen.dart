@@ -59,6 +59,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   ];
 
   final List<SearchFilter> _cardSets = [
+    SearchFilter.setMkm,
     SearchFilter.setLci,
     SearchFilter.setWoe,
     SearchFilter.setMat,
@@ -109,6 +110,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   ];
 
   final List<SearchFilter> _alchemyCardSets = [
+    SearchFilter.setYmkm,
     SearchFilter.setYlci,
     SearchFilter.setYwoe,
     SearchFilter.setLtr,
@@ -140,6 +142,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   ];
 
   final List<SearchFilter> kStandardLegalSets = [
+    SearchFilter.setMkm,
     SearchFilter.setLci,
     SearchFilter.setWoe,
     SearchFilter.setMat,
