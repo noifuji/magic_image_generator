@@ -12,10 +12,6 @@ fvm flutter run -d chrome --web-renderer canvaskit --dart-define=ENV=stg
 - ステージングビルド
 fvm flutter build web --release --web-renderer canvaskit --dart-define=ENV=stg
 
-!!!!!!!!Flutter3.0のバグが修正されるまではこのコマンドでビルドする!!!!!!!!!!!
-flutter build web --release --web-renderer canvaskit　--dart-define=BROWSER_IMAGE_DECODING_ENABLED=false --dart-define=ENV=stg
-詳細はこちら　https://github.com/flutter/flutter/issues/103803
-
 - AWSアップロード(Staging)
 aws --region ap-northeast-1 s3 sync ./build/web s3://magic-image-generator-staging/  --profile=PROFILE_NAME
 
@@ -24,10 +20,6 @@ aws --region ap-northeast-1 s3 sync ./build/web s3://magic-image-generator-stagi
 
 - プロダクションビルド
 fvm flutter build web --release --web-renderer canvaskit --dart-define=ENV=prd
-
-!!!!!!!!Flutter3.0のバグが修正されるまではこのコマンドでビルドする!!!!!!!!!!!
-flutter build web --release --web-renderer canvaskit　--dart-define=BROWSER_IMAGE_DECODING_ENABLED=false --dart-define=ENV=prd
-詳細はこちら　https://github.com/flutter/flutter/issues/103803
 
 
 - AWSアップロード(Production)

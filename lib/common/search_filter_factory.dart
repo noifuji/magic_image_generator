@@ -207,6 +207,22 @@ class SearchFilterFactory {
     }
 
     /****Sets****/
+    else if (sf == SearchFilter.setBig) {
+      return SearchFilterData(
+          filter: sf,
+          name: AppLocalizations.of(context)!.setBig,
+          searchValue: "big",
+          searchKey: "set",
+          filterType: SearchFilterType.set);
+    }
+    else if (sf == SearchFilter.setOtj) {
+      return SearchFilterData(
+          filter: sf,
+          name: AppLocalizations.of(context)!.setOtj,
+          searchValue: "otj",
+          searchKey: "set",
+          filterType: SearchFilterType.set);
+    }
     else if (sf == SearchFilter.setMkm) {
       return SearchFilterData(
           filter: sf,
@@ -626,7 +642,14 @@ class SearchFilterFactory {
     }
 
     /****Sets Supplemental****/
-    else if (sf == SearchFilter.setWot) {
+    else if (sf == SearchFilter.setOtp) {
+      return SearchFilterData(
+          filter: sf,
+          name: AppLocalizations.of(context)!.setOtp,
+          searchValue: "otp",
+          searchKey: "set",
+          filterType: SearchFilterType.set);
+    } else if (sf == SearchFilter.setWot) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setWot,

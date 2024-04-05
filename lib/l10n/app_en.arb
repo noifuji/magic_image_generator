@@ -59,6 +59,8 @@
     "manaValue6": "6",
     "manaValue7AndMore": "7+",
 
+    "setBig": "The Big Score",
+    "setOtj": "Outlaws of Thunder Junction",
     "setMkm": "Murders at Karlov Manor",
     "setLci": "The Lost Caverns of Ixalan",
     "setWoe": "Wilds of Eldraine",
@@ -125,6 +127,7 @@
     "setYlci": "Alchemy: Ixalan",
     "setYmkm": "Alchemy: Karlov Manor",
 
+    "setOtp": "Breaking News",
     "setWot": "Wilds of Eldraine: Enchanting Tales",
     "setMul": "Multiverse Legends",
     "setSis": "Shadows of the Past",
