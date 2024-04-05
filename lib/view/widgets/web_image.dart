@@ -31,7 +31,6 @@ class WebImageState extends State<WebImage> {
 
   @override
   void initState() {
-    debugPrint("initState WebImage:${widget.url}");
     url = widget.url;
     super.initState();
     if (widget.controller.value.image == null) {
@@ -47,7 +46,6 @@ class WebImageState extends State<WebImage> {
 
   @override
   Widget build(BuildContext context) {
-    //debugPrint("rebuild WebImage:${widget.url}");
 
     if (url != widget.url) {
       widget.controller.fetchImage(widget.url);
