@@ -111,6 +111,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   ];
 
   final List<SearchFilter> _alchemyCardSets = [
+    SearchFilter.setYotj,
     SearchFilter.setYmkm,
     SearchFilter.setYlci,
     SearchFilter.setYwoe,
