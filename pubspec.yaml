@@ -43,7 +43,7 @@ dependencies:
   provider: ^6.0.2
   csv: ^6.0.0
   http: ^1.2.1
-  intl: ^0.18.0
+  intl: ^0.19.0
   breakpoint: ^1.2.0
   uuid: ^4.3.3
   screenshot: ^2.3.0
