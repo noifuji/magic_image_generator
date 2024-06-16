@@ -126,8 +126,10 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   ];
 
   final List<SearchFilter> _supplementalSet = [
+    SearchFilter.setMh3,
     SearchFilter.setOtp,
     SearchFilter.setWot,
+    SearchFilter.setSpg,
     SearchFilter.setMul,
     SearchFilter.setSis,
     SearchFilter.setBrr,
