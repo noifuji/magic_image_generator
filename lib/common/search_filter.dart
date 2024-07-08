@@ -90,8 +90,10 @@ enum SearchFilter {
   setYNeo,
   setYMid,
 
+  setMh3,
   setOtp,
   setWot,
+  setSpg,
   setMul,
   setBrr,
   setSta,

@@ -650,7 +650,21 @@ class SearchFilterFactory {
     }
 
     /****Sets Supplemental****/
-    else if (sf == SearchFilter.setOtp) {
+    else if (sf == SearchFilter.setSpg) {
+      return SearchFilterData(
+          filter: sf,
+          name: AppLocalizations.of(context)!.setSpg,
+          searchValue: "spg",
+          searchKey: "set",
+          filterType: SearchFilterType.set);
+    } else if (sf == SearchFilter.setMh3) {
+      return SearchFilterData(
+          filter: sf,
+          name: AppLocalizations.of(context)!.setMh3,
+          searchValue: "mh3",
+          searchKey: "set",
+          filterType: SearchFilterType.set);
+    } else if (sf == SearchFilter.setOtp) {
       return SearchFilterData(
           filter: sf,
           name: AppLocalizations.of(context)!.setOtp,
