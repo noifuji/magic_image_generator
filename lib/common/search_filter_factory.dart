@@ -207,6 +207,14 @@ class SearchFilterFactory {
     }
 
     /****Sets****/
+    else if (sf == SearchFilter.setBlb) {
+      return SearchFilterData(
+          filter: sf,
+          name: AppLocalizations.of(context)!.setBlb,
+          searchValue: "blb",
+          searchKey: "set",
+          filterType: SearchFilterType.set);
+    }
     else if (sf == SearchFilter.setBig) {
       return SearchFilterData(
           filter: sf,
