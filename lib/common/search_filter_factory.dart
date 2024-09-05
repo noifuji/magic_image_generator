@@ -570,6 +570,14 @@ class SearchFilterFactory {
     }
 
     /****Sets Alchemy****/
+    else if (sf == SearchFilter.setYblb) {
+      return SearchFilterData(
+          filter: sf,
+          name: AppLocalizations.of(context)!.setYblb,
+          searchValue: "yblb",
+          searchKey: "set",
+          filterType: SearchFilterType.set);
+    }
     else if (sf == SearchFilter.setYotj) {
       return SearchFilterData(
           filter: sf,

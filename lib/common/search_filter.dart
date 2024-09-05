@@ -78,6 +78,7 @@ enum SearchFilter {
   setGtc,
   setRtr,
 
+  setYblb,
   setYotj,
   setYmkm,
   setYlci,
