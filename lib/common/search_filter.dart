@@ -26,6 +26,7 @@ enum SearchFilter {
   manaValue5,
   manaValue6,
   manaValue7AndMore,
+  setFdn,
   setDsk,
   setBlb,
   setBig,

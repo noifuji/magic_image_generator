@@ -207,6 +207,14 @@ class SearchFilterFactory {
     }
 
     /****Sets****/
+    else if (sf == SearchFilter.setFdn) {
+      return SearchFilterData(
+          filter: sf,
+          name: AppLocalizations.of(context)!.setFdn,
+          searchValue: "fdn",
+          searchKey: "set",
+          filterType: SearchFilterType.set);
+    }
     else if (sf == SearchFilter.setDsk) {
       return SearchFilterData(
           filter: sf,
