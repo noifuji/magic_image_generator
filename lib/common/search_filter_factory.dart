@@ -207,6 +207,14 @@ class SearchFilterFactory {
     }
 
     /****Sets****/
+    else if (sf == SearchFilter.setDft) {
+      return SearchFilterData(
+          filter: sf,
+          name: AppLocalizations.of(context)!.setDft,
+          searchValue: "dft",
+          searchKey: "set",
+          filterType: SearchFilterType.set);
+    }
     else if (sf == SearchFilter.setFdn) {
       return SearchFilterData(
           filter: sf,
