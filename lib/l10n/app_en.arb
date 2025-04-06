@@ -59,6 +59,7 @@
     "manaValue6": "6",
     "manaValue7AndMore": "7+",
 
+    "setTdm": "Tarkir: Dragonstorm",
     "setDft": "Aetherdrift",
     "setFdn": "Foundations",
     "setDsk": "Duskmourn: House of Horror",
@@ -134,6 +135,7 @@
     "setYblb": "Alchemy: Bloomburrow",
     "setYdsk": "Alchemy: Duskmourn",
 
+    "setJ25": "Foundations Jumpstart",
     "setMh3": "Modern Horizons 3",
     "setOtp": "Breaking News",
     "setWot": "Wilds of Eldraine: Enchanting Tales",
