@@ -58,6 +58,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   ];
 
   final List<SearchFilter> _cardSets = [
+    SearchFilter.setFin,
     SearchFilter.setTdm,
     SearchFilter.setDft,
     SearchFilter.setFdn,
@@ -155,6 +156,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   ];
 
   final List<SearchFilter> kStandardLegalSets = [
+    SearchFilter.setFin,
     SearchFilter.setTdm,
     SearchFilter.setDft,
     SearchFilter.setFdn,
