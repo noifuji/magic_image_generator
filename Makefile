@@ -4,7 +4,7 @@ clean:
 	fvm flutter pub get
 
 run:
-	fvm flutter run -d chrome --web-renderer canvaskit --dart-define=ENV=stg --web-port=42638
+	fvm flutter run -d chrome --wasm --dart-define=ENV=stg --web-port=42638
 
 deploy-stg:
 	fvm flutter clean

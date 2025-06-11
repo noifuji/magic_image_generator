@@ -1,8 +1,15 @@
+@JS()
+library kofi_button;
+
 import 'package:flutter/material.dart';
-//ignore:avoid_web_libraries_in_flutter
-import 'dart:js' as js;
+import 'dart:js_interop';
+import 'dart:js_interop_unsafe';
+
 import "../../common/constants.dart" as constants;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:magic_image_generator/l10n/app_localizations.dart';
+
+@JS('open')
+external void openUrl(String url);
 
 class KofiButton extends StatelessWidget {
   final bool isSmall;
@@ -16,13 +23,13 @@ class KofiButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return (width != null && height != null)
         ? Container(
-            width: width,
-            height: height,
-            padding: const EdgeInsets.only(top: 10, bottom: 10, right: 10),
-            child: createTextButton(context, width, height))
+        width: width,
+        height: height,
+        padding: const EdgeInsets.only(top: 10, bottom: 10, right: 10),
+        child: createTextButton(context, width, height))
         : Container(
-            padding: const EdgeInsets.only(top: 10, bottom: 10, right: 10),
-            child: createTextButton(context, null, null));
+        padding: const EdgeInsets.only(top: 10, bottom: 10, right: 10),
+        child: createTextButton(context, null, null));
   }
 
   Widget createTextButton(BuildContext context, double? width, double? height) {
@@ -39,12 +46,12 @@ class KofiButton extends StatelessWidget {
             Text(AppLocalizations.of(context)!.kofi,
                 style: (width != null && height != null)
                     ? TextStyle(
-                        color: Colors.white, fontSize: height * 0.75 * 0.5)
+                    color: Colors.white, fontSize: height * 0.75 * 0.5)
                     : const TextStyle(color: Colors.white)),
         ]));
   }
 
   void onPressed() {
-    js.context.callMethod('open', [constants.kofiUrl]);
+    openUrl(constants.kofiUrl);
   }
 }

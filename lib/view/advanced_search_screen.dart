@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:breakpoint/breakpoint.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:magic_image_generator/l10n/app_localizations.dart';
 import 'package:magic_image_generator/common/search_filter_factory.dart';
 import 'package:magic_image_generator/viewmodel/search_view_model.dart';
 import 'package:provider/provider.dart';

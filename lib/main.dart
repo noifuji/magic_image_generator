@@ -4,13 +4,12 @@ import 'package:breakpoint/breakpoint.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:magic_image_generator/view/canvas_view_screen.dart';
 import 'package:magic_image_generator/view/donate_screen.dart';
 import 'package:magic_image_generator/view/search_view_screen.dart';
-import 'package:magic_image_generator/view/widgets/kofi_button_nonweb.dart'
-    if (dart.library.html) 'package:magic_image_generator/view/widgets/kofi_button_web.dart';
+import 'package:magic_image_generator/view/widgets/kofi_button.dart';
 import 'package:magic_image_generator/view/widgets/language_drop_down_list.dart';
 import 'package:magic_image_generator/view/widgets/progress_bar.dart';
 import 'package:magic_image_generator/viewmodel/app_language.dart';

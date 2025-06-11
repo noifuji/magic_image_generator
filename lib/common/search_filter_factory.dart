@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:magic_image_generator/common/search_filter.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:magic_image_generator/l10n/app_localizations.dart';
 
 class SearchFilterFactory {
   static SearchFilterData createSearchFilter(

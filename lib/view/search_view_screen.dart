@@ -12,7 +12,7 @@ import '../common/mig_exception.dart';
 import '../common/util.dart';
 import '../viewmodel/canvas_view_model.dart';
 import '../viewmodel/search_view_model.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:magic_image_generator/l10n/app_localizations.dart';
 
 class SearchViewScreen extends StatefulWidget {
   final int responsiveColumns;
