@@ -59,7 +59,7 @@
     "manaValue6": "6",
     "manaValue7AndMore": "7+",
 
-    "setFin": "Final Fantasy",
+    "setFin": "FINAL FANTASY",
     "setTdm": "Tarkir: Dragonstorm",
     "setDft": "Aetherdrift",
     "setFdn": "Foundations",
@@ -135,7 +135,10 @@
     "setYotj": "Alchemy: Thunder Junction",
     "setYblb": "Alchemy: Bloomburrow",
     "setYdsk": "Alchemy: Duskmourn",
+    "setYdft": "Alchemy: Aetherdrift",
+    "setYtdm": "Alchemy: Tarkir",
 
+    "setFca": "FINAL FANTASY Through the Ages",
     "setJ25": "Foundations Jumpstart",
     "setMh3": "Modern Horizons 3",
     "setOtp": "Breaking News",

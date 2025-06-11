@@ -83,6 +83,8 @@ enum SearchFilter {
   setGtc,
   setRtr,
 
+  setYtdm,
+  setYdft,
   setYdsk,
   setYblb,
   setYotj,
@@ -98,6 +100,7 @@ enum SearchFilter {
   setYNeo,
   setYMid,
 
+  setFca,
   setJ25,
   setMh3,
   setOtp,
