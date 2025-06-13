@@ -6,27 +6,27 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:magic_image_generator/view/canvas_view_screen.dart';
-import 'package:magic_image_generator/view/donate_screen.dart';
-import 'package:magic_image_generator/view/search_view_screen.dart';
-import 'package:magic_image_generator/view/widgets/kofi_button.dart';
-import 'package:magic_image_generator/view/widgets/language_drop_down_list.dart';
-import 'package:magic_image_generator/view/widgets/progress_bar.dart';
-import 'package:magic_image_generator/viewmodel/app_language.dart';
-import 'package:magic_image_generator/viewmodel/canvas_view_model.dart';
-import 'package:magic_image_generator/viewmodel/search_view_model.dart';
+import 'package:magic_image_generator/features/canvas/presentation/screens/canvas_view_screen.dart';
+import 'package:magic_image_generator/features/donate/presentation/screens/donate_screen.dart';
+import 'package:magic_image_generator/features/search/presentation/screens/search_view_screen.dart';
+import 'package:magic_image_generator/core/widgets/kofi_button.dart';
+import 'package:magic_image_generator/core/widgets/language_drop_down_list.dart';
+import 'package:magic_image_generator/core/widgets/progress_bar.dart';
+import 'package:magic_image_generator/core/app_language.dart';
+import 'package:magic_image_generator/features/canvas/presentation/viewmodel/canvas_view_model.dart';
+import 'package:magic_image_generator/features/search/presentation/viewmodel/search_view_model.dart';
 import 'package:provider/provider.dart';
 
-import './common/configure_nonweb.dart'
-    if (dart.library.html) './common/configure_web.dart';
-import './common/constants.dart' as constants;
-import 'common/util.dart';
-import 'data/card_fetch_csv_api.dart';
-import 'data/card_memory_datasource.dart';
-import 'data/card_remote_data_source.dart';
-import 'data/card_repository_impl.dart';
-import 'data/data_source.dart';
-import 'domain/card_repository.dart';
+import 'package:magic_image_generator/core/configure_nonweb.dart'
+    if (dart.library.html) 'package:magic_image_generator/core/configure_web.dart';
+import 'package:magic_image_generator/core/constants.dart' as constants;
+import 'package:magic_image_generator/core/util.dart';
+import 'package:magic_image_generator/features/search/data/card_fetch_csv_api.dart';
+import 'package:magic_image_generator/features/search/data/card_memory_datasource.dart';
+import 'package:magic_image_generator/features/search/data/card_remote_data_source.dart';
+import 'package:magic_image_generator/features/search/data/card_repository_impl.dart';
+import 'package:magic_image_generator/features/search/data/data_source.dart';
+import 'package:magic_image_generator/features/search/domain/card_repository.dart';
 import 'firebase_options.dart';
 
 /*
