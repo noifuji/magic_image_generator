@@ -25,7 +25,7 @@ class ImageMatrixPainter extends CustomPainter {
   ImageMatrixPainter({required this.matrix});
 
   @override
-  Future<void> paint(Canvas canvas, Size size) async {
+  void paint(Canvas canvas, Size size) {
     final paint = Paint();
 
     for (var row = 0; row < matrix.length; row++) {
