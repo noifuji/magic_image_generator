@@ -3,11 +3,10 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
 import 'package:magic_image_generator/features/search/domain/entity/card_info_header.dart';
-import 'package:magic_image_generator/features/search/domain/fetch_card_images_usecase.dart';
-import 'package:magic_image_generator/features/search/domain/merge_card_images_usecase.dart';
-
-import '../../domain/copy_image_to_clipboard_usecase.dart';
-import '../../domain/download_image_usecase.dart';
+import 'package:magic_image_generator/features/search/usecase/fetch_card_images_usecase.dart';
+import 'package:magic_image_generator/features/canvas/usecase/merge_card_images_usecase.dart';
+import 'package:magic_image_generator/features/canvas/usecase/copy_image_to_clipboard_usecase.dart';
+import 'package:magic_image_generator/features/canvas/usecase/download_image_usecase.dart';
 
 class CanvasViewModel extends ChangeNotifier {
   List<List<CardInfoHeader>> _selectedCards = [];

@@ -1,13 +1,13 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
-import 'package:magic_image_generator/features/search/data/data/card_master_version.dart';
+import 'package:magic_image_generator/features/search/data/card_master_version.dart';
 import 'package:magic_image_generator/features/search/domain/entity/card_info_header.dart';
 import 'package:magic_image_generator/features/search/domain/entity/search_query_symbol.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:magic_image_generator/core/util.dart';
-import '../../domain/card_repository.dart';
+import '../domain/card_repository.dart';
 import 'card.dart';
 import 'card_remote_data_source.dart';
 import 'package:magic_image_generator/core/constants.dart' as constants;

@@ -6,7 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:magic_image_generator/features/search/domain/analyze_query_usecase.dart';
+import 'package:magic_image_generator/features/search/usecase/analyze_query_usecase.dart';
 import 'package:magic_image_generator/features/search/domain/enum/relational_operator_type.dart';
 import 'package:magic_image_generator/features/search/domain/entity/search_condition.dart';
 import 'package:magic_image_generator/features/search/domain/enum/search_keyword_type.dart';

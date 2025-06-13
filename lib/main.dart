@@ -21,11 +21,11 @@ import 'package:magic_image_generator/core/configure_nonweb.dart'
     if (dart.library.html) 'package:magic_image_generator/core/configure_web.dart';
 import 'package:magic_image_generator/core/constants.dart' as constants;
 import 'package:magic_image_generator/core/util.dart';
-import 'package:magic_image_generator/features/search/data/data/card_fetch_csv_api.dart';
-import 'package:magic_image_generator/features/search/data/data/card_memory_datasource.dart';
-import 'package:magic_image_generator/features/search/data/data/card_remote_data_source.dart';
-import 'package:magic_image_generator/features/search/data/data/card_repository_impl.dart';
-import 'package:magic_image_generator/features/search/data/data/data_source.dart';
+import 'package:magic_image_generator/features/search/data/card_fetch_csv_api.dart';
+import 'package:magic_image_generator/features/search/data/card_memory_datasource.dart';
+import 'package:magic_image_generator/features/search/data/card_remote_data_source.dart';
+import 'package:magic_image_generator/features/search/data/card_repository_impl.dart';
+import 'package:magic_image_generator/features/search/data/data_source.dart';
 import 'package:magic_image_generator/features/search/domain/card_repository.dart';
 import 'firebase_options.dart';
 

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'dart:js_interop';
 import 'dart:js_interop_unsafe';
 
-package:magic_image_generator/core/constants.dart" as constants;
+import 'package:magic_image_generator/core/constants.dart' as constants;
 import 'package:magic_image_generator/l10n/app_localizations.dart';
 
 @JS('open')

@@ -1,5 +1,5 @@
-package:magic_image_generator/core/search_filter.dart';
-package:magic_image_generator/core/search_filter_factory.dart';
+import 'package:magic_image_generator/core/search_filter.dart';
+import 'package:magic_image_generator/core/search_filter_factory.dart';
 
 class AnalyzeFilterUseCase {
   String call(Map<SearchFilter, bool> filterState,

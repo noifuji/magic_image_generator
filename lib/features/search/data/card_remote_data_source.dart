@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-import 'package:magic_image_generator/features/search/data/data/card_fetch_csv_api.dart';
-import 'package:magic_image_generator/features/search/data/data/card_master_version.dart';
+import 'package:magic_image_generator/features/search/data/card_fetch_csv_api.dart';
+import 'package:magic_image_generator/features/search/data/card_master_version.dart';
 import 'package:magic_image_generator/features/search/domain/entity/search_query_symbol.dart';
 
 import 'package:magic_image_generator/core/constants.dart' as constants;

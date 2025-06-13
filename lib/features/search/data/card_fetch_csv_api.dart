@@ -4,7 +4,7 @@ import 'package:archive/archive.dart';
 import 'package:csv/csv.dart' as csv;
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:magic_image_generator/features/search/data/data/card_master_version.dart';
+import 'package:magic_image_generator/features/search/data/card_master_version.dart';
 import 'package:magic_image_generator/core/util.dart';
 
 class CardFetchCsvApi {

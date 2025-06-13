@@ -5,8 +5,8 @@ import 'package:magic_image_generator/core/widgets/overlay_flippable_image.dart'
 import 'package:magic_image_generator/core/widgets/web_image.dart';
 import 'package:provider/provider.dart';
 
-import '../viewmodel/canvas_view_model.dart';
-import '../viewmodel/search_view_model.dart';
+import 'package:magic_image_generator/features/canvas/presentation/viewmodel/canvas_view_model.dart';
+import 'package:magic_image_generator/features/search/presentation/viewmodel/search_view_model.dart';
 
 class SearchCard extends StatefulWidget {
   final CardInfoHeader card;

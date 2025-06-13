@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import '../../domain/entity/search_query_symbol.dart';
+import '../domain/entity/search_query_symbol.dart';
 import 'card.dart';
 import 'card_master_version.dart';
 
