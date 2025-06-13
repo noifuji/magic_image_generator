@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:magic_image_generator/domain/usecase/import_deck_list_usecase.dart';
-import 'package:magic_image_generator/common/constants.dart';
+import 'package:magic_image_generator/features/deck_import/domain/import_deck_list_usecase.dart';
+import 'package:magic_image_generator/core/constants.dart';
 
 void main() {
   Map<ArenaDeckListGroup, String> groupMap = {

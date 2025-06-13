@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:magic_image_generator/l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:magic_image_generator/common/search_filter.dart';
-import 'package:magic_image_generator/common/search_filter_factory.dart';
-import 'package:magic_image_generator/domain/usecase/analyze_filter_usecase.dart';
+import 'package:magic_image_generator/core/search_filter.dart';
+import 'package:magic_image_generator/core/search_filter_factory.dart';
+import 'package:magic_image_generator/features/search/domain/analyze_filter_usecase.dart';
 
 class LocalizationsInj extends StatelessWidget {
   final Widget child;

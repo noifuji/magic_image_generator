@@ -28,3 +28,24 @@ aws --region ap-northeast-1 s3 sync ./build/web s3://magic-image-generator-produ
 
 - CloudFront invalidate
 aws cloudfront create-invalidation --distribution-id E2YAUEENNV3LHC --paths "/*"
+
+## Directory Structure
+
+```
+lib/
+  core/                # 共通処理やウィジェット
+  features/
+    search/            # カード検索機能
+      data/
+      domain/
+      presentation/
+    canvas/            # 画像編集機能
+      domain/
+      presentation/
+    deck_import/       # デッキ読み込み
+      domain/
+      presentation/
+    donate/
+      presentation/
+  main.dart
+```
