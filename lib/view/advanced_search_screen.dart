@@ -58,6 +58,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   ];
 
   final List<SearchFilter> _cardSets = [
+    SearchFilter.setEoe,
     SearchFilter.setFin,
     SearchFilter.setTdm,
     SearchFilter.setDft,
@@ -136,6 +137,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   ];
 
   final List<SearchFilter> _supplementalSet = [
+    SearchFilter.setEos,
     SearchFilter.setFca,
     SearchFilter.setJ25,
     SearchFilter.setMh3,
@@ -159,6 +161,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   ];
 
   final List<SearchFilter> kStandardLegalSets = [
+    SearchFilter.setEoe,
     SearchFilter.setFin,
     SearchFilter.setTdm,
     SearchFilter.setDft,
@@ -170,11 +173,6 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
     SearchFilter.setMkm,
     SearchFilter.setLci,
     SearchFilter.setWoe,
-    SearchFilter.setMat,
-    SearchFilter.setMom,
-    SearchFilter.setOne,
-    SearchFilter.setBro,
-    SearchFilter.setDmu,
   ];
 
   late final ScrollController rightPaneScrollController;

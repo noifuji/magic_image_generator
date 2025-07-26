@@ -59,6 +59,7 @@
     "manaValue6": "6",
     "manaValue7AndMore": "7+",
 
+    "setEoe": "Edge of Eternities",
     "setFin": "FINAL FANTASY",
     "setTdm": "Tarkir: Dragonstorm",
     "setDft": "Aetherdrift",
@@ -138,6 +139,7 @@
     "setYdft": "Alchemy: Aetherdrift",
     "setYtdm": "Alchemy: Tarkir",
 
+    "setEos": "Stellar Sights",
     "setFca": "FINAL FANTASY Through the Ages",
     "setJ25": "Foundations Jumpstart",
     "setMh3": "Modern Horizons 3",
