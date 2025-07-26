@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:magic_image_generator/core/search_filter.dart';
 import 'package:magic_image_generator/core/search_filter_factory.dart';
 import '../viewmodel/search_view_model.dart';
-import 'package:magic_image_generator/features/deck_import/presentation/screens/import_deck_list_screen.dart';
+import 'package:magic_image_generator/features/search/presentation/screens/import_deck_list_screen.dart';
 
 class SearchBoxWidget extends StatefulWidget {
   final int responsiveColumns;

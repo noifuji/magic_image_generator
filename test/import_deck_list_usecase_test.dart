@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:magic_image_generator/features/deck_import/usecase/import_deck_list_usecase.dart';
+import 'package:magic_image_generator/features/search/usecase/import_deck_list_usecase.dart';
 import 'package:magic_image_generator/core/constants.dart';
 
 void main() {

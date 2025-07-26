@@ -8,7 +8,7 @@ import 'package:magic_image_generator/features/search/domain/card_repository.dar
 import 'package:magic_image_generator/features/search/domain/entity/card_info.dart';
 import 'package:magic_image_generator/features/search/domain/entity/card_info_header.dart';
 import 'package:magic_image_generator/features/search/domain/entity/search_result.dart';
-import 'package:magic_image_generator/features/deck_import/usecase/import_deck_list_usecase.dart';
+import 'package:magic_image_generator/features/search/usecase/import_deck_list_usecase.dart';
 import 'package:magic_image_generator/features/search/presentation/widgets/sort_drop_down.dart';
 import 'package:magic_image_generator/core/widgets/web_image.dart';
 
