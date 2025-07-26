@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:magic_image_generator/data/card_fetch_csv_api.dart';
-import 'package:magic_image_generator/data/card_memory_datasource.dart';
-import 'package:magic_image_generator/data/card_remote_data_source.dart';
-import 'package:magic_image_generator/data/card_repository_impl.dart';
-import 'package:magic_image_generator/domain/card_repository.dart';
-import 'package:magic_image_generator/domain/entity/card_info_header.dart';
-import 'package:magic_image_generator/domain/usecase/analyze_query_usecase.dart';
+import 'package:magic_image_generator/features/search/data/card_fetch_csv_api.dart';
+import 'package:magic_image_generator/features/search/data/card_memory_datasource.dart';
+import 'package:magic_image_generator/features/search/data/card_remote_data_source.dart';
+import 'package:magic_image_generator/features/search/data/card_repository_impl.dart';
+import 'package:magic_image_generator/features/search/domain/card_repository.dart';
+import 'package:magic_image_generator/features/search/domain/entity/card_info_header.dart';
+import 'package:magic_image_generator/features/search/usecase/analyze_query_usecase.dart';
 
 void main() {
   late CardRepository repo;
