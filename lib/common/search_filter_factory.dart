@@ -207,6 +207,22 @@ class SearchFilterFactory {
     }
 
     /****Sets****/
+    else if (sf == SearchFilter.setEcl) {
+      return SearchFilterData(
+          filter: sf,
+          name: AppLocalizations.of(context)!.setEcl,
+          searchValue: "ecl",
+          searchKey: "set",
+          filterType: SearchFilterType.set);
+    }
+    else if (sf == SearchFilter.setTla) {
+      return SearchFilterData(
+          filter: sf,
+          name: AppLocalizations.of(context)!.setTla,
+          searchValue: "tla",
+          searchKey: "set",
+          filterType: SearchFilterType.set);
+    }
     else if (sf == SearchFilter.setOm1) {
       return SearchFilterData(
           filter: sf,
